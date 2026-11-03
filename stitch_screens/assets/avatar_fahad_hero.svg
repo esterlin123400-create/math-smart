@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgHero" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fba867"/>
+    </linearGradient>
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="heroGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background circle with border -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgHero)"/>
+  <circle cx="100" cy="100" r="94" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="10 5" opacity="0.6"/>
+
+  <!-- Body / Cyber Space Suit -->
+  <path d="M 45 190 C 45 145, 70 135, 100 135 C 130 135, 155 145, 155 190 Z" fill="url(#suitGrad)"/>
+  <!-- Suit Collar details -->
+  <path d="M 75 145 L 100 165 L 125 145 L 100 138 Z" fill="#0369a1"/>
+  <!-- Glowing Chest Emblem (Math Delta/Triangle) -->
+  <polygon points="100,165 90,180 110,180" fill="#38bdf8" filter="url(#heroGlow)"/>
+
+  <!-- Neck -->
+  <rect x="88" y="115" width="24" height="25" rx="5" fill="url(#skinGrad)"/>
+
+  <!-- Ears -->
+  <circle cx="62" cy="98" r="11" fill="url(#skinGrad)"/>
+  <circle cx="138" cy="98" r="11" fill="url(#skinGrad)"/>
+
+  <!-- Head / Face -->
+  <rect x="66" y="65" width="68" height="66" rx="30" fill="url(#skinGrad)"/>
+
+  <!-- Modern Hair -->
+  <path d="M 64 70 C 64 35, 136 35, 136 70 C 125 55, 105 52, 95 56 C 85 52, 72 58, 64 70 Z" fill="url(#hairGrad)"/>
+  <path d="M 66 65 Q 85 45 110 52 Q 130 50 134 68 Q 120 62 105 64 Q 85 62 66 65 Z" fill="#475569"/>
+
+  <!-- Cybernetic Hologram Visor Glasses -->
+  <rect x="68" y="80" width="64" height="22" rx="11" fill="url(#visorGrad)" opacity="0.92" filter="url(#heroGlow)"/>
+  <!-- Visor Reflection line -->
+  <path d="M 72 84 L 120 84" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <!-- HUD Math Symbol inside visor -->
+  <text x="100" y="96" font-family="'Outfit', sans-serif" font-weight="900" font-size="12" fill="#ffffff" text-anchor="middle" letter-spacing="1">π ≈ 3.14</text>
+
+  <!-- Friendly Smile -->
+  <path d="M 88 116 Q 100 126 112 116" stroke="#c2410c" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- Little Astronaut Star Antenna / Headset -->
+  <circle cx="62" cy="98" r="4" fill="#38bdf8" filter="url(#heroGlow)"/>
+  <path d="M 62 98 Q 50 115 70 125" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="70" cy="125" r="3" fill="#67e8f9"/>
+</svg>

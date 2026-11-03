@@ -1,0 +1,111 @@
+[
+  {
+    "id": "076af0414b8f453d9c2625b58f51b622",
+    "title": "نتيجة التقييم الذكي ومراجعة الحل - أذكياء الرياضيات",
+    "safeName": "01_smart_assessment_result",
+    "category": "التقييم ومراجعة الحل"
+  },
+  {
+    "id": "14e80d8cb23441e794e9d5c7437ae41b",
+    "title": "أذكياء الرياضيات - لوحة تحكم المعلم الشاملة",
+    "safeName": "02_teacher_dashboard",
+    "category": "لوحات التحكم"
+  },
+  {
+    "id": "1dd06a1443b94feca3a00e60f89d9f99",
+    "title": "حلبة التحديات المباشرة",
+    "safeName": "03_live_challenge_arena",
+    "category": "التحديات المباشرة"
+  },
+  {
+    "id": "2a09bf136d314007b38d4db82142d19f",
+    "title": "تسجيل دخول الطالب - أذكياء الرياضيات",
+    "safeName": "04_student_login",
+    "category": "تسجيل الدخول"
+  },
+  {
+    "id": "d0426d10d9954d7392f588ac47c94dfc",
+    "title": "استعادة كلمة المرور - أذكياء الرياضيات",
+    "safeName": "05_password_recovery",
+    "category": "إدارة الحسابات"
+  },
+  {
+    "id": "a3fdb2a306334443b833c604f3606f14",
+    "title": "اختيار وتخصيص المرحلة الدراسية (جميع المراحل)",
+    "safeName": "06_grade_level_selection",
+    "category": "المراحل الدراسية"
+  },
+  {
+    "id": "a75fc6bb011344e6b2dbe3a2a1e1a568",
+    "title": "لوحة التحكم وإدارة السجلات - أذكياء الرياضيات",
+    "safeName": "07_records_management",
+    "category": "إدارة السجلات"
+  },
+  {
+    "id": "adf77b530ff84df89ea53e995adb85a4",
+    "title": "أذكياء الرياضيات - التقارير والتحليلات الأكاديمية",
+    "safeName": "08_academic_reports",
+    "category": "التقارير والتحليلات"
+  },
+  {
+    "id": "d4c6700013024c35a53d06cd8b4f2411",
+    "title": "مساحة حل المسائل التفاعلية",
+    "safeName": "09_interactive_problem_solving",
+    "category": "حل المسائل التفاعلية"
+  },
+  {
+    "id": "ecb1a11b548a47299287fcf411abf3af",
+    "title": "تسجيل دخول المشرف والمعلم - أذكياء الرياضيات",
+    "safeName": "10_supervisor_teacher_login",
+    "category": "تسجيل الدخول"
+  },
+  {
+    "id": "8146e104c7064c1da8e966831a7895f9",
+    "title": "الملف الشخصي والإعدادات - أذكياء الرياضيات",
+    "safeName": "11_profile_and_settings",
+    "category": "الملف الشخصي والإعدادات"
+  },
+  {
+    "id": "412d271bccc547e3a02821060a3ed1ac",
+    "title": "إدارة لوحة المفاتيح والرموز - أذكياء الرياضيات",
+    "safeName": "12_keyboard_symbols_management",
+    "category": "لوحة المفاتيح والرموز الرياضية"
+  },
+  {
+    "id": "5abe1f97873c4457ae3c61ea46cf274c",
+    "title": "لوحة تحكم الطلاب - أذكياء الرياضيات",
+    "safeName": "13_student_dashboard",
+    "category": "لوحات التحكم"
+  },
+  {
+    "id": "671bd352a4974db98152250baa53826f",
+    "title": "إنشاء حساب مشرف ومعلم - أذكياء الرياضيات",
+    "safeName": "14_supervisor_teacher_registration",
+    "category": "إنشاء الحسابات"
+  },
+  {
+    "id": "97004bf157bf4f6a97205027f10c1d68",
+    "title": "إنشاء حساب طالب جديد - أذكياء الرياضيات",
+    "safeName": "15_student_registration",
+    "category": "إنشاء الحسابات"
+  },
+  {
+    "id": "98110dcba3fc45dfafff6e1a95f0d9e7",
+    "title": "تقرير متابعة ولي الأمر والمعلم",
+    "safeName": "16_parent_teacher_followup_report",
+    "category": "التقارير والتحليلات"
+  },
+  {
+    "id": "f03cd71c121c4ba39c81e7f5b91cae7f",
+    "title": "المناهج والوحدات الدراسية - أذكياء الرياضيات",
+    "safeName": "17_curriculum_and_units",
+    "category": "المناهج الدراسية"
+  },
+  {
+    "id": "7c379b1d3bc74feaa483ba674aef3c44",
+    "title": "شعار أذكياء الرياضيات",
+    "safeName": "18_logo_branding",
+    "category": "الهوية والشعار"
+  }
+]
+

@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSphere" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="botHead" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="botVisor" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="glowCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="polyGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="polyPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <filter id="neonBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow Behind Robot -->
+  <circle cx="250" cy="200" r="150" fill="url(#bgSphere)" filter="url(#neonBlur)"/>
+  <ellipse cx="250" cy="340" rx="140" ry="24" fill="#030712" opacity="0.6"/>
+
+  <!-- Orbital Math Rings -->
+  <ellipse cx="250" cy="200" rx="190" ry="60" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="14 8" opacity="0.4" transform="rotate(-15 250 200)"/>
+  <ellipse cx="250" cy="200" rx="180" ry="70" fill="none" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="10 12" opacity="0.3" transform="rotate(25 250 200)"/>
+
+  <!-- Floating 3D Geometric Math Solids -->
+  <!-- 1. Glowing Tetrahedron / Pyramid -->
+  <g transform="translate(60, 90)">
+    <polygon points="40,10 70,70 10,60" fill="url(#polyGold)" opacity="0.85"/>
+    <polygon points="40,10 70,70 50,85" fill="#d97706" opacity="0.7"/>
+    <line x1="40" y1="10" x2="50" y2="85" stroke="#fef08a" stroke-width="2"/>
+    <text x="35" y="105" font-family="'Outfit'" font-size="12" fill="#fbbf24" font-weight="700">a² + b² = c²</text>
+  </g>
+
+  <!-- 2. Glowing Dodecahedron / Cube -->
+  <g transform="translate(370, 70)">
+    <polygon points="40,15 80,35 80,75 40,55" fill="url(#polyPurple)" opacity="0.85"/>
+    <polygon points="40,15 0,35 0,75 40,55" fill="#6d28d9" opacity="0.7"/>
+    <polygon points="40,15 80,35 40,55 0,35" fill="#a855f7" opacity="0.9"/>
+    <text x="5" y="110" font-family="'Outfit'" font-size="14" fill="#c084fc" font-weight="800">∫ f(x) dx</text>
+  </g>
+
+  <!-- 3. Glowing Math Sphere -->
+  <g transform="translate(390, 240)">
+    <circle cx="35" cy="35" r="30" fill="url(#glowCyan)" opacity="0.8" filter="url(#neonBlur)"/>
+    <ellipse cx="35" cy="35" rx="30" ry="10" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7"/>
+    <text x="25" y="40" font-family="'Outfit'" font-size="16" fill="#ffffff" font-weight="900">π</text>
+  </g>
+
+  <!-- ROBOT MASCOT (Astro-Math Genius) -->
+  <!-- Antennas / Signal Nodes -->
+  <line x1="250" y1="100" x2="250" y2="60" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="250" cy="55" r="10" fill="#38bdf8" filter="url(#neonBlur)"/>
+
+  <!-- Robot Body Torso -->
+  <rect x="190" y="220" width="120" height="95" rx="30" fill="url(#botHead)" stroke="#cbd5e1" stroke-width="3"/>
+  <!-- Torso Screen Display -->
+  <rect x="210" y="240" width="80" height="50" rx="14" fill="#0f172a"/>
+  <!-- Glowing Math Heartbeat -->
+  <path d="M 220 265 L 235 265 L 243 250 L 253 280 L 261 260 L 270 265 L 280 265" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonBlur)"/>
+
+  <!-- Robot Neck -->
+  <rect x="235" y="205" width="30" height="20" rx="6" fill="#64748b"/>
+
+  <!-- Robot Floating Shoulders / Hands -->
+  <!-- Left Hand holding glowing stylus -->
+  <circle cx="160" cy="245" r="22" fill="url(#botHead)" stroke="#94a3b8" stroke-width="2"/>
+  <rect x="135" y="210" width="10" height="55" rx="5" fill="#38bdf8" transform="rotate(-30 140 230)" filter="url(#neonBlur)"/>
+  <polygon points="120,200 130,220 110,215" fill="#ffffff" filter="url(#neonBlur)"/>
+  
+  <!-- Right Hand waving -->
+  <circle cx="340" cy="240" r="22" fill="url(#botHead)" stroke="#94a3b8" stroke-width="2"/>
+  <circle cx="355" cy="225" r="8" fill="#38bdf8" filter="url(#neonBlur)"/>
+
+  <!-- Robot Head -->
+  <rect x="180" y="95" width="140" height="115" rx="42" fill="url(#botHead)" stroke="#cbd5e1" stroke-width="3"/>
+  <!-- Robot Ears / Sound receivers -->
+  <rect x="165" y="130" width="16" height="45" rx="8" fill="#64748b"/>
+  <rect x="319" y="130" width="16" height="45" rx="8" fill="#64748b"/>
+  <circle cx="173" cy="152" r="5" fill="#38bdf8" filter="url(#neonBlur)"/>
+  <circle cx="327" cy="152" r="5" fill="#38bdf8" filter="url(#neonBlur)"/>
+
+  <!-- Visor Screen Face -->
+  <rect x="195" y="115" width="110" height="72" rx="26" fill="#090d16" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Happy Glowing Digital Eyes (Arc shaped) -->
+  <path d="M 215 148 Q 230 134 242 148" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" filter="url(#neonBlur)"/>
+  <path d="M 258 148 Q 270 134 282 148" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" filter="url(#neonBlur)"/>
+
+  <!-- Cute Digital Blush -->
+  <ellipse cx="218" cy="164" rx="7" ry="3" fill="#ec4899" opacity="0.6"/>
+  <ellipse cx="280" cy="164" rx="7" ry="3" fill="#ec4899" opacity="0.6"/>
+
+  <!-- Digital Smile -->
+  <path d="M 242 165 Q 250 172 258 165" fill="none" stroke="#67e8f9" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Holographic Floating Math Symbols near hand -->
+  <text x="100" y="170" font-family="'Outfit'" font-size="22" fill="#38bdf8" font-weight="900" filter="url(#neonBlur)">∞</text>
+  <text x="135" y="145" font-family="'Outfit'" font-size="18" fill="#67e8f9" font-weight="900">+</text>
+  <text x="90" y="240" font-family="'Outfit'" font-size="18" fill="#f43f5e" font-weight="900">×</text>
+</svg>

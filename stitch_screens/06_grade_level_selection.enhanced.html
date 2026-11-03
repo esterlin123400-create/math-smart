@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تخصيص واختيار المرحلة الدراسية - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080c18;
+            --surface-card: rgba(18, 25, 45, 0.75);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 30px 25px 60px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.2) 0, transparent 40%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0, transparent 40%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .back-link:hover { color: #fff; }
+
+        .page-intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-intro h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .page-intro p {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* STAGE TABS */
+        .stage-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .stage-tab {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-card);
+            color: var(--text-muted);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .stage-tab.active {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        /* GRADES GRID */
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .grade-card {
+            background: var(--surface-card);
+            backdrop-filter: blur(14px);
+            border: 2px solid var(--border-card);
+            border-radius: 20px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card.selected {
+            border-color: #38bdf8;
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+        }
+
+        .grade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .grade-icon {
+            width: 50px; height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .select-check {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: 2px solid var(--border-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: transparent;
+        }
+
+        .grade-card.selected .select-check {
+            background: #10b981;
+            border-color: #10b981;
+            color: #fff;
+        }
+
+        .grade-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .grade-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .topics-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .topic-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-card);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        /* ACTION BAR */
+        .action-bar {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 14px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            transition: all 0.25s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← العودة إلى معرض الواجهات (19)</a>
+            <span style="font-size:13px; color:var(--text-muted)">إعدادات المناهج والمراحل</span>
+        </header>
+
+        <div class="page-intro">
+            <h1>اختيار وتخصيص المرحلة الدراسية</h1>
+            <p>حدد المرحلة والفصل الدراسي لتحميل خطط التقييم الذكي وبنوك المسائل المعتمدة</p>
+        </div>
+
+        <div class="stage-tabs">
+            <button class="stage-tab active" onclick="switchStage(this, 'primary')">المرحلة الابتدائية (الصفوف 1 - 6)</button>
+            <button class="stage-tab" onclick="switchStage(this, 'middle')">المرحلة المتوسطة (الصفوف 1 - 3)</button>
+            <button class="stage-tab" onclick="switchStage(this, 'secondary')">المرحلة الثانوية (المسارات التخصصية)</button>
+            <button class="stage-tab" onclick="switchStage(this, 'calculus')">مرحلة التفاضل والتكامل (Calculus)</button>
+        </div>
+
+        <div class="grades-grid" id="gradesGrid">
+            <!-- PRIMARY GRADES -->
+            <div class="grade-card selected" data-stage="primary" onclick="toggleGrade(this, 'الصف السادس الابتدائي')">
+                <div class="grade-header">
+                    <div class="grade-icon">📐</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصف السادس الابتدائي</div>
+                <div class="grade-desc">العمليات على الكسور، الهندسة والمساحات، والنسب والنسبة المئوية.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">الكسور العشرية</span>
+                    <span class="topic-pill">المعادلات البسيطة</span>
+                    <span class="topic-pill">المساحة والمحيط</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="primary" onclick="toggleGrade(this, 'الصف الخامس الابتدائي')">
+                <div class="grade-header">
+                    <div class="grade-icon">🔢</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصف الخامس الابتدائي</div>
+                <div class="grade-desc">جمع وطرح الكسور، ضرب وقسمة الأعداد الكبيرة، وتطبيقات القياس.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">الضرب والقسمة المطولة</span>
+                    <span class="topic-pill">الكسور الاعتيادية</span>
+                    <span class="topic-pill">وحدات القياس</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="primary" onclick="toggleGrade(this, 'الصفوف الأولية (1-3 ابتدائي)')">
+                <div class="grade-header">
+                    <div class="grade-icon">🌱</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصفوف الأولية (1 - 3 ابتدائي)</div>
+                <div class="grade-desc">الأعداد حتى 100، حقائق الجمع والطرح الذهني، ومقدمة الضرب الممتع.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">الجمع الذهني</span>
+                    <span class="topic-pill">مقدمة الضرب</span>
+                    <span class="topic-pill">الأشكال الهندسية</span>
+                </div>
+            </div>
+
+            <!-- MIDDLE GRADES -->
+            <div class="grade-card" data-stage="middle" style="display:none;" onclick="toggleGrade(this, 'الصف الأول المتوسط')">
+                <div class="grade-header">
+                    <div class="grade-icon">📘</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصف الأول المتوسط</div>
+                <div class="grade-desc">الأعداد الصحيحة، المعادلات والدوال الخطية، والتناسب والميل.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">الأعداد الصحيحة</span>
+                    <span class="topic-pill">الجبر والدوال</span>
+                    <span class="topic-pill">الإحصاء والاحتمال</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="middle" style="display:none;" onclick="toggleGrade(this, 'الصف الثاني المتوسط')">
+                <div class="grade-header">
+                    <div class="grade-icon">📗</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصف الثاني المتوسط</div>
+                <div class="grade-desc">الأعداد الحقيقية، نظرية فيثاغورس، التحويلات الهندسية، والتطابق.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">نظرية فيثاغورس</span>
+                    <span class="topic-pill">الجذور التربيعية</span>
+                    <span class="topic-pill">التحويلات الهندسية</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="middle" style="display:none;" onclick="toggleGrade(this, 'الصف الثالث المتوسط')">
+                <div class="grade-header">
+                    <div class="grade-icon">📙</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">الصف الثالث المتوسط</div>
+                <div class="grade-desc">أنظمة المعادلات الخطية، الدوال التربيعية، وكثيرات الحدود والمميز.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">أنظمة المعادلات</span>
+                    <span class="topic-pill">الدوال التربيعية</span>
+                    <span class="topic-pill">المقادير الجبرية</span>
+                </div>
+            </div>
+
+            <!-- SECONDARY GRADES -->
+            <div class="grade-card" data-stage="secondary" style="display:none;" onclick="toggleGrade(this, 'المسار العام (المشترك)')">
+                <div class="grade-header">
+                    <div class="grade-icon">🏛️</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">المسار العام والمشترك (ثانوي)</div>
+                <div class="grade-desc">المصفوفات والمحددات، المتطابقات المثلثية، والقطوع المخروطية.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">المصفوفات</span>
+                    <span class="topic-pill">حساب المثلثات</span>
+                    <span class="topic-pill">القطوع المخروطية</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="secondary" style="display:none;" onclick="toggleGrade(this, 'مسار الهندسة والحاسب')">
+                <div class="grade-header">
+                    <div class="grade-icon">💻</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">مسار الهندسة والحاسب</div>
+                <div class="grade-desc">المتجهات ثلاثية الأبعاد، الضرب الداخلي والاتجاهي، والأعداد المركبة.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">المتجهات R³</span>
+                    <span class="topic-pill">الإحداثيات القطبية</span>
+                    <span class="topic-pill">نظرية ديموافر</span>
+                </div>
+            </div>
+
+            <!-- CALCULUS GRADES -->
+            <div class="grade-card" data-stage="calculus" style="display:none;" onclick="toggleGrade(this, 'Calculus I - النهايات والاشتقاق')">
+                <div class="grade-header">
+                    <div class="grade-icon">⚡</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">Calculus I: النهايات والاشتقاق</div>
+                <div class="grade-desc">حساب النهايات، قاعدة السلسلة، الاشتقاق الضمني، والمعدلات المرتبطة بالزمن.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">النهايات والاتصال</span>
+                    <span class="topic-pill">قواعد الاشتقاق</span>
+                    <span class="topic-pill">القيم القصوى والانقلاب</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="calculus" style="display:none;" onclick="toggleGrade(this, 'Calculus II - التكامل المتقدم وتطبيقاته')">
+                <div class="grade-header">
+                    <div class="grade-icon">∫</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">Calculus II: التكامل وتطبيقاته</div>
+                <div class="grade-desc">النظرية الأساسية للتفاضل والتكامل، طرق التكامل بالتعويض والأجزاء، وحساب المساحات.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">التكامل المحدود</span>
+                    <span class="topic-pill">التكامل بالأجزاء</span>
+                    <span class="topic-pill">المساحات بين المنحنيات</span>
+                </div>
+            </div>
+
+            <div class="grade-card" data-stage="calculus" style="display:none;" onclick="toggleGrade(this, 'Calculus III - الحجوم والمعادلات التفاضلية')">
+                <div class="grade-header">
+                    <div class="grade-icon">🌀</div>
+                    <div class="select-check">✓</div>
+                </div>
+                <div class="grade-title">Calculus III: الحجوم والمعادلات التفاضلية</div>
+                <div class="grade-desc">حجوم الأجسام الدورانية بطريقة الأقراص والقشور، طول المنحنى، والمعادلات التفاضلية.</div>
+                <div class="topics-list">
+                    <span class="topic-pill">الأجسام الدورانية</span>
+                    <span class="topic-pill">المعادلات التفاضلية</span>
+                    <span class="topic-pill">المتسلسلات اللانهائية</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div>
+                <strong id="selectedGradeLabel" style="color:#fff; font-size:15px; display:block">تم تحديد: الصف السادس الابتدائي</strong>
+                <span style="color:var(--text-muted); font-size:12px">جاهز لتطبيق معايير التقييم الذكي وحلبات التحدي والوحدات المعتمدة</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="17_curriculum_and_units.html" class="save-btn" style="text-decoration:none; display:inline-block; text-align:center;">استعراض شجرة المناهج (17) 📖</a>
+                <button class="save-btn" onclick="saveSelection()">حفظ وتفعيل المرحلة ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSelectedGrade = 'الصف السادس الابتدائي';
+
+        function toggleGrade(card, gradeTitle) {
+            document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            currentSelectedGrade = gradeTitle;
+            document.getElementById('selectedGradeLabel').innerText = 'تم تحديد: ' + gradeTitle;
+        }
+
+        function switchStage(btn, stage) {
+            document.querySelectorAll('.stage-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cards = document.querySelectorAll('.grade-card');
+            cards.forEach(card => {
+                if (card.getAttribute('data-stage') === stage) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function saveSelection() {
+            alert('تم حفظ وتفعيل: ' + currentSelectedGrade + ' بنجاح! تم ربطه بمنصة التقييم والوحدات الدراسية.');
+            window.location.href = '17_curriculum_and_units.html';
+        }
+    </script>
+</body>
+</html>

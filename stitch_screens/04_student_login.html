@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول الطالب - منصة أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080d1a;
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --accent-cyan: #06b6d4;
+            --accent-amber: #f59e0b;
+            --accent-pink: #ec4899;
+            --surface: rgba(17, 24, 39, 0.75);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(79, 70, 229, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.2) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+            color: var(--text-main);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating Math Symbols */
+        .math-symbol {
+            position: absolute;
+            font-family: 'Outfit', serif;
+            font-size: 2.2rem;
+            color: rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            user-select: none;
+            animation: float 14s infinite ease-in-out;
+        }
+        .sym-1 { top: 12%; left: 8%; animation-duration: 12s; }
+        .sym-2 { top: 78%; left: 12%; animation-duration: 16s; }
+        .sym-3 { top: 20%; right: 10%; animation-duration: 15s; }
+        .sym-4 { top: 82%; right: 14%; animation-duration: 13s; }
+        .sym-5 { top: 48%; left: 4%; animation-duration: 18s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(12deg); }
+        }
+
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            max-width: 1080px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .mascot-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .mascot-image-box {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 20px;
+        }
+
+        .mascot-image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 20px 40px rgba(6, 182, 212, 0.3));
+            animation: mascotFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .mascot-caption h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 40%, #67e8f9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mascot-caption p {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 35px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(79, 70, 229, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .brand-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            border-radius: 20px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .brand-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .brand-header p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Avatar Picker */
+        .avatar-section {
+            margin-bottom: 24px;
+        }
+
+        .avatar-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        .avatars-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .avatar-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            padding: 4px;
+            overflow: hidden;
+        }
+
+        .avatar-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            display: block;
+            pointer-events: none;
+        }
+
+        .avatar-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .avatar-btn.active {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: scale(1.12);
+        }
+
+        @media (max-width: 900px) {
+            .login-wrapper { flex-direction: column; gap: 30px; }
+            .mascot-image-box { max-width: 250px; }
+            .mascot-caption { display: none; }
+        }
+
+        /* Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .form-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: #4f46e5;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(79, 70, 229, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .card-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .card-footer a {
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        .card-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-nav {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .back-nav a {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .back-nav a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Math Symbols -->
+    <div class="math-symbol sym-1">π</div>
+    <div class="math-symbol sym-2">∑</div>
+    <div class="math-symbol sym-3">√x</div>
+    <div class="math-symbol sym-4">∞</div>
+       <div class="login-wrapper">
+        <!-- MASCOT VISUAL SIDE -->
+        <div class="mascot-side">
+            <div class="mascot-image-box">
+                <img src="assets/student_hero_mascot.svg" alt="روبوت أذكياء الرياضيات الذكي">
+            </div>
+            <div class="mascot-caption">
+                <h2>مغامرة الرياضيات تبدأ هنا! 🚀</h2>
+                <p>حل المسائل التفاعلية، تنافس في حلبة التحدي المباشرة، واصعد إلى صدارة الأذكياء.</p>
+            </div>
+        </div>
+
+        <!-- LOGIN CARD -->
+        <div class="login-card">
+            <div class="brand-header">
+                <div class="brand-icon">📐</div>
+                <h1>مرحباً بك يا بطل الرياضيات!</h1>
+                <p>سجل دخولك لبدء التحدي وحل المسائل الذكية</p>
+            </div>
+
+            <!-- Avatar Selection -->
+            <div class="avatar-section">
+                <span class="avatar-label">اختر شخصيتك المفضلة:</span>
+                <div class="avatars-row">
+                    <button type="button" class="avatar-btn active" onclick="selectAvatar(this, 'astronaut')" title="رائد الفضاء">
+                        <img src="assets/avatar_astronaut.svg" alt="رائد الفضاء">
+                    </button>
+                    <button type="button" class="avatar-btn" onclick="selectAvatar(this, 'robot')" title="الروبوت الذكي">
+                        <img src="assets/avatar_robot.svg" alt="الروبوت الذكي">
+                    </button>
+                    <button type="button" class="avatar-btn" onclick="selectAvatar(this, 'ninja')" title="النينجا السريع">
+                        <img src="assets/avatar_ninja.svg" alt="النينجا السريع">
+                    </button>
+                    <button type="button" class="avatar-btn" onclick="selectAvatar(this, 'wizard')" title="ساحر الأرقام">
+                        <img src="assets/avatar_wizard.svg" alt="ساحر الأرقام">
+                    </button>
+                    <button type="button" class="avatar-btn" onclick="selectAvatar(this, 'scientist')" title="العالم العبقري">
+                        <img src="assets/avatar_scientist.svg" alt="العالم العبقري">
+                    </button>
+                </div>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="studentCode">اسم المستخدم أو كود الطالب:</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="studentCode" placeholder="مثال: MATH-2026-88" required value="MATH-HERO-01">
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">كلمة المرور أو الرمز السري (PIN):</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" placeholder="••••••••" required value="123456">
+                        <span class="input-icon">🔒</span>
+                    </div>
+                </div>
+
+                <div class="form-meta">
+                    <label class="remember-me">
+                        <input type="checkbox" checked> تذكرني دائماً
+                    </label>
+                    <a href="05_password_recovery.html" class="forgot-link">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button type="submit" class="submit-btn" id="loginBtn">
+                    <span>انطلق إلى مساحة الرياضيات</span>
+                    <span>←</span>
+                </button>
+            </form>
+
+            <div class="card-footer">
+                ليس لديك حساب بعد؟ <a href="15_student_registration.html">أنشئ حساب طالب جديد</a>
+            </div>
+            <div class="back-nav">
+                <a href="index.html">← العودة إلى بوابة الواجهات الكاملة</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectAvatar(btn, role) {
+            document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<span>جاري الدخول إلى الحلبة...</span> ⏳';
+            btn.style.opacity = '0.8';
+            setTimeout(() => {
+                alert('مرحباً بك في أذكياء الرياضيات! تم تسجيل الدخول بنجاح.');
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

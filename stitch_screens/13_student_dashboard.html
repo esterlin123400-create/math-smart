@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الطلاب - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080c18;
+            --surface-card: rgba(17, 24, 43, 0.75);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-pink: #ec4899;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 25px 30px 60px;
+            background-image: 
+                radial-gradient(at 0% 10%, rgba(79, 70, 229, 0.2) 0, transparent 40%),
+                radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.18) 0, transparent 45%);
+        }
+
+        .container { max-width: 1300px; margin: 0 auto; }
+
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 16px 28px;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .brand-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a.active, .nav-links a:hover { color: #38bdf8; }
+
+        /* STUDENT HERO */
+        .student-hero {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(6, 182, 212, 0.15));
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 24px;
+            padding: 30px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 35px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .hero-avatar {
+            width: 84px; height: 84px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-text h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .streak-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 16px 24px;
+            text-align: center;
+        }
+
+        .streak-fire { font-size: 26px; }
+        .streak-val { font-size: 22px; font-weight: 900; color: #fbbf24; font-family: 'Outfit'; }
+
+        /* GRID */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .card-box {
+            background: var(--surface-card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card-box h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Missions */
+        .mission-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .mission-info h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .mission-info p { font-size: 12px; color: var(--text-muted); }
+
+        .mission-action a {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* Badges */
+        .badges-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .badge-icon { font-size: 32px; margin-bottom: 8px; }
+        .badge-name { font-size: 12px; font-weight: 700; color: #cbd5e1; }
+
+        /* Leaderboard */
+        .rank-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 13px;
+        }
+        .rank-item.top { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+        @media (max-width: 900px) {
+            .dash-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="brand-logo">
+                <div class="brand-icon">📐</div>
+                <span>أذكياء الرياضيات - مساحة الطلاب</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">الرئيسية</a></li>
+                <li><a href="09_interactive_problem_solving.html">المسائل التفاعلية</a></li>
+                <li><a href="03_live_challenge_arena.html">حلبة التحدي</a></li>
+                <li><a href="11_profile_and_settings.html">الملف الشخصي</a></li>
+                <li><a href="index.html">← المعرض العام</a></li>
+            </ul>
+        </nav>
+
+        <!-- STUDENT HERO -->
+        <div class="student-hero">
+            <div class="hero-profile">
+                <div class="hero-avatar">
+                    <img src="assets/avatar_fahad_hero.svg" alt="أفاتار البطل فهد">
+                </div>
+                <div class="hero-text">
+                    <h1>مرحباً، يا بطل الرياضيات فهد! 👋</h1>
+                    <span class="hero-badge">المستوى 7 - محارب الأرقام الأسطوري ⭐</span>
+                    <div style="font-size:13px; color:var(--text-muted); margin-top:8px">
+                        مجموع النقاط: <strong style="color:#38bdf8">2,450 XP</strong> | الترتيب في الفصل: <strong style="color:#fbbf24">المركز الثاني 🥈</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="streak-box">
+                <div class="streak-fire">🔥 7</div>
+                <div class="streak-val">أيام متتالية</div>
+                <div style="font-size:11px; color:var(--text-muted)">حافظ على استمراريتك!</div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div class="dash-grid">
+            <div>
+                <!-- ACTIVE MISSIONS -->
+                <div class="card-box">
+                    <h3>مهام وتحديات اليوم 🎯</h3>
+                    <div class="mission-item">
+                        <div class="mission-info">
+                            <h4>حل 5 مسائل في المعادلات الخطية</h4>
+                            <p>المكافأة: +100 نقطة خبرة XP ووسام السرعة</p>
+                        </div>
+                        <div class="mission-action">
+                            <a href="09_interactive_problem_solving.html">ابدأ الآن</a>
+                        </div>
+                    </div>
+
+                    <div class="mission-item">
+                        <div class="mission-info">
+                            <h4>تحدي حلبة الأذكياء المباشرة</h4>
+                            <p>تنافس مع زملائك في الفصل مباشرة على الهواء</p>
+                        </div>
+                        <div class="mission-action">
+                            <a href="03_live_challenge_arena.html" style="background:linear-gradient(135deg, #ec4899, #8b5cf6)">دخول الحلبة ⚔️</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BADGES -->
+                <div class="card-box">
+                    <h3>الأوسمة والإنجازات 🏆</h3>
+                    <div class="badges-row">
+                        <div class="badge-card"><div class="badge-icon">📐</div><div class="badge-name">خبير الهندسة</div></div>
+                        <div class="badge-card"><div class="badge-icon">⚡</div><div class="badge-name">البرق السريع</div></div>
+                        <div class="badge-card"><div class="badge-icon">🎯</div><div class="badge-name">دقة 100%</div></div>
+                        <div class="badge-card"><div class="badge-icon">🧠</div><div class="badge-name">عبقري الجبر</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD -->
+            <div>
+                <div class="card-box">
+                    <h3>لوحة شرف الأذكياء 🥇</h3>
+                    <div class="rank-item top">
+                        <span>🥇 1. سارة الخالدي</span>
+                        <strong style="color:#fbbf24">2,620 XP</strong>
+                    </div>
+                    <div class="rank-item top" style="background:rgba(56, 189, 248, 0.1); border-color:rgba(56, 189, 248, 0.3)">
+                        <span>🥈 2. فهد السالم (أنت)</span>
+                        <strong style="color:#38bdf8">2,450 XP</strong>
+                    </div>
+                    <div class="rank-item">
+                        <span>🥉 3. ريان القحطاني</span>
+                        <span>2,190 XP</span>
+                    </div>
+                    <div class="rank-item">
+                        <span>4. ليان الشمري</span>
+                        <span>2,050 XP</span>
+                    </div>
+                    <div class="rank-item">
+                        <span>5. عمر الغامدي</span>
+                        <span>1,940 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

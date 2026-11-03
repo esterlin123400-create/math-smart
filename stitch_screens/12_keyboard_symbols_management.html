@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة لوحة المفاتيح والرموز الرياضية - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080c18;
+            --surface-card: rgba(18, 25, 45, 0.8);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 30px 25px 60px;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(79, 70, 229, 0.2) 0, transparent 40%),
+                radial-gradient(at 90% 80%, rgba(6, 182, 212, 0.15) 0, transparent 40%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .back-link:hover { color: #fff; }
+
+        .page-intro {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-intro h1 {
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .page-intro p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* GRID */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card-panel {
+            background: var(--surface-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-card);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .card-panel h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Symbol Category */
+        .symbol-category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .symbols-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sym-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-card);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-family: 'Outfit', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sym-chip:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.05);
+        }
+
+        .sym-chip.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(6, 182, 212, 0.25));
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        /* KEYBOARD TEST PREVIEW */
+        .test-input-box {
+            background: #020617;
+            border: 2px solid #4f46e5;
+            border-radius: 14px;
+            padding: 16px 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            color: #38bdf8;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-keys-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .k-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-card);
+            color: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            font-family: 'Outfit';
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .k-btn:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+
+        .btn-save {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        @media (max-width: 900px) {
+            .workspace-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← العودة إلى معرض الواجهات (19)</a>
+            <span style="font-size:13px; color:var(--text-muted)">إعدادات لوحة المفاتيح التفاعلية</span>
+        </header>
+
+        <div class="page-intro">
+            <h1>إدارة لوحة المفاتيح والرموز الرياضية</h1>
+            <p>تخصيص الرموز المتاحة للطلاب في مساحات حل المسائل التفاعلية حسب المرحلة التعليمية</p>
+        </div>
+
+        <div class="workspace-grid">
+            <!-- SYMBOLS SELECTOR -->
+            <div class="card-panel">
+                <h3>تفعيل الرموز المتاحة للطلاب</h3>
+
+                <div class="symbol-category">
+                    <span class="category-title">العمليات الحسابية الأساسية:</span>
+                    <div class="symbols-row">
+                        <div class="sym-chip active">+ <span>جمع</span></div>
+                        <div class="sym-chip active">- <span>طرح</span></div>
+                        <div class="sym-chip active">× <span>ضرب</span></div>
+                        <div class="sym-chip active">÷ <span>قسمة</span></div>
+                        <div class="sym-chip active">= <span>يساوي</span></div>
+                    </div>
+                </div>
+
+                <div class="symbol-category">
+                    <span class="category-title">الجبر والدوال المتقدمة:</span>
+                    <div class="symbols-row">
+                        <div class="sym-chip active">x² <span>تربيع</span></div>
+                        <div class="sym-chip active">√ <span>جذر تربيعي</span></div>
+                        <div class="sym-chip active">π <span>باي</span></div>
+                        <div class="sym-chip active">|x| <span>القيمة المطلقة</span></div>
+                        <div class="sym-chip">∑ <span>المجموع</span></div>
+                        <div class="sym-chip">∞ <span>ما لا نهاية</span></div>
+                    </div>
+                </div>
+
+                <div class="symbol-category">
+                    <span class="category-title">المقارنات والعلاقات الرياضية:</span>
+                    <div class="symbols-row">
+                        <div class="sym-chip active">&le; <span>أصغر أو يساوي</span></div>
+                        <div class="sym-chip active">&ge; <span>أكبر أو يساوي</span></div>
+                        <div class="sym-chip active">&ne; <span>لا يساوي</span></div>
+                        <div class="sym-chip">&approx; <span>تقريباً</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIVE PREVIEW KEYBOARD -->
+            <div class="card-panel">
+                <h3>معاينة وتجربة لوحة المفاتيح الذكية</h3>
+                <div class="test-input-box" id="testDisplay">f(x) = 2x² + √16</div>
+
+                <div class="preview-keys-grid">
+                    <button class="k-btn" onclick="typeKey('x²')">x²</button>
+                    <button class="k-btn" onclick="typeKey('√')">√</button>
+                    <button class="k-btn" onclick="typeKey('π')">π</button>
+                    <button class="k-btn" onclick="clearKeys()" style="color:#f87171">C</button>
+
+                    <button class="k-btn" onclick="typeKey('7')">7</button>
+                    <button class="k-btn" onclick="typeKey('8')">8</button>
+                    <button class="k-btn" onclick="typeKey('9')">9</button>
+                    <button class="k-btn" onclick="typeKey('÷')">÷</button>
+
+                    <button class="k-btn" onclick="typeKey('4')">4</button>
+                    <button class="k-btn" onclick="typeKey('5')">5</button>
+                    <button class="k-btn" onclick="typeKey('6')">6</button>
+                    <button class="k-btn" onclick="typeKey('×')">×</button>
+
+                    <button class="k-btn" onclick="typeKey('1')">1</button>
+                    <button class="k-btn" onclick="typeKey('2')">2</button>
+                    <button class="k-btn" onclick="typeKey('3')">3</button>
+                    <button class="k-btn" onclick="typeKey('-')">-</button>
+
+                    <button class="k-btn" onclick="typeKey('0')">0</button>
+                    <button class="k-btn" onclick="typeKey('.')">.</button>
+                    <button class="k-btn" onclick="typeKey('=')">=</button>
+                    <button class="k-btn" onclick="typeKey('+')">+</button>
+                </div>
+
+                <button class="btn-save" onclick="alert('تم حفظ إعدادات لوحة المفاتيح بنجاح وتعميمها على شاشات الطلاب!');">حفظ وتعميم لوحة المفاتيح ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let expr = "f(x) = 2x² + √16";
+        function typeKey(k) {
+            expr += k;
+            document.getElementById('testDisplay').innerText = expr;
+        }
+        function clearKeys() {
+            expr = "";
+            document.getElementById('testDisplay').innerText = "اكتب باللوحة...";
+        }
+    </script>
+</body>
+</html>

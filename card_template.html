@@ -1,0 +1,27 @@
+<div class="card" data-category="{{CATEGORY}}" data-title="{{TITLE}}" data-id="{{ID}}">
+    <div class="card-preview">
+        <span class="batch-badge">واجهة {{INDEX}}</span>
+        {{IMG_TAG}}
+    </div>
+    <div class="card-body">
+        <div>
+            <div class="card-category">{{CATEGORY}}</div>
+            <div class="card-title">{{TITLE}}</div>
+            <div class="card-id-row">
+                <span>ID: {{ID}}</span>
+                <button class="copy-id-btn" onclick="copyToClipboard('{{ID}}')" title="نسخ المعرف">نسخ ID</button>
+            </div>
+        </div>
+        <div class="card-actions">
+            {{HTML_BTN}}
+            {{PNG_BTN}}
+        </div>
+    </div>
+</div>
+<!-- BTN_TEMPLATES_START
+HTML_READY:<a href="{{SAFE_NAME}}.html" target="_blank" class="btn btn-primary"><span>فتح الواجهة الكاملة</span> ↗</a>
+HTML_PENDING:<button class="btn btn-primary" onclick="copyToClipboard('{{ID}}')" title="نسخ معرف الواجهة">نسخ المعرف ID</button>
+PNG_READY:<button class="btn btn-outline" onclick="openPreviewModal('{{SAFE_NAME}}.html', '{{TITLE}}')"><span>معاينة سريعة 👁️</span></button>
+PNG_PENDING:<button class="btn btn-outline" onclick="openPreviewModal('{{SAFE_NAME}}.html', '{{TITLE}}')"><span>معاينة سريعة 👁️</span></button>
+IMG_PLACEHOLDER:<div class="placeholder-preview"><span class="placeholder-icon">📐</span><span>واجهة منصة أذكياء الرياضيات</span></div>
+BTN_TEMPLATES_END -->

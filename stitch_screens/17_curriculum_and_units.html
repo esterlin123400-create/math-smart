@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المناهج والوحدات الدراسية (جميع المراحل والتفاضل والتكامل) - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080c18;
+            --surface: rgba(18, 25, 45, 0.82);
+            --surface-hover: rgba(26, 36, 64, 0.95);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.5);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --accent-pink: #ec4899;
+            --accent-purple: #a855f7;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 30px 25px 70px;
+            background-image: 
+                radial-gradient(at 10% 0%, rgba(79, 70, 229, 0.22) 0, transparent 40%),
+                radial-gradient(at 90% 15%, rgba(6, 182, 212, 0.18) 0, transparent 40%),
+                radial-gradient(at 50% 85%, rgba(236, 72, 153, 0.15) 0, transparent 50%);
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-link:hover { color: #fff; }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-change-stage {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'Cairo';
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-change-stage:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        /* PAGE INTRO HERO */
+        .page-intro {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+        .page-intro h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        .page-intro p {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* STATS OVERVIEW ROW */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .stat-val { font-size: 20px; font-weight: 900; color: #fff; line-height: 1.2; }
+        .stat-lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+        /* STAGE TABS */
+        .stage-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            flex-wrap: wrap;
+        }
+        .stage-tab {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 12px 22px;
+            border-radius: 16px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+        .stage-tab:hover {
+            color: #fff;
+            border-color: rgba(99, 102, 241, 0.35);
+        }
+        .stage-tab.active {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+        .stage-tab-count {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* SEARCH BAR */
+        .search-bar-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 42px 12px 16px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-box input:focus {
+            border-color: #6366f1;
+        }
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* UNITS GRID */
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .unit-card {
+            background: var(--surface);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 26px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .unit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            background: var(--surface-hover);
+        }
+
+        .unit-top-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .unit-stage-tag {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .tag-elementary { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+        .tag-middle { background: rgba(56, 189, 248, 0.18); color: #38bdf8; }
+        .tag-high { background: rgba(168, 85, 247, 0.18); color: #c084fc; }
+        .tag-calculus { background: rgba(236, 72, 153, 0.18); color: #f472b6; }
+
+        .unit-formula-pill {
+            font-family: monospace;
+            direction: ltr;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #93c5fd;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .unit-header-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .unit-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .unit-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.4;
+        }
+        .unit-grade {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .unit-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* LESSONS LIST */
+        .lessons-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+        }
+        .lessons-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .lessons-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .lessons-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94a3b8;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+        .lessons-list li:last-child { border-bottom: none; }
+        .lesson-name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #e2e8f0;
+        }
+        .lesson-xp {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        /* CARD ACTIONS */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .btn-start {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+        }
+        .btn-start:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+        .btn-video-preview {
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-video-preview:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* MODAL */
+        .video-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .video-modal.active { display: flex; }
+        .modal-card {
+            background: #0f172a;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 20px;
+            max-width: 620px;
+            width: 100%;
+            padding: 26px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+        }
+        .modal-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-player {
+            width: 100%;
+            height: 260px;
+            background: radial-gradient(circle at center, #1e1b4b, #040711);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .play-btn-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(79, 70, 229, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← العودة إلى معرض الواجهات (19)</a>
+            <div class="header-actions">
+                <a href="06_grade_level_selection.html" class="btn-change-stage">⚙️ تخصيص المرحلة (شاشة 06)</a>
+                <span class="badge badge-primary">شاشة 17: المناهج والوحدات (شاملة)</span>
+            </div>
+        </header>
+
+        <div class="page-intro">
+            <h1>خارطة المناهج والوحدات الدراسية التفاعلية</h1>
+            <p>منظومة تعليمية متكاملة تشمل جميع المراحل من التأسيس الابتدائي، مروراً بالمتوسط والثانوي، وحتى مقررات التفاضل والتكامل المتقدمة (Calculus)</p>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(79, 70, 229, 0.15)">📚</div>
+                <div>
+                    <div class="stat-val">12 وحدة</div>
+                    <div class="stat-lbl">إجمالي الوحدات المعتمدة</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(6, 182, 212, 0.15)">🎯</div>
+                <div>
+                    <div class="stat-val">48 درساً</div>
+                    <div class="stat-lbl">الدروس التفاعلية المصورة</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(236, 72, 153, 0.15)">∫</div>
+                <div>
+                    <div class="stat-val">4 وحدات تفاضل</div>
+                    <div class="stat-lbl">Calculus I & II & III</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(245, 158, 11, 0.15)">⚡</div>
+                <div>
+                    <div class="stat-val">+4,200 XP</div>
+                    <div class="stat-lbl">نقاط الخبرة القابلة للإنجاز</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE SELECTOR TABS -->
+        <div class="stage-tabs">
+            <button class="stage-tab active" onclick="filterByStage('all', this)">
+                <span>🌐 جميع المراحل</span>
+                <span class="stage-tab-count">12</span>
+            </button>
+            <button class="stage-tab" onclick="filterByStage('elementary', this)">
+                <span>🌱 المرحلة الابتدائية</span>
+                <span class="stage-tab-count">3</span>
+            </button>
+            <button class="stage-tab" onclick="filterByStage('middle', this)">
+                <span>🌿 المرحلة المتوسطة</span>
+                <span class="stage-tab-count">3</span>
+            </button>
+            <button class="stage-tab" onclick="filterByStage('high', this)">
+                <span>🏛️ المرحلة الثانوية</span>
+                <span class="stage-tab-count">2</span>
+            </button>
+            <button class="stage-tab" onclick="filterByStage('calculus', this)">
+                <span>∫ مرحلة التفاضل والتكامل</span>
+                <span class="stage-tab-count">4</span>
+            </button>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="search-bar-wrap">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="curriculumSearch" onkeyup="searchUnits()" placeholder="ابحث باسم الوحدة، الدرس، أو القانون (مثلاً: تكامل، اشتقاق، كسور، نهايات، فيثاغورس)...">
+            </div>
+            <div style="font-size:13px; color:var(--text-muted)">
+                عرض <strong id="visibleCount" style="color:#fff">12</strong> من 12 وحدة تعليمية
+            </div>
+        </div>
+
+        <!-- UNITS GRID -->
+        <div class="units-grid" id="unitsGrid">
+
+            <!-- 1. ELEMENTARY 1-3 -->
+            <div class="unit-card" data-stage="elementary" data-title="تأسيس الحساب والأعداد والعمليات الأساسية" data-grade="الصفوف الأولية (1-3 ابتدائي)">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-elementary">المرحلة الابتدائية</span>
+                        <span class="unit-formula-pill">٥ + ٧ = ١٢ • ٣ × ٤ = ١٢</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">🌱</div>
+                        <div>
+                            <div class="unit-title">تأسيس الحساب والأعداد والعمليات الأساسية</div>
+                            <div class="unit-grade">الصفوف الأولية (1 - 3 ابتدائي)</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">تمثيل الأعداد حتى 100، القيمة المنزلية، وحقائق الجمع والطرح الذهني ومقدمة الضرب الممتع.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#34d399">✓ 100% مكتمل</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ تمثيل الأعداد والقيمة المنزلية حتى 100</span>
+                                <span class="lesson-xp">+45 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ استراتيجيات الجمع والطرح الذهني</span>
+                                <span class="lesson-xp">+55 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ مفهوم الضرب كجمع متكرر والعد القفزي</span>
+                                <span class="lesson-xp">+60 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ الأشكال المستوية والمجسمات وقراءة الساعة</span>
+                                <span class="lesson-xp">+50 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('تأسيس الحساب والأعداد والعمليات الأساسية', 'المرحلة الابتدائية', '14 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 2. ELEMENTARY 4-5 -->
+            <div class="unit-card" data-stage="elementary" data-title="العمليات الحسابية المطولة والكسور والقياس" data-grade="الصف الرابع والخامس الابتدائي">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-elementary">المرحلة الابتدائية</span>
+                        <span class="unit-formula-pill">ق.م.أ (١٢، ١٨) = ٦</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">🔢</div>
+                        <div>
+                            <div class="unit-title">العمليات الحسابية المطولة والكسور والقياس</div>
+                            <div class="unit-grade">الصف الرابع والخامس الابتدائي</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">إتقان الضرب في عددين، خوارزمية القسمة المطولة، القواسم والمضاعفات، وجمع وطرح الكسور.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#38bdf8">85% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ خوارزمية الضرب في رقمين وثلاثة أرقام</span>
+                                <span class="lesson-xp">+60 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ القسمة المطولة مع باقٍ والتحقق بالضرب</span>
+                                <span class="lesson-xp">+70 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ الكسور الاعتيادية المتكافئة والتبسيط</span>
+                                <span class="lesson-xp">+65 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ جمع وطرح الكسور وتطبيقات القياس والزمن</span>
+                                <span class="lesson-xp">+75 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('العمليات الحسابية المطولة والكسور والقياس', 'المرحلة الابتدائية', '20 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 3. ELEMENTARY 6 -->
+            <div class="unit-card" data-stage="elementary" data-title="الأنماط العددية والجبر والنسب والهندسة" data-grade="الصف السادس الابتدائي">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-elementary">المرحلة الابتدائية</span>
+                        <span class="unit-formula-pill">٣س + ٦ = ٢١ • المحيط = ٢ط نق</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">📐</div>
+                        <div>
+                            <div class="unit-title">الأنماط العددية والجبر والنسب والهندسة</div>
+                            <div class="unit-grade">الصف السادس الابتدائي</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">المعادلات الخطية البسيطة، النسب المئوية، محيط ومساحة الدائرة، وحساب الحجوم ومساحة السطوح.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#fbbf24">60% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ الخطوات الأربع لحل المسألة والأنماط الجبرية</span>
+                                <span class="lesson-xp">+60 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ المتغيرات والعبارات وحل المعادلات البسيطة</span>
+                                <span class="lesson-xp">+70 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ النسبة المئوية والاحتمال والتمثيلات البيانية</span>
+                                <span class="lesson-xp">+75 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 محيط ومساحة الدائرة وحجم المنشور</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('الأنماط العددية والجبر والنسب والهندسة', 'المرحلة الابتدائية', '18 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 4. MIDDLE 1 -->
+            <div class="unit-card" data-stage="middle" data-title="الأعداد الصحيحة والمعادلات والدوال الخطية" data-grade="الصف الأول متوسط">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-middle">المرحلة المتوسطة</span>
+                        <span class="unit-formula-pill">س - (-٤) = ١٠ • ص = ك س</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">📘</div>
+                        <div>
+                            <div class="unit-title">الأعداد الصحيحة والمعادلات والدوال الخطية</div>
+                            <div class="unit-grade">الصف الأول متوسط</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">العمليات على الأعداد الصحيحة وقواعد الإشارات، حل المعادلات ذات الخطوتين، ومفهوم التناسب والميل.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#38bdf8">70% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ العمليات على الأعداد الصحيحة وقواعد الإشارات</span>
+                                <span class="lesson-xp">+65 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ حل المعادلات ذات الخطوتين والمتباينات</span>
+                                <span class="lesson-xp">+80 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ النسبة والتناسب ومعدل التغير والميل</span>
+                                <span class="lesson-xp">+75 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 المستوي الإحداثي والدوال والتمثيل البياني</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('الأعداد الصحيحة والمعادلات والدوال الخطية', 'المرحلة المتوسطة', '22 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 5. MIDDLE 2 -->
+            <div class="unit-card" data-stage="middle" data-title="الأعداد الحقيقية ونظرية فيثاغورس والتطابق" data-grade="الصف الثاني متوسط">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-middle">المرحلة المتوسطة</span>
+                        <span class="unit-formula-pill">أ² + ب² = ج²</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">📗</div>
+                        <div>
+                            <div class="unit-title">الأعداد الحقيقية ونظرية فيثاغورس والتطابق</div>
+                            <div class="unit-grade">الصف الثاني متوسط</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">الجذور التربيعية والتكعيبية، نظرية فيثاغورس في المثلث القائم، التحويلات الهندسية والإحصاء.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#fbbf24">40% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ الأعداد الحقيقية والجذور والعمليات عليها</span>
+                                <span class="lesson-xp">+70 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ نظرية فيثاغورس وتطبيقاتها الهندسية</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 التحويلات الهندسية: الانعكاس، الانسحاب، والدوران</span>
+                                <span class="lesson-xp">+80 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 مساحات الأشكال المركبة والاحتمال المركب</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('الأعداد الحقيقية ونظرية فيثاغورس', 'المرحلة المتوسطة', '24 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 6. MIDDLE 3 -->
+            <div class="unit-card" data-stage="middle" data-title="أنظمة المعادلات الخطية والدوال التربيعية" data-grade="الصف الثالث متوسط">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-middle">المرحلة المتوسطة</span>
+                        <span class="unit-formula-pill">س = (-ب ± √(ب²-٤أ ج))/٢أ</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">📙</div>
+                        <div>
+                            <div class="unit-title">أنظمة المعادلات الخطية والدوال التربيعية</div>
+                            <div class="unit-grade">الصف الثالث متوسط</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">حل أنظمة المعادلات بالحذف والتعويض، كثيرات الحدود، والقانون العام للدالة التربيعية وحساب المميز.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#fbbf24">25% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ حل أنظمة المعادلات الخطية بيانياً وجبرياً</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ كثيرات الحدود وتحليل المقادير الجبرية</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 الدوال التربيعية والقانون العام وحساب المميز</span>
+                                <span class="lesson-xp">+100 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 العبارات والمعادلات الجذرية</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('أنظمة المعادلات الخطية والدوال التربيعية', 'المرحلة المتوسطة', '28 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 7. HIGH SCHOOL - COMMON -->
+            <div class="unit-card" data-stage="high" data-title="المصفوفات والمتطابقات المثلثية والقطوع المخروطية" data-grade="المسار المشترك والعام">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-high">المرحلة الثانوية</span>
+                        <span class="unit-formula-pill">جا²(θ) + جتا²(θ) = ١</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">🏛️</div>
+                        <div>
+                            <div class="unit-title">المصفوفات والمتطابقات المثلثية والقطوع</div>
+                            <div class="unit-grade">المسار العام والمشترك (ثانوي)</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">العمليات على المصفوفات، النظير الضربي، المتطابقات المثلثية الأساسية، ومعادلات القطوع المخروطية.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#c084fc">35% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ المصفوفات والمحددات وقاعدة كرامر للحل</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ المتطابقات المثلثية وضعف ونصف الزاوية</span>
+                                <span class="lesson-xp">+100 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 القطوع المخروطية: المكافئ والناقص والزائد</span>
+                                <span class="lesson-xp">+95 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 الدوال اللوغاريتمية والأسية وحل المعادلات</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('المصفوفات والمتطابقات المثلثية', 'المرحلة الثانوية', '32 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 8. HIGH SCHOOL - ENGINEERING -->
+            <div class="unit-card" data-stage="high" data-title="المتجهات والفضاء الإقليدي ثلاثي الأبعاد" data-grade="مسار الهندسة والحاسب">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-high">المرحلة الثانوية</span>
+                        <span class="unit-formula-pill">u · v = |u||v|cosθ</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box">💻</div>
+                        <div>
+                            <div class="unit-title">المتجهات والفضاء الإقليدي ثلاثي الأبعاد</div>
+                            <div class="unit-grade">مسار الهندسة وعلوم الحاسب</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">المتجهات في المستوى والفضاء R³، الضرب الداخلي والاتجاهي، الإحداثيات القطبية، ونظرية ديموافر.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#c084fc">15% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ المتجهات في بعدين وثلاثة أبعاد والعمليات الخطية</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 الضرب الداخلي (القياسي) والضرب المتجهي</span>
+                                <span class="lesson-xp">+100 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 معادلات المستقيم والمستوى في الفضاء الثلاثي</span>
+                                <span class="lesson-xp">+95 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 الإحداثيات القطبية والأعداد المركبة وديموافر</span>
+                                <span class="lesson-xp">+110 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('المتجهات والفضاء الإقليدي ثلاثي الأبعاد', 'المرحلة الثانوية', '30 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 9. CALCULUS 1: LIMITS -->
+            <div class="unit-card" data-stage="calculus" data-title="النهايات والاتصال وسلوك الدوال (Limits & Continuity)" data-grade="حساب التفاضل والتكامل 1 (Calculus I)">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-calculus">مرحلة التفاضل والتكامل</span>
+                        <span class="unit-formula-pill">lim[x→a] f(x) = L</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box" style="background:rgba(236,72,153,0.15); border-color:rgba(236,72,153,0.3)">⚡</div>
+                        <div>
+                            <div class="unit-title">النهايات والاتصال وسلوك الدوال</div>
+                            <div class="unit-grade">Calculus I: Limits & Continuity</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">المفهوم البياني والعددي للنهاية، تقنيات إزالة صيغ عدم التعيين (0/0)، نهايات الدوال المثلثية، والاتصال ومبرهنة القيمة المتوسطة.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#f472b6">80% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ مفهوم النهاية وقواعد الحساب الجبرية</span>
+                                <span class="lesson-xp">+85 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ تقنيات إزالة عدم التعيين (التحليل، الضرب بالمرافق)</span>
+                                <span class="lesson-xp">+95 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ نهايات الدوال المثلثية ونظرية الحصر (Squeeze)</span>
+                                <span class="lesson-xp">+100 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ الاتصال عند نقطة وعلى فترة ومبرهنة القيمة المتوسطة</span>
+                                <span class="lesson-xp">+110 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('النهايات والاتصال وسلوك الدوال', 'مرحلة التفاضل والتكامل', '28 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 10. CALCULUS 1: DERIVATIVES -->
+            <div class="unit-card" data-stage="calculus" data-title="قواعد الاشتقاق وتطبيقات التفاضل (Derivatives & Applications)" data-grade="حساب التفاضل والتكامل 1 (Calculus I)">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-calculus">مرحلة التفاضل والتكامل</span>
+                        <span class="unit-formula-pill">dy/dx = f'(x) • Chain Rule</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box" style="background:rgba(236,72,153,0.15); border-color:rgba(236,72,153,0.3)">📈</div>
+                        <div>
+                            <div class="unit-title">قواعد الاشتقاق وتطبيقات التفاضل</div>
+                            <div class="unit-grade">Calculus I: Differentiation</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">تعريف المشتقة كمعامل ميل ومعدل تغير آني، قواعد القوة والسلسلة، الاشتقاق الضمني، والمعدلات الزمنية ورسم المنحنيات والقيم القصوى.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#f472b6">50% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ قواعد الاشتقاق الأساسية (القوة، الضرب، القسمة)</span>
+                                <span class="lesson-xp">+90 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">✓ قاعدة السلسلة (Chain Rule) والاشتقاق الضمني</span>
+                                <span class="lesson-xp">+105 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">▶ المعدلات الزمنية المرتبطة (Related Rates)</span>
+                                <span class="lesson-xp">+120 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 القيم العظمى والصغرى ونقاط الانقلاب ورسم المنحنيات</span>
+                                <span class="lesson-xp">+120 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('قواعد الاشتقاق وتطبيقات التفاضل', 'مرحلة التفاضل والتكامل', '35 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 11. CALCULUS 2: INTEGRATION -->
+            <div class="unit-card" data-stage="calculus" data-title="التكامل المحدود وغير المحدود (Integration & Antiderivatives)" data-grade="حساب التفاضل والتكامل 2 (Calculus II)">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-calculus">مرحلة التفاضل والتكامل</span>
+                        <span class="unit-formula-pill">∫ f(x)dx = F(x) + C</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box" style="background:rgba(236,72,153,0.15); border-color:rgba(236,72,153,0.3)">∫</div>
+                        <div>
+                            <div class="unit-title">التكامل المحدود وغير المحدود</div>
+                            <div class="unit-grade">Calculus II: Integral Calculus</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">النظرية الأساسية للتفاضل والتكامل، طرق التكامل بالتعويض وبالأجزاء والكسور الجزئية، وحساب المساحات المحصورة بين المنحنيات.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#f472b6">20% منجز</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">✓ النظرية الأساسية للتفاضل والتكامل والدوال الأصلية</span>
+                                <span class="lesson-xp">+95 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 طريقة التكامل بالتعويض (U-Substitution)</span>
+                                <span class="lesson-xp">+105 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 التكامل بالأجزاء والتجزيء (Integration by Parts)</span>
+                                <span class="lesson-xp">+120 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 الكسور الجزئية وحساب المساحات بين المنحنيات</span>
+                                <span class="lesson-xp">+130 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('التكامل المحدود وغير المحدود', 'مرحلة التفاضل والتكامل', '34 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+            <!-- 12. CALCULUS 3: ADVANCED -->
+            <div class="unit-card" data-stage="calculus" data-title="حجوم الأجسام الدورانية والمعادلات التفاضلية (Advanced Calculus)" data-grade="حساب التفاضل والتكامل المتقدم (Calculus III)">
+                <div>
+                    <div class="unit-top-meta">
+                        <span class="unit-stage-tag tag-calculus">مرحلة التفاضل والتكامل</span>
+                        <span class="unit-formula-pill">V = π ∫ [f(x)]² dx</span>
+                    </div>
+                    <div class="unit-header-content">
+                        <div class="unit-icon-box" style="background:rgba(236,72,153,0.15); border-color:rgba(236,72,153,0.3)">🌀</div>
+                        <div>
+                            <div class="unit-title">حجوم الأجسام الدورانية والمعادلات التفاضلية</div>
+                            <div class="unit-grade">Calculus III: Solids of Revolution & Diff Eq</div>
+                        </div>
+                    </div>
+                    <div class="unit-desc">حساب الحجوم بطريقة الأقراص والقشور الأسطوانية، طول المنحنى، والمعادلات التفاضلية من الرتبة الأولى وفصل المتغيرات.</div>
+
+                    <div class="lessons-box">
+                        <div class="lessons-header">
+                            <span>الدروس التفاعلية (4 دروس)</span>
+                            <span style="color:#94a3b8">جديد ومتاح</span>
+                        </div>
+                        <ul class="lessons-list">
+                            <li>
+                                <span class="lesson-name">🔒 حجوم الأجسام الدورانية بطريقة الأقراص والحلقات</span>
+                                <span class="lesson-xp">+125 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 طريقة القشور الأسطوانية (Cylindrical Shells)</span>
+                                <span class="lesson-xp">+125 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 طول القوس ومساحة السطح الدوراني</span>
+                                <span class="lesson-xp">+120 XP</span>
+                            </li>
+                            <li>
+                                <span class="lesson-name">🔒 المعادلات التفاضلية القابلة للفصل وتطبيقات النمو</span>
+                                <span class="lesson-xp">+140 XP</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-video-preview" onclick="openVideoModal('حجوم الأجسام الدورانية والمعادلات التفاضلية', 'مرحلة التفاضل والتكامل', '40 دقيقة')">🎬 الشرح</button>
+                    <a href="09_interactive_problem_solving.html" class="btn-start">دخول مسائل الوحدة 🚀</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- VIDEO MODAL SIMULATOR -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-card">
+            <div class="modal-top">
+                <div>
+                    <span id="modalStageBadge" class="unit-stage-tag tag-calculus">مرحلة التفاضل والتكامل</span>
+                    <h3 id="modalTitle" style="font-size:18px; font-weight:800; color:#fff; margin-top:4px;">عنوان الدرس</h3>
+                </div>
+                <button onclick="closeVideoModal()" style="background:rgba(255,255,255,0.08); border:none; color:#fff; width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+            </div>
+
+            <div class="modal-player">
+                <div class="play-btn-circle" onclick="startSimulatedVideo()">▶</div>
+                <div style="margin-top:14px; font-size:14px; font-weight:700; color:#fff;">شرح مرئي تفاعلي عالي الدقة (HD 1080p)</div>
+                <div id="modalDuration" style="font-size:12px; color:var(--text-muted); margin-top:4px;">مدة الشرح: 25 دقيقة</div>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <a href="09_interactive_problem_solving.html" class="btn-start" style="flex:1;">الانتقال للمسائل التفاعلية ✍️</a>
+                <button class="btn-video-preview" onclick="closeVideoModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeStage = 'all';
+
+        function filterByStage(stage, btn) {
+            activeStage = stage;
+            document.querySelectorAll('.stage-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }
+
+        function searchUnits() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = (document.getElementById('curriculumSearch').value || '').trim().toLowerCase();
+            const cards = document.querySelectorAll('.unit-card');
+            let visible = 0;
+
+            cards.forEach(card => {
+                const stage = card.getAttribute('data-stage') || '';
+                const title = (card.getAttribute('data-title') || '').toLowerCase();
+                const grade = (card.getAttribute('data-grade') || '').toLowerCase();
+                const text = card.innerText.toLowerCase();
+
+                const matchesStage = (activeStage === 'all') || (stage === activeStage);
+                const matchesQuery = !query || title.includes(query) || grade.includes(query) || text.includes(query);
+
+                if (matchesStage && matchesQuery) {
+                    card.style.display = 'flex';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('visibleCount').innerText = visible;
+        }
+
+        function openVideoModal(title, stage, duration) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalStageBadge').innerText = stage;
+            document.getElementById('modalDuration').innerText = 'مدة الشرح: ' + duration + ' • مدعوم بالذكاء الاصطناعي';
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+
+        function startSimulatedVideo() {
+            alert('بدء تشغيل الشرح التفاعلي للدرس بالذكاء الاصطناعي!');
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeVideoModal();
+        });
+    </script>
+</body>
+</html>

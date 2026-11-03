@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول المشرف والمعلم - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a14;
+            --surface: rgba(16, 23, 41, 0.85);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+            color: #fff;
+            background-image: radial-gradient(at 10% 20%, rgba(79, 70, 229, 0.25) 0%, transparent 40%);
+        }
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 35px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+        }
+        .brand { text-align: center; margin-bottom: 25px; }
+        .icon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, #0284c7, #4f46e5);
+            border-radius: 18px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        p { color: var(--text-muted); font-size: 14px; }
+        .role-switch {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 25px;
+        }
+        .role-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 10px;
+            font-family: 'Cairo';
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .role-btn.active { background: #4f46e5; color: #fff; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 15px;
+        }
+        input:focus { outline: none; border-color: #38bdf8; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+        .btn:hover { filter: brightness(1.1); }
+        .footer { margin-top: 25px; text-align: center; font-size: 13px; color: var(--text-muted); }
+        .footer a { color: #38bdf8; text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="brand">
+            <div class="icon">💼</div>
+            <h1>بوابة المشرفين والمعلمين</h1>
+            <p>تسجيل الدخول إلى لوحة إدارة الرياضيات الشاملة</p>
+        </div>
+
+        <div class="role-switch">
+            <button class="role-btn active" onclick="switchRole(this, 'معلم')">👨‍🏫 دخول المعلم</button>
+            <button class="role-btn" onclick="switchRole(this, 'مشرف')">👔 دخول المشرف الأكاديمي</button>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='02_teacher_dashboard.html';">
+            <div class="form-group">
+                <label>البريد الإلكتروني التعليمي أو الهوية الوطنية:</label>
+                <input type="text" placeholder="teacher@math.edu.sa" required value="abdullah.teacher@math.edu.sa">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" placeholder="••••••••" required value="password123">
+            </div>
+            <button type="submit" class="btn">تسجيل الدخول إلى لوحة التحكم ←</button>
+        </form>
+
+        <div class="footer">
+            ليس لديك حساب معلم؟ <a href="14_supervisor_teacher_registration.html">طلب تسجيل جديد</a> | <a href="index.html">معرض الواجهات</a>
+        </div>
+    </div>
+
+    <script>
+        function switchRole(btn, role) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم وإدارة السجلات - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a14;
+            --surface: rgba(18, 25, 45, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            min-height: 100vh;
+            padding: 30px 25px 60px;
+            background-image: radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.2) 0, transparent 40%);
+        }
+        .container { max-width: 1240px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .page-title h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+        .page-title p { color: var(--text-muted); font-size: 14px; }
+        .back-link { color: var(--text-muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+        .back-link:hover { color: #fff; }
+
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; text-align: right; font-size: 14px; }
+        th { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+        td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        .btn-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #38bdf8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Cairo';
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="page-title">
+                <h1>لوحة التحكم وإدارة السجلات - أذكياء الرياضيات</h1>
+                <p>إدارة سجلات الطلاب، نتائج التقييم الذكي، وأرشيف التحديات المكتملة</p>
+            </div>
+            <a href="index.html" class="back-link">← العودة لمعرض الواجهات (18)</a>
+        </header>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم السجل</th>
+                        <th>اسم الطالب</th>
+                        <th>المرحلة</th>
+                        <th>التاريخ</th>
+                        <th>نوع النشاط</th>
+                        <th>النتيجة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#REC-9081</td>
+                        <td>فهد عبدالعزيز السالم</td>
+                        <td>الصف السادس</td>
+                        <td>2026-10-29</td>
+                        <td>تقييم ذكي - الوحدة 2</td>
+                        <td><strong style="color:#10b981">92%</strong></td>
+                        <td><button class="btn-action" onclick="window.location.href='01_smart_assessment_result.html'">عرض السجل</button></td>
+                    </tr>
+                    <tr>
+                        <td>#REC-9080</td>
+                        <td>سارة فهد الخالدي</td>
+                        <td>الصف السادس</td>
+                        <td>2026-10-29</td>
+                        <td>حلبة تحدي مباشر</td>
+                        <td><strong style="color:#38bdf8">فوز (الأولى)</strong></td>
+                        <td><button class="btn-action" onclick="window.location.href='03_live_challenge_arena.html'">عرض الجولة</button></td>
+                    </tr>
+                    <tr>
+                        <td>#REC-9079</td>
+                        <td>ريان خالد القحطاني</td>
+                        <td>الصف الخامس</td>
+                        <td>2026-10-28</td>
+                        <td>مسائل تفاعلية ذاتية</td>
+                        <td><strong style="color:#fbbf24">84%</strong></td>
+                        <td><button class="btn-action" onclick="window.location.href='09_interactive_problem_solving.html'">مراجعة الحل</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

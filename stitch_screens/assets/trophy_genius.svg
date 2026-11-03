@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldCup" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="40%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="goldBase" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="pedestal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="trophyGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="80" cy="70" r="50" fill="#f59e0b" opacity="0.25" filter="url(#trophyGlow)"/>
+
+  <!-- Sparkle Stars -->
+  <polygon points="40,25 43,32 50,35 43,38 40,45 37,38 30,35 37,32" fill="#fef08a" filter="url(#trophyGlow)"/>
+  <polygon points="120,30 122,35 127,37 122,39 120,44 118,39 113,37 118,35" fill="#fef08a" filter="url(#trophyGlow)"/>
+  <polygon points="80,10 82,14 86,16 82,18 80,22 78,18 74,16 78,14" fill="#ffffff"/>
+
+  <!-- Left Cup Handle -->
+  <path d="M 50 45 C 25 45, 25 80, 52 82 L 52 72 C 38 70, 38 55, 50 55 Z" fill="url(#goldCup)"/>
+
+  <!-- Right Cup Handle -->
+  <path d="M 110 45 C 135 45, 135 80, 108 82 L 108 72 C 122 70, 122 55, 110 55 Z" fill="url(#goldCup)"/>
+
+  <!-- Trophy Cup Body -->
+  <path d="M 45 30 L 115 30 C 115 65, 100 85, 80 88 C 60 85, 45 65, 45 30 Z" fill="url(#goldCup)"/>
+  <ellipse cx="80" cy="30" rx="35" ry="6" fill="#fef08a"/>
+
+  <!-- Cup Emblem: Math Star / Pi -->
+  <circle cx="80" cy="56" r="14" fill="#78350f" opacity="0.6"/>
+  <polygon points="80,47 84,53 90,54 86,59 87,65 80,62 73,65 74,59 70,54 76,53" fill="#ffffff" filter="url(#trophyGlow)"/>
+
+  <!-- Trophy Stem -->
+  <rect x="74" y="88" width="12" height="24" rx="2" fill="url(#goldBase)"/>
+  <ellipse cx="80" cy="112" rx="20" ry="6" fill="url(#goldBase)"/>
+
+  <!-- Pedestal Base -->
+  <polygon points="56,118 104,118 112,146 48,146" fill="url(#pedestal)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="42" y="146" width="76" height="10" rx="3" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+
+  <!-- Gold Plate on Base -->
+  <rect x="58" y="126" width="44" height="14" rx="3" fill="url(#goldBase)"/>
+  <text x="80" y="136" font-family="'Cairo', sans-serif" font-size="8" font-weight="900" fill="#78350f" text-anchor="middle">عبقري الرياضيات</text>
+</svg>

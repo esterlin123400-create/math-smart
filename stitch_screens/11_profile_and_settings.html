@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي والإعدادات - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a14;
+            --surface: rgba(18, 25, 45, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            min-height: 100vh;
+            padding: 30px 25px 60px;
+            background-image: radial-gradient(at 90% 10%, rgba(79, 70, 229, 0.2) 0, transparent 40%);
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .back-link { color: var(--text-muted); text-decoration: none; font-weight: 700; font-size: 14px; }
+        .back-link:hover { color: #fff; }
+
+        .profile-card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .avatar-box {
+            width: 90px; height: 90px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+        .profile-info h1 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+        .profile-info p { color: var(--text-muted); font-size: 14px; margin-bottom: 8px; }
+        .badge-role { background: rgba(99, 102, 241, 0.2); color: #818cf8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+        .settings-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        .settings-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .setting-desc h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .setting-desc p { font-size: 12px; color: var(--text-muted); }
+
+        .toggle-switch {
+            width: 50px; height: 26px;
+            background: #4f46e5;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-knob {
+            width: 20px; height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px; left: 3px;
+        }
+        .btn-save {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            border: none;
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-family: 'Cairo';
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← العودة إلى معرض الواجهات</a>
+            <span style="font-size:13px; color:var(--text-muted)">إعدادات الحساب والتفضيلات</span>
+        </header>
+
+        <div class="profile-card">
+            <div class="avatar-box">🧑‍🚀</div>
+            <div class="profile-info">
+                <h1>فهد عبدالعزيز السالم</h1>
+                <p>مدرسة أذكياء المستقبل - الصف السادس الابتدائي (شعبة أ)</p>
+                <span class="badge-role">حساب طالب معتمد ⭐</span>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h3>تفضيلات الذكاء الاصطناعي والتفاعل</h3>
+
+            <div class="setting-item">
+                <div class="setting-desc">
+                    <h4>المساعد الرياضي الذكي (AI Tutor)</h4>
+                    <p>تقديم تلميحات ذكية أثناء حل المسائل التفاعلية</p>
+                </div>
+                <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-desc">
+                    <h4>تأثيرات الصوت التفاعلية</h4>
+                    <p>تشغيل أصوات الفوز والتحدي في حلبة التحديات المباشرة</p>
+                </div>
+                <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-desc">
+                    <h4>المظهر الداكن فائق التباين</h4>
+                    <p>راحة العين أثناء حل المسائل الرياضية الطويلة</p>
+                </div>
+                <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <div style="margin-top:25px; text-align:left">
+                <button class="btn-save" onclick="alert('تم حفظ الإعدادات بنجاح!')">حفظ التغييرات ✓</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

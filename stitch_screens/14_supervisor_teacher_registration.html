@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب مشرف ومعلم - أذكياء الرياضيات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a14;
+            --surface: rgba(16, 23, 41, 0.85);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.2) 0%, transparent 40%);
+        }
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 580px;
+            padding: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 25px; }
+        .icon {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            border-radius: 16px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        h1 { font-size: 24px; font-weight: 800; }
+        p { color: var(--text-muted); font-size: 14px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 14px;
+        }
+        input:focus, select:focus { outline: none; border-color: #6366f1; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            margin-top: 10px;
+        }
+        .footer { margin-top: 20px; text-align: center; font-size: 13px; color: var(--text-muted); }
+        .footer a { color: #38bdf8; text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="icon">📝</div>
+            <h1>تسجيل حساب تربوي جديد</h1>
+            <p>انضم إلى منصة أذكياء الرياضيات كمعلم أو مشرف أكاديمي</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); alert('تم استلام طلب التسجيل بنجاح! سيتم مراجعة الاعتماد.'); window.location.href='10_supervisor_teacher_login.html';">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>الاسم الكامل:</label>
+                    <input type="text" placeholder="مثال: أ. محمد العتيبي" required>
+                </div>
+                <div class="form-group">
+                    <label>الدور التربوي:</label>
+                    <select required>
+                        <option>معلم رياضيات</option>
+                        <option>مشرف تربوي رياضيات</option>
+                        <option>رئيس قسم الرياضيات</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>البريد الإلكتروني الوزاري:</label>
+                    <input type="email" placeholder="edu@moe.gov.sa" required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الجوال:</label>
+                    <input type="tel" placeholder="05xxxxxxxx" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>المدرسة أو إدارة التعليم:</label>
+                <input type="text" placeholder="اسم المدرسة أو مكتب التعليم التابع له" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>كلمة المرور:</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>تأكيد كلمة المرور:</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">إرسال طلب الانضمام والاعتماد ✓</button>
+        </form>
+
+        <div class="footer">
+            لديك حساب بالفعل؟ <a href="10_supervisor_teacher_login.html">تسجيل الدخول</a> | <a href="index.html">معرض الواجهات</a>
+        </div>
+    </div>
+</body>
+</html>

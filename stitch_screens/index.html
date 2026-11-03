@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة أذكياء الرياضيات - بوابة الواجهات التفاعلية الكاملة (18 واجهة)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #060913;
+            --bg-card: rgba(17, 24, 39, 0.72);
+            --bg-card-hover: rgba(30, 41, 59, 0.88);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.55);
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --accent-cyan: #06b6d4;
+            --accent-purple: #a855f7;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-pink: #ec4899;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(79, 70, 229, 0.2) 0px, transparent 50%),
+                radial-gradient(at 90% 10%, rgba(6, 182, 212, 0.16) 0px, transparent 50%),
+                radial-gradient(at 50% 80%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 30px 20px 60px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* HEADER HERO */
+        header {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 35px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; left: 0; height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4, #a855f7, #ec4899);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-box {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .header-titles h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .header-titles p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-card);
+            padding: 10px 20px;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .stat-badge .num {
+            font-size: 24px;
+            font-weight: 800;
+            color: #38bdf8;
+            font-family: 'Outfit', sans-serif;
+            display: block;
+        }
+
+        .stat-badge .lbl {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* STATUS BANNER */
+        .status-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: var(--radius-md);
+            padding: 18px 24px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .status-banner-text {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-pill {
+            background: #10b981;
+            color: #042f24;
+            font-weight: 800;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .status-banner strong {
+            color: #a7f3d0;
+        }
+
+        .quick-hint {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* CONTROLS (SEARCH & FILTER) */
+        .controls-bar {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            color: var(--text-heading);
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .categories-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-card);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .filter-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        /* GRID */
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 25px;
+        }
+
+        /* CARD */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.25);
+        }
+
+        .card-preview {
+            height: 200px;
+            background: #090e1a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-card);
+            padding: 16px;
+        }
+
+        .card-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover .card-preview img {
+            transform: scale(1.05);
+        }
+
+        .batch-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        /* BESPOKE MINI PREVIEW STYLES */
+        .mini-ui-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mini-text-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+        }
+        .mini-text-badge.blue { color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1); }
+        .mini-text-badge.purple { color: #c084fc; border-color: rgba(192, 132, 252, 0.3); background: rgba(192, 132, 252, 0.1); }
+        .mini-text-badge.emerald { color: #34d399; border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1); }
+        .mini-text-badge.amber { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.1); }
+        .mini-text-badge.pink { color: #f472b6; border-color: rgba(244, 114, 182, 0.3); background: rgba(244, 114, 182, 0.1); }
+        .mini-text-badge.gold { color: #fcd34d; border-color: rgba(252, 211, 77, 0.4); background: rgba(252, 211, 77, 0.15); }
+
+        /* Teacher Mini */
+        .teacher-mini { width: 90%; }
+        .mini-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .mini-pill { font-size: 12px; font-weight: 800; color: #fff; background: rgba(79, 70, 229, 0.25); border: 1px solid rgba(79,70,229,0.4); padding: 3px 10px; border-radius: 8px; }
+        .mini-status { font-size: 11px; color: #34d399; font-weight: 700; }
+        .mini-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin: 6px 0; }
+        .mini-stat-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 10px; text-align: center; }
+        .mini-num { font-size: 16px; font-weight: 900; color: #38bdf8; font-family: 'Outfit'; display: block; }
+        .mini-lbl { font-size: 10px; color: #94a3b8; }
+        .mini-chart-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; }
+        .mini-bar-fill { height: 100%; background: linear-gradient(90deg, #4f46e5, #06b6d4); }
+
+        /* Auth Mini */
+        .mini-icon-circle { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .mini-icon-circle.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .mini-icon-circle.emerald { background: linear-gradient(135deg, #10b981, #059669); }
+        .mini-otp-row { display: flex; gap: 8px; margin: 4px 0; }
+        .mini-otp-dot { width: 12px; height: 12px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8; }
+
+        /* Grades Mini */
+        .grades-mini { width: 90%; gap: 6px; }
+        .grade-pill-mini { width: 100%; padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .grade-pill-mini.primary { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border-color: rgba(59,130,246,0.3); }
+        .grade-pill-mini.middle { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border-color: rgba(168,85,247,0.3); }
+        .grade-pill-mini.high { background: rgba(236, 72, 153, 0.15); color: #f472b6; border-color: rgba(236,72,153,0.3); }
+
+        /* Table Mini */
+        .table-mini { width: 95%; gap: 4px; }
+        .mini-table-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr; width: 100%; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; font-size: 11px; align-items: center; }
+        .mini-table-row.header { background: rgba(255,255,255,0.08); font-weight: 800; color: #fff; }
+        .tag-success { color: #34d399; font-weight: 700; }
+        .tag-info { color: #38bdf8; font-weight: 700; }
+
+        /* Chart Mini */
+        .mini-bars-chart { display: flex; gap: 14px; align-items: flex-end; height: 75px; padding: 5px 0; }
+        .bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+        .bar-col .bar { width: 16px; background: rgba(79, 70, 229, 0.5); border-radius: 4px; transition: height 0.3s; }
+        .bar-col .bar.active { background: linear-gradient(180deg, #38bdf8, #4f46e5); box-shadow: 0 0 10px rgba(56,189,248,0.5); }
+        .bar-col span { font-size: 10px; color: #94a3b8; }
+
+        /* Dual Login Mini */
+        .dual-avatar-group { display: flex; gap: 14px; margin-bottom: 4px; }
+        .dual-avatar { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 14px; border-radius: 12px; font-size: 22px; }
+        .dual-avatar.teacher { background: rgba(79, 70, 229, 0.2); border: 1px solid rgba(79,70,229,0.4); }
+        .dual-avatar.supervisor { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168,85,247,0.4); }
+        .dual-avatar span { font-size: 11px; font-weight: 800; color: #fff; }
+
+        /* Settings Mini */
+        .settings-mini { width: 90%; }
+        .mini-user-row { display: flex; align-items: center; gap: 10px; width: 100%; margin-bottom: 6px; }
+        .mini-user-info .name { font-size: 12px; font-weight: 800; color: #fff; display: block; }
+        .mini-user-info .role { font-size: 10px; color: #38bdf8; }
+        .mini-toggle-row { display: flex; justify-content: space-between; align-items: center; width: 100%; background: rgba(255,255,255,0.04); padding: 6px 12px; border-radius: 8px; font-size: 11px; }
+        .mini-toggle { width: 28px; height: 16px; background: #4f46e5; border-radius: 10px; position: relative; }
+        .mini-toggle::after { content: ''; position: absolute; left: 2px; top: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
+
+        /* Math Keys Mini */
+        .keys-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 90%; margin-bottom: 4px; }
+        .m-key { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 6px; text-align: center; font-size: 13px; font-weight: 900; color: #38bdf8; font-family: 'Outfit'; }
+
+        /* Student Dash Mini */
+        .student-dash-mini { width: 90%; gap: 10px; }
+        .mini-xp-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; }
+        .mini-xp-fill { height: 100%; background: linear-gradient(90deg, #06b6d4, #10b981); }
+
+        /* Avatar pick */
+        .avatar-pick-row { display: flex; gap: 12px; align-items: center; }
+
+        /* Parent Mini */
+        .circle-progress-mini { width: 68px; height: 68px; border-radius: 50%; border: 4px solid #f59e0b; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(245,158,11,0.3); }
+        .circle-progress-mini .score { font-size: 16px; font-weight: 900; color: #fbbf24; font-family: 'Outfit'; }
+        .circle-progress-mini .label { font-size: 9px; color: #94a3b8; }
+
+        /* Curriculum Books */
+        .curriculum-mini { width: 90%; gap: 5px; }
+        .book-pill { width: 100%; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-align: right; }
+        .book-pill.blue { background: rgba(56,189,248,0.12); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.25); }
+        .book-pill.purple { background: rgba(168,85,247,0.12); color: #d8b4fe; border: 1px solid rgba(168,85,247,0.25); }
+        .book-pill.emerald { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+
+        /* Infinity Gold */
+        .infinity-badge { font-size: 44px; color: #fbbf24; font-weight: 900; text-shadow: 0 0 20px rgba(245,158,11,0.6); display: flex; align-items: center; gap: 6px; }
+
+        /* CARD BODY */
+        .card-body {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .card-category {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .card-id-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 6px 12px;
+            margin-bottom: 18px;
+            font-family: 'Outfit', monospace;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .copy-id-btn {
+            background: transparent;
+            border: none;
+            color: #38bdf8;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .copy-id-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #fff;
+        }
+
+        /* ACTIONS */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4338ca, #1d4ed8);
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.55);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            border: 1px solid var(--border-card);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* MODAL PREVIEW */
+        .preview-modal {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(16px);
+        }
+
+        .preview-modal.active {
+            display: flex;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(2, 6, 23, 0.85);
+        }
+
+        .modal-window {
+            position: relative;
+            background: #0b1120;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            width: 95vw;
+            max-width: 1300px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            z-index: 2;
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--border-card);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .modal-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-icon {
+            font-size: 24px;
+        }
+
+        .modal-title-wrap h3 {
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .device-switch {
+            display: flex;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .device-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .device-btn.active {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #cbd5e1;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .modal-body {
+            flex-grow: 1;
+            background: #020617;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            transition: width 0.35s ease;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            background: #fff;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #10b981;
+            color: #ffffff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 99999;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* JOURNEY PHASES & SECTION HEADERS */
+        .phases-quickbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .phase-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-card);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Cairo', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .phase-btn.active {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .phase-section-header {
+            grid-column: 1 / -1;
+            background: linear-gradient(90deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.65));
+            border: 1px solid var(--border-card);
+            border-right: 4px solid var(--accent-cyan);
+            border-radius: var(--radius-md);
+            padding: 16px 24px;
+            margin-top: 20px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .phase-section-header.p1 { border-right-color: #06b6d4; }
+        .phase-section-header.p2 { border-right-color: #a855f7; }
+        .phase-section-header.p3 { border-right-color: #f59e0b; }
+        .phase-section-header.p4 { border-right-color: #10b981; }
+        .phase-section-header.p5 { border-right-color: #ec4899; }
+
+        .phase-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .phase-pill {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .phase-section-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .phase-section-header p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .phase-count-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; align-items: flex-start; }
+            .screens-grid { grid-template-columns: 1fr; }
+            .device-switch { display: none; }
+            .phase-section-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="header-content">
+                <div class="brand-section">
+                    <div class="logo-box">📐</div>
+                    <div class="header-titles">
+                        <h1>منصة أذكياء الرياضيات - بوابة الواجهات التفاعلية الكاملة</h1>
+                        <p>مرتبة تسلسلياً حسب رحلة المستخدم الكاملة من البداية وحتى الإدارة والتقارير (18 واجهة مبرمجة)</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <span class="num">18</span>
+                        <span class="lbl">واجهة مرتبة منطقياً</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="num">5</span>
+                        <span class="lbl">مراحل رحلة المستخدم</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="num">100%</span>
+                        <span class="lbl">جاهزة للاستخدام</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- STATUS BANNER -->
+        <div class="status-banner">
+            <div class="status-banner-text">
+                <span class="status-pill">ترتيب منطقي معتمد ✓</span>
+                <span>تم ترتيب الواجهات الـ 18 بتسلسل رحلة المستخدم الكاملة: <strong>(1) الهوية وبوابات الدخول ➔ (2) المراحل والمناهج ➔ (3) تجربة الطالب والتعلم النشط والتقييم ➔ (4) لوحة المعلم والمتابعة ➔ (5) الملف الشخصي</strong>.</span>
+            </div>
+            <div class="quick-hint">
+                ⚡ يمكنك تصفية الواجهات حسب مرحلة الرحلة أو حسب التصنيف
+            </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن واجهة بالاسم، رقم الخطوة (مثال: 'خطوة 01')، المعرّف ID، أو التصنيف..." onkeyup="filterCards()">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- رحلة المستخدم: المراحل الخمس الرئيسية -->
+            <div class="phases-quickbar" id="phasesNav">
+                <button class="phase-btn active" onclick="setPhaseFilter('all')">
+                    <span>🌟 جميع المراحل (18)</span>
+                </button>
+                <button class="phase-btn" onclick="setPhaseFilter('phase1')">
+                    <span>🚀 1. الهوية وبوابات الدخول (6)</span>
+                </button>
+                <button class="phase-btn" onclick="setPhaseFilter('phase2')">
+                    <span>📚 2. المراحل والمناهج الدراسية (2)</span>
+                </button>
+                <button class="phase-btn" onclick="setPhaseFilter('phase3')">
+                    <span>🎯 3. بيئة الطالب والتعلم والتقييم (5)</span>
+                </button>
+                <button class="phase-btn" onclick="setPhaseFilter('phase4')">
+                    <span>👨‍🏫 4. لوحة المعلم والمتابعة (4)</span>
+                </button>
+                <button class="phase-btn" onclick="setPhaseFilter('phase5')">
+                    <span>⚙️ 5. الملف الشخصي والإعدادات (1)</span>
+                </button>
+            </div>
+
+            <!-- التصنيفات الدقيقة -->
+            <div class="categories-nav" id="categoriesNav">
+                <button class="filter-btn active" onclick="setCategory('all')">جميع التصنيفات</button>
+                <button class="filter-btn" onclick="setCategory('الهوية والشعار')">الهوية والشعار</button>
+                <button class="filter-btn" onclick="setCategory('تسجيل الدخول')">تسجيل الدخول</button>
+                <button class="filter-btn" onclick="setCategory('إنشاء الحسابات')">إنشاء الحسابات</button>
+                <button class="filter-btn" onclick="setCategory('المراحل الدراسية')">المراحل الدراسية</button>
+                <button class="filter-btn" onclick="setCategory('المناهج الدراسية')">المناهج الدراسية</button>
+                <button class="filter-btn" onclick="setCategory('لوحات التحكم')">لوحات التحكم</button>
+                <button class="filter-btn" onclick="setCategory('حل المسائل التفاعلية')">حل المسائل التفاعلية</button>
+                <button class="filter-btn" onclick="setCategory('لوحة المفاتيح والرموز الرياضية')">لوحة الرموز</button>
+                <button class="filter-btn" onclick="setCategory('التحديات المباشرة')">التحديات المباشرة</button>
+                <button class="filter-btn" onclick="setCategory('التقييم ومراجعة الحل')">التقييم والحلول</button>
+                <button class="filter-btn" onclick="setCategory('إدارة السجلات')">إدارة السجلات</button>
+                <button class="filter-btn" onclick="setCategory('التقارير والتحليلات')">التقارير والتحليلات</button>
+                <button class="filter-btn" onclick="setCategory('الملف الشخصي والإعدادات')">الملف الشخصي</button>
+            </div>
+        </div>
+
+        <!-- SCREENS GRID (ARRANGED IN LOGICAL ORDER 1 TO 18) -->
+        <div class="screens-grid" id="screensGrid">
+            
+            <!-- ========================================== -->
+            <!-- PHASE 1: ONBOARDING & AUTHENTICATION (1-6) -->
+            <!-- ========================================== -->
+            <div class="phase-section-header p1" data-phase-group="phase1">
+                <div class="phase-header-left">
+                    <span class="phase-pill">المرحلة 01</span>
+                    <div>
+                        <h2>الهوية وبوابات الدخول وإدارة الحسابات</h2>
+                        <p>نقطة الانطلاق الأولى: التعريف بالهوية، تسجيل دخول الطلاب والكادر، إنشاء الحسابات واستعادة الأمان</p>
+                    </div>
+                </div>
+                <span class="phase-count-badge">6 واجهات</span>
+            </div>
+
+            <!-- Step 01: Logo & Branding (Was 18) -->
+            <div class="card" data-phase-group="phase1" data-category="الهوية والشعار" data-title="الخطوة 01: شعار أذكياء الرياضيات والهوية البصرية الرسمية" data-id="7c379b1d3bc74feaa483ba674aef3c44">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.25) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 01 • ملف 18</span>
+                    <div class="mini-ui-preview">
+                        <div class="infinity-badge">
+                            <span>∞</span>
+                            <span style="font-size:26px;">✨</span>
+                        </div>
+                        <span class="mini-text-badge gold">الهوية البصرية والعلامة التجارية لمنصة الذكاء</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">الهوية والشعار</div>
+                        <div class="card-title">شعار أذكياء الرياضيات والهوية البصرية</div>
+                        <div class="card-id-row">
+                            <span>ID: 7c379b1d3bc74feaa483ba674aef3c44</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('7c379b1d3bc74feaa483ba674aef3c44')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="18_logo_branding.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('18_logo_branding.html', 'شعار أذكياء الرياضيات والهوية')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 02: Student Login (Was 04) -->
+            <div class="card" data-phase-group="phase1" data-category="تسجيل الدخول" data-title="الخطوة 02: تسجيل دخول الطالب - أذكياء الرياضيات" data-id="2a09bf136d314007b38d4db82142d19f">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(6,182,212,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 02 • ملف 04</span>
+                    <img src="assets/student_hero_mascot.svg" alt="تسجيل دخول الطالب" style="width:170px; height:auto; object-fit:contain; filter:drop-shadow(0 10px 22px rgba(6,182,212,0.4));">
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">تسجيل الدخول</div>
+                        <div class="card-title">تسجيل دخول الطالب - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 2a09bf136d314007b38d4db82142d19f</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('2a09bf136d314007b38d4db82142d19f')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="04_student_login.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('04_student_login.html', 'تسجيل دخول الطالب')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 03: Student Registration (Was 15) -->
+            <div class="card" data-phase-group="phase1" data-category="إنشاء الحسابات" data-title="الخطوة 03: إنشاء حساب طالب جديد - أذكياء الرياضيات" data-id="97004bf157bf4f6a97205027f10c1d68">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(236,72,153,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 03 • ملف 15</span>
+                    <div class="mini-ui-preview">
+                        <div class="avatar-pick-row">
+                            <img src="assets/avatar_ninja.svg" alt="Ninja" style="width:40px; height:40px;">
+                            <img src="assets/avatar_robot.svg" alt="Robot" style="width:48px; height:48px; filter:drop-shadow(0 4px 12px rgba(236,72,153,0.5)); transform:scale(1.15);">
+                            <img src="assets/avatar_wizard.svg" alt="Wizard" style="width:40px; height:40px;">
+                        </div>
+                        <span class="mini-text-badge pink">انضم إلى أبطال الرياضيات وأنشئ حسابك</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">إنشاء الحسابات</div>
+                        <div class="card-title">إنشاء حساب طالب جديد - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 97004bf157bf4f6a97205027f10c1d68</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('97004bf157bf4f6a97205027f10c1d68')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="15_student_registration.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('15_student_registration.html', 'إنشاء حساب طالب جديد')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 04: Supervisor & Teacher Login (Was 10) -->
+            <div class="card" data-phase-group="phase1" data-category="تسجيل الدخول" data-title="الخطوة 04: تسجيل دخول المشرف والمعلم - أذكياء الرياضيات" data-id="ecb1a11b548a47299287fcf411abf3af">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(99,102,241,0.22) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 04 • ملف 10</span>
+                    <div class="mini-ui-preview">
+                        <div class="dual-avatar-group">
+                            <div class="dual-avatar teacher">👨‍🏫<span>معلم</span></div>
+                            <div class="dual-avatar supervisor">💼<span>مشرف</span></div>
+                        </div>
+                        <span class="mini-text-badge purple">بوابة تسجيل الدخول الموحدة للكادر</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">تسجيل الدخول</div>
+                        <div class="card-title">تسجيل دخول المشرف والمعلم - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: ecb1a11b548a47299287fcf411abf3af</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('ecb1a11b548a47299287fcf411abf3af')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="10_supervisor_teacher_login.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('10_supervisor_teacher_login.html', 'تسجيل دخول المشرف والمعلم')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 05: Supervisor & Teacher Registration (Was 14) -->
+            <div class="card" data-phase-group="phase1" data-category="إنشاء الحسابات" data-title="الخطوة 05: إنشاء حساب مشرف ومعلم - أذكياء الرياضيات" data-id="671bd352a4974db98152250baa53826f">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 05 • ملف 14</span>
+                    <div class="mini-ui-preview">
+                        <div class="mini-icon-circle emerald">🎓</div>
+                        <span style="font-size:13px; font-weight:800; color:#fff;">تسجيل المعلم والمشرف</span>
+                        <span class="mini-text-badge emerald">اعتماد المدرسة والتخصص الأكاديمي</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">إنشاء الحسابات</div>
+                        <div class="card-title">إنشاء حساب مشرف ومعلم - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 671bd352a4974db98152250baa53826f</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('671bd352a4974db98152250baa53826f')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="14_supervisor_teacher_registration.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('14_supervisor_teacher_registration.html', 'إنشاء حساب مشرف ومعلم')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 06: Password Recovery (Was 05) -->
+            <div class="card" data-phase-group="phase1" data-category="إدارة الحسابات" data-title="الخطوة 06: استعادة كلمة المرور - أذكياء الرياضيات" data-id="d0426d10d9954d7392f588ac47c94dfc">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 06 • ملف 05</span>
+                    <div class="mini-ui-preview">
+                        <div class="mini-icon-circle amber">🔐</div>
+                        <div class="mini-otp-row">
+                            <span class="mini-otp-dot"></span><span class="mini-otp-dot"></span><span class="mini-otp-dot"></span><span class="mini-otp-dot"></span>
+                        </div>
+                        <span class="mini-text-badge amber">استعادة آمنة عبر رمز التحقق OTP</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">إدارة الحسابات</div>
+                        <div class="card-title">استعادة كلمة المرور - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: d0426d10d9954d7392f588ac47c94dfc</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('d0426d10d9954d7392f588ac47c94dfc')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="05_password_recovery.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('05_password_recovery.html', 'استعادة كلمة المرور')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- PHASE 2: CURRICULUM & SETUP (7-8)          -->
+            <!-- ========================================== -->
+            <div class="phase-section-header p2" data-phase-group="phase2">
+                <div class="phase-header-left">
+                    <span class="phase-pill">المرحلة 02</span>
+                    <div>
+                        <h2>المراحل والمناهج الدراسية</h2>
+                        <p>تخصيص المسار التعليمي للطالب: تحديد المرحلة (ابتدائي، متوسط، ثانوي) واستكشاف شجرة المناهج والوحدات</p>
+                    </div>
+                </div>
+                <span class="phase-count-badge">واجهتان (2)</span>
+            </div>
+
+            <!-- Step 07: Grade Level Selection (Was 06) -->
+            <div class="card" data-phase-group="phase2" data-category="المراحل الدراسية" data-title="الخطوة 07: اختيار وتخصيص المرحلة الدراسية (جميع المراحل)" data-id="a3fdb2a306334443b833c604f3606f14">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 07 • ملف 06</span>
+                    <div class="mini-ui-preview grades-mini">
+                        <div class="grade-pill-mini primary">🎒 المرحلة الابتدائية (1-6)</div>
+                        <div class="grade-pill-mini middle">📐 المرحلة المتوسطة (1-3)</div>
+                        <div class="grade-pill-mini high">🔬 المرحلة الثانوية (مسارات)</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">المراحل الدراسية</div>
+                        <div class="card-title">اختيار وتخصيص المرحلة الدراسية (جميع المراحل)</div>
+                        <div class="card-id-row">
+                            <span>ID: a3fdb2a306334443b833c604f3606f14</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('a3fdb2a306334443b833c604f3606f14')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="06_grade_level_selection.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('06_grade_level_selection.html', 'اختيار المرحلة الدراسية')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 08: Curriculum & Units (Was 17) -->
+            <div class="card" data-phase-group="phase2" data-category="المناهج الدراسية" data-title="الخطوة 08: المناهج والوحدات الدراسية - أذكياء الرياضيات" data-id="f03cd71c121c4ba39c81e7f5b91cae7f">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(99,102,241,0.22) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 08 • ملف 17</span>
+                    <div class="mini-ui-preview curriculum-mini">
+                        <div class="book-pill blue">📘 ابتدائي ومتوسط (6 وحدات)</div>
+                        <div class="book-pill purple">🏛️ المرحلة الثانوية (وحدتان)</div>
+                        <div class="book-pill emerald">∫ التفاضل والتكامل Calculus (4 وحدات)</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">المناهج الدراسية • 12 وحدة كاملة</div>
+                        <div class="card-title">المناهج والوحدات الدراسية (جميع المراحل والتفاضل والتكامل)</div>
+                        <div class="card-id-row">
+                            <span>ID: f03cd71c121c4ba39c81e7f5b91cae7f</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('f03cd71c121c4ba39c81e7f5b91cae7f')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="17_curriculum_and_units.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('17_curriculum_and_units.html', 'المناهج والوحدات الدراسية')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================= -->
+            <!-- PHASE 3: STUDENT JOURNEY, ACTIVE LEARNING & EVALUATION (9-13) -->
+            <!-- ============================================================= -->
+            <div class="phase-section-header p3" data-phase-group="phase3">
+                <div class="phase-header-left">
+                    <span class="phase-pill">المرحلة 03</span>
+                    <div>
+                        <h2>بيئة الطالب والتعلم النشط والتحديات والتقييم</h2>
+                        <p>قلب المنصة التعليمي: لوحة تحكم الطالب، مساحة حل المسائل بالسبورة الذكية، لوحة الرموز، حلبة التحديات الحية، ونتائج التقييم</p>
+                    </div>
+                </div>
+                <span class="phase-count-badge">5 واجهات</span>
+            </div>
+
+            <!-- Step 09: Student Dashboard (Was 13) -->
+            <div class="card" data-phase-group="phase3" data-category="لوحات التحكم" data-title="الخطوة 09: لوحة تحكم الطلاب - أذكياء الرياضيات" data-id="5abe1f97873c4457ae3c61ea46cf274c">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(6,182,212,0.22) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 09 • ملف 13</span>
+                    <div class="mini-ui-preview student-dash-mini">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <img src="assets/avatar_fahad_hero.svg" alt="الطالب فهد" style="width:58px; height:58px; border-radius:16px; box-shadow:0 6px 18px rgba(6,182,212,0.45);">
+                            <div>
+                                <div style="font-size:13px; font-weight:800; color:#fff;">فهد البطل 🌟</div>
+                                <div style="font-size:11px; color:#38bdf8;">1,450 نقطة تميز XP</div>
+                            </div>
+                        </div>
+                        <div class="mini-xp-bar"><div class="mini-xp-fill" style="width:82%;"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">لوحات التحكم</div>
+                        <div class="card-title">لوحة تحكم الطلاب - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 5abe1f97873c4457ae3c61ea46cf274c</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('5abe1f97873c4457ae3c61ea46cf274c')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="13_student_dashboard.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('13_student_dashboard.html', 'لوحة تحكم الطلاب')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 10: Interactive Problem Solving (Was 09) -->
+            <div class="card" data-phase-group="phase3" data-category="حل المسائل التفاعلية" data-title="الخطوة 10: مساحة حل المسائل التفاعلية الذكية" data-id="d4c6700013024c35a53d06cd8b4f2411">
+                <div class="card-preview" style="padding: 12px; background: radial-gradient(circle at 50% 50%, rgba(79,70,229,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 10 • ملف 09</span>
+                    <img src="assets/math_algebra_balance_diagram.svg" alt="مساحة حل المسائل" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">حل المسائل التفاعلية</div>
+                        <div class="card-title">مساحة حل المسائل التفاعلية الذكية</div>
+                        <div class="card-id-row">
+                            <span>ID: d4c6700013024c35a53d06cd8b4f2411</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('d4c6700013024c35a53d06cd8b4f2411')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="09_interactive_problem_solving.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('09_interactive_problem_solving.html', 'حل المسائل التفاعلية')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 11: Keyboard Symbols Management (Was 12) -->
+            <div class="card" data-phase-group="phase3" data-category="لوحة المفاتيح والرموز الرياضية" data-title="الخطوة 11: إدارة لوحة المفاتيح والرموز - أذكياء الرياضيات" data-id="412d271bccc547e3a02821060a3ed1ac">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.22) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 11 • ملف 12</span>
+                    <div class="mini-ui-preview">
+                        <div class="keys-grid">
+                            <span class="m-key">π</span>
+                            <span class="m-key">√x</span>
+                            <span class="m-key">∑</span>
+                            <span class="m-key">∫</span>
+                            <span class="m-key">x²</span>
+                            <span class="m-key">±</span>
+                            <span class="m-key">∞</span>
+                            <span class="m-key">θ</span>
+                        </div>
+                        <span class="mini-text-badge purple">لوحة المفاتيح الرياضية التفاعلية</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">لوحة المفاتيح والرموز الرياضية</div>
+                        <div class="card-title">إدارة لوحة المفاتيح والرموز - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 412d271bccc547e3a02821060a3ed1ac</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('412d271bccc547e3a02821060a3ed1ac')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="12_keyboard_symbols_management.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('12_keyboard_symbols_management.html', 'إدارة لوحة المفاتيح والرموز')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 12: Live Challenge Arena (Was 03) -->
+            <div class="card" data-phase-group="phase3" data-category="التحديات المباشرة" data-title="الخطوة 12: حلبة التحديات المباشرة - المنافسات الرياضية" data-id="1dd06a1443b94feca3a00e60f89d9f99">
+                <div class="card-preview" style="background: radial-gradient(circle, rgba(236,72,153,0.2) 0%, rgba(56,189,248,0.2) 100%);">
+                    <span class="batch-badge">خطوة 12 • ملف 03</span>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <img src="assets/avatar_fahad_hero.svg" alt="فهد البطل" style="width:70px; height:70px; border-radius:18px; box-shadow:0 6px 16px rgba(56,189,248,0.45);">
+                        <span style="font-family:'Outfit'; font-weight:900; color:#fbbf24; font-size:22px; text-shadow:0 0 10px rgba(245,158,11,0.6);">VS</span>
+                        <img src="assets/avatar_math_wizard.svg" alt="ساحر الأرقام" style="width:70px; height:70px; border-radius:18px; box-shadow:0 6px 16px rgba(236,72,153,0.45);">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">التحديات المباشرة</div>
+                        <div class="card-title">حلبة التحديات المباشرة - المنافسات الرياضية</div>
+                        <div class="card-id-row">
+                            <span>ID: 1dd06a1443b94feca3a00e60f89d9f99</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('1dd06a1443b94feca3a00e60f89d9f99')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="03_live_challenge_arena.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('03_live_challenge_arena.html', 'حلبة التحديات المباشرة')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 13: Smart Assessment Result (Was 01) -->
+            <div class="card" data-phase-group="phase3" data-category="التقييم ومراجعة الحل" data-title="الخطوة 13: نتيجة التقييم الذكي ومراجعة الحل - أذكياء الرياضيات" data-id="076af0414b8f453d9c2625b58f51b622">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 13 • ملف 01</span>
+                    <img src="assets/trophy_genius.svg" alt="نتيجة التقييم الذكي" style="width:115px; height:115px; object-fit:contain; filter:drop-shadow(0 10px 20px rgba(245,158,11,0.45));">
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">التقييم ومراجعة الحل</div>
+                        <div class="card-title">نتيجة التقييم الذكي ومراجعة الحل - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 076af0414b8f453d9c2625b58f51b622</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('076af0414b8f453d9c2625b58f51b622')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="01_smart_assessment_result.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('01_smart_assessment_result.html', 'نتيجة التقييم الذكي ومراجعة الحل')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- PHASE 4: TEACHER DASHBOARD, RECORDS & ACADEMIC REPORTS (14-17) -->
+            <!-- ============================================================== -->
+            <div class="phase-section-header p4" data-phase-group="phase4">
+                <div class="phase-header-left">
+                    <span class="phase-pill">المرحلة 04</span>
+                    <div>
+                        <h2>لوحة المعلم والمتابعة والتقارير الأكاديمية</h2>
+                        <p>أدوات المعلم والمشرف وولي الأمر: لوحة إدارة الفصول، إدارة سجلات الطلاب، التحليلات البيانية الذكية، وتقارير المتابعة الأسرية</p>
+                    </div>
+                </div>
+                <span class="phase-count-badge">4 واجهات</span>
+            </div>
+
+            <!-- Step 14: Teacher Dashboard (Was 02) -->
+            <div class="card" data-phase-group="phase4" data-category="لوحات التحكم" data-title="الخطوة 14: أذكياء الرياضيات - لوحة تحكم المعلم الشاملة" data-id="14e80d8cb23441e794e9d5c7437ae41b">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(79,70,229,0.25) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 14 • ملف 02</span>
+                    <div class="mini-ui-preview teacher-mini">
+                        <div class="mini-row">
+                            <span class="mini-pill">👨‍🏫 لوحة المعلم</span>
+                            <span class="mini-status">نشط 🟢</span>
+                        </div>
+                        <div class="mini-grid-2">
+                            <div class="mini-stat-card"><span class="mini-num">28</span><span class="mini-lbl">طالب مسجل</span></div>
+                            <div class="mini-stat-card"><span class="mini-num">94%</span><span class="mini-lbl">نسبة الإتقان</span></div>
+                        </div>
+                        <div class="mini-chart-bar"><div class="mini-bar-fill" style="width:78%;"></div></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">لوحات التحكم</div>
+                        <div class="card-title">أذكياء الرياضيات - لوحة تحكم المعلم الشاملة</div>
+                        <div class="card-id-row">
+                            <span>ID: 14e80d8cb23441e794e9d5c7437ae41b</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('14e80d8cb23441e794e9d5c7437ae41b')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="02_teacher_dashboard.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('02_teacher_dashboard.html', 'لوحة تحكم المعلم الشاملة')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 15: Records Management (Was 07) -->
+            <div class="card" data-phase-group="phase4" data-category="إدارة السجلات" data-title="الخطوة 15: لوحة التحكم وإدارة السجلات - أذكياء الرياضيات" data-id="a75fc6bb011344e6b2dbe3a2a1e1a568">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 15 • ملف 07</span>
+                    <div class="mini-ui-preview table-mini">
+                        <div class="mini-table-row header"><span>اسم الطالب</span><span>الحالة</span><span>الدرجة</span></div>
+                        <div class="mini-table-row"><span>سارة أحمد</span><span class="tag-success">مكتمل ✓</span><span>98%</span></div>
+                        <div class="mini-table-row"><span>عمر خالد</span><span class="tag-info">قيد المتابعة</span><span>88%</span></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">إدارة السجلات</div>
+                        <div class="card-title">لوحة التحكم وإدارة السجلات - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: a75fc6bb011344e6b2dbe3a2a1e1a568</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('a75fc6bb011344e6b2dbe3a2a1e1a568')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="07_records_management.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('07_records_management.html', 'لوحة التحكم وإدارة السجلات')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 16: Academic Reports (Was 08) -->
+            <div class="card" data-phase-group="phase4" data-category="التقارير والتحليلات" data-title="الخطوة 16: أذكياء الرياضيات - التقارير والتحليلات الأكاديمية" data-id="adf77b530ff84df89ea53e995adb85a4">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.22) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 16 • ملف 08</span>
+                    <div class="mini-ui-preview">
+                        <div class="mini-bars-chart">
+                            <div class="bar-col"><div class="bar" style="height:48px;"></div><span>جبر</span></div>
+                            <div class="bar-col"><div class="bar active" style="height:68px;"></div><span>هندسة</span></div>
+                            <div class="bar-col"><div class="bar" style="height:54px;"></div><span>حساب</span></div>
+                            <div class="bar-col"><div class="bar active" style="height:72px;"></div><span>إحصاء</span></div>
+                        </div>
+                        <span class="mini-text-badge blue">تقارير بيانية وإحصائيات ذكية</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">التقارير والتحليلات</div>
+                        <div class="card-title">أذكياء الرياضيات - التقارير والتحليلات الأكاديمية</div>
+                        <div class="card-id-row">
+                            <span>ID: adf77b530ff84df89ea53e995adb85a4</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('adf77b530ff84df89ea53e995adb85a4')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="08_academic_reports.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('08_academic_reports.html', 'التقارير والتحليلات الأكاديمية')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 17: Parent Teacher Followup Report (Was 16) -->
+            <div class="card" data-phase-group="phase4" data-category="التقارير والتحليلات" data-title="الخطوة 17: تقرير متابعة ولي الأمر والمعلم" data-id="98110dcba3fc45dfafff6e1a95f0d9e7">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 17 • ملف 16</span>
+                    <div class="mini-ui-preview">
+                        <div class="circle-progress-mini">
+                            <span class="score">96%</span>
+                            <span class="label">تفاعل أسبوعي</span>
+                        </div>
+                        <span class="mini-text-badge amber">شراكة تكاملية بين المدرسة والأسرة</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">التقارير والتحليلات</div>
+                        <div class="card-title">تقرير متابعة ولي الأمر والمعلم</div>
+                        <div class="card-id-row">
+                            <span>ID: 98110dcba3fc45dfafff6e1a95f0d9e7</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('98110dcba3fc45dfafff6e1a95f0d9e7')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="16_parent_teacher_followup_report.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('16_parent_teacher_followup_report.html', 'تقرير متابعة ولي الأمر والمعلم')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- PHASE 5: PROFILE & SYSTEM SETTINGS (18)        -->
+            <!-- ============================================== -->
+            <div class="phase-section-header p5" data-phase-group="phase5">
+                <div class="phase-header-left">
+                    <span class="phase-pill">المرحلة 05</span>
+                    <div>
+                        <h2>الملف الشخصي والإعدادات العامة</h2>
+                        <p>تخصيص الهوية والسمة الشخصية، إعدادات الحساب والأمان، والتفضيلات العامة للمنصة</p>
+                    </div>
+                </div>
+                <span class="phase-count-badge">واجهة واحدة (1)</span>
+            </div>
+
+            <!-- Step 18: Profile & Settings (Was 11) -->
+            <div class="card" data-phase-group="phase5" data-category="الملف الشخصي والإعدادات" data-title="الخطوة 18: الملف الشخصي والإعدادات - أذكياء الرياضيات" data-id="8146e104c7064c1da8e966831a7895f9">
+                <div class="card-preview" style="background: radial-gradient(circle at 50% 50%, rgba(14,165,233,0.2) 0%, #090e1a 100%);">
+                    <span class="batch-badge">خطوة 18 • ملف 11</span>
+                    <div class="mini-ui-preview settings-mini">
+                        <div class="mini-user-row">
+                            <img src="assets/avatar_astronaut.svg" alt="User" style="width:42px; height:42px; border-radius:50%; border:2px solid #38bdf8;">
+                            <div class="mini-user-info">
+                                <span class="name">عبدالرحمن فهد</span>
+                                <span class="role">المستوى 5 • رائد رياضيات 🚀</span>
+                            </div>
+                        </div>
+                        <div class="mini-toggle-row">
+                            <span>الوضع المظلم المتكيف</span>
+                            <span class="mini-toggle"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="card-category">الملف الشخصي والإعدادات</div>
+                        <div class="card-title">الملف الشخصي والإعدادات - أذكياء الرياضيات</div>
+                        <div class="card-id-row">
+                            <span>ID: 8146e104c7064c1da8e966831a7895f9</span>
+                            <button class="copy-id-btn" onclick="copyToClipboard('8146e104c7064c1da8e966831a7895f9')" title="نسخ المعرف">نسخ ID</button>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="11_profile_and_settings.html" target="_blank" class="btn btn-primary">
+                            <span>فتح الواجهة الكاملة</span> ↗
+                        </a>
+                        <button class="btn btn-outline" onclick="openPreviewModal('11_profile_and_settings.html', 'الملف الشخصي والإعدادات')">
+                            <span>معاينة سريعة 👁️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- INTERACTIVE PREVIEW MODAL -->
+    <div class="preview-modal" id="previewModal">
+        <div class="modal-backdrop" onclick="closePreviewModal()"></div>
+        <div class="modal-window">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-icon">📐</span>
+                    <div>
+                        <h3 id="modalTitle">معاينة تفاعلية فورية</h3>
+                        <p id="modalSubtitle" style="font-size:12px; color:var(--text-muted);"></p>
+                    </div>
+                </div>
+                <div class="modal-controls">
+                    <div class="device-switch">
+                        <button class="device-btn active" id="btnDesk" onclick="setDeviceView('desktop')" title="شاشة حاسب">💻 كمبيوتر (100%)</button>
+                        <button class="device-btn" id="btnTab" onclick="setDeviceView('tablet')" title="شاشة لوحية">📱 تابلت (768px)</button>
+                        <button class="device-btn" id="btnMob" onclick="setDeviceView('mobile')" title="شاشة هاتف">📱 جوال (390px)</button>
+                    </div>
+                    <a id="modalOpenExternal" href="#" target="_blank" class="btn btn-primary btn-sm">فتح بصفحة مستقلة ↗</a>
+                    <button class="modal-close-btn" onclick="closePreviewModal()" title="إغلاق">✕</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="iframe-container" id="iframeContainer">
+                    <iframe id="previewIframe" src="" frameborder="0" title="معاينة الواجهة"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">تم النسخ إلى الحافظة بنجاح ✓</div>
+
+    <script>
+        let currentCategory = 'all';
+        let currentPhase = 'all';
+
+        function filterCards() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const title = (card.getAttribute('data-title') || '').toLowerCase();
+                const category = (card.getAttribute('data-category') || '').toLowerCase();
+                const id = (card.getAttribute('data-id') || '').toLowerCase();
+                const phase = (card.getAttribute('data-phase-group') || '').toLowerCase();
+
+                const matchesQuery = !query || title.includes(query) || category.includes(query) || id.includes(query);
+                const matchesCategory = currentCategory === 'all' || card.getAttribute('data-category') === currentCategory;
+                const matchesPhase = currentPhase === 'all' || phase === currentPhase;
+
+                if (matchesQuery && matchesCategory && matchesPhase) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Sync phase headers visibility based on visible cards
+            document.querySelectorAll('.phase-section-header').forEach(header => {
+                const phaseGroup = header.getAttribute('data-phase-group');
+                const visibleCards = document.querySelectorAll(`.card[data-phase-group="${phaseGroup}"][style*="display: flex"]`);
+                const isExplicitlyFilteredOut = currentPhase !== 'all' && currentPhase !== phaseGroup;
+                
+                if (isExplicitlyFilteredOut || visibleCards.length === 0) {
+                    header.style.display = 'none';
+                } else {
+                    header.style.display = 'flex';
+                }
+            });
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const btnText = btn.innerText;
+                btn.classList.toggle('active', (cat === 'all' && btnText.includes('جميع')) || btnText.includes(cat));
+            });
+            filterCards();
+        }
+
+        function setPhaseFilter(phase) {
+            currentPhase = phase;
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                const onclickAttr = btn.getAttribute('onclick') || '';
+                btn.classList.toggle('active', onclickAttr.includes(`'${phase}'`));
+            });
+            filterCards();
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2200);
+            });
+        }
+
+        /* MODAL PREVIEW LOGIC */
+        function openPreviewModal(url, title) {
+            const modal = document.getElementById('previewModal');
+            const iframe = document.getElementById('previewIframe');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const extLink = document.getElementById('modalOpenExternal');
+
+            modalTitle.innerText = title;
+            modalSubtitle.innerText = 'ملف الواجهة: ' + url;
+            extLink.href = url;
+            iframe.src = url;
+
+            setDeviceView('desktop');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('previewModal');
+            const iframe = document.getElementById('previewIframe');
+            modal.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function setDeviceView(device) {
+            const container = document.getElementById('iframeContainer');
+            const btnDesk = document.getElementById('btnDesk');
+            const btnTab = document.getElementById('btnTab');
+            const btnMob = document.getElementById('btnMob');
+
+            btnDesk.classList.remove('active');
+            btnTab.classList.remove('active');
+            btnMob.classList.remove('active');
+
+            if (device === 'mobile') {
+                container.style.width = '390px';
+                btnMob.classList.add('active');
+            } else if (device === 'tablet') {
+                container.style.width = '768px';
+                btnTab.classList.add('active');
+            } else {
+                container.style.width = '100%';
+                btnDesk.classList.add('active');
+            }
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePreviewModal();
+            }
+        });
+    </script>
+</body>
+</html>
