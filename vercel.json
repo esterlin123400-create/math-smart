@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/math-smart-react/dist/index.html" }
+  ]
+}
