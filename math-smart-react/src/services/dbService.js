@@ -179,3 +179,4 @@ export const subscribeToRoom = (roomCode, onRoomUpdate) => {
     supabase.removeChannel(channel);
   };
 };
+

@@ -139,3 +139,4 @@ create trigger on_auth_user_created
 -- Enable Realtime for Live Challenge Arena (تفعيل الوقت الفعلي لحلبة التحدي)
 alter publication supabase_realtime add table public.challenge_rooms;
 alter publication supabase_realtime add table public.quiz_results;
+

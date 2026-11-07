@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { MathKeypad } from '../components/MathKeypad';
 import { ScratchpadCanvas } from '../components/ScratchpadCanvas';
+import { analyzeMathStep, askMathTutor, isGeminiConfigured } from '../services/aiService';
+import { addStudentXP } from '../services/dbService';
 
 export const InteractiveProblemSolving = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { user } = useAuth();
   const [currentProblemIdx, setCurrentProblemIdx] = useState(0);
   const [equationInput, setEquationInput] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [solvedList, setSolvedList] = useState({}); // { 0: true, 1: true, ... }
   const [totalXpEarned, setTotalXpEarned] = useState(0);
+
+  // AI States
+  const [aiAnalyzing, setAiAnalyzing] = useState(false);
+  const [aiAnalysisResult, setAiAnalysisResult] = useState(null);
+  const [showTutorModal, setShowTutorModal] = useState(false);
+  const [tutorQuestion, setTutorQuestion] = useState('');
+  const [tutorResponse, setTutorResponse] = useState('');
+  const [tutorLoading, setTutorLoading] = useState(false);
 
   const problems = [
     {
@@ -88,8 +100,10 @@ export const InteractiveProblemSolving = () => {
 
   const handleClear = () => {
     setEquationInput('');
+    setAiAnalysisResult(null);
   };
 
+  // التحقق المباشر
   const handleCheckAnswer = () => {
     const clean = equationInput.trim().replace(/\s+/g, '');
     if (!clean) {
@@ -101,13 +115,64 @@ export const InteractiveProblemSolving = () => {
       if (!solvedList[currentProblemIdx]) {
         setSolvedList(prev => ({ ...prev, [currentProblemIdx]: true }));
         setTotalXpEarned(prev => prev + currentProb.xp);
+        if (user?.id) {
+          addStudentXP(user.id, currentProb.xp);
+        }
         showToast(`🎉 إجابة عبقرية صحيحة! أحسنت! (+${currentProb.xp} XP)`, 'success');
       } else {
         showToast('هذه المسألة محلولة بنجاح مسبقاً!', 'info');
       }
     } else {
-      showToast('الجواب غير دقيق بعد، تفقد الخطوات أو اضغط على زر التلميح 💡', 'warning');
+      showToast('الجواب غير دقيق بعد، جرب التحليل بالذكاء الاصطناعي 🤖', 'warning');
     }
+  };
+
+  // التحليل الذكي عبر Gemini
+  const handleAiAnalysis = async () => {
+    if (!equationInput.trim()) {
+      showToast('اكتب خطوتك أو حلك أولاً ليحلله الذكاء الاصطناعي!', 'info');
+      return;
+    }
+
+    setAiAnalyzing(true);
+    setAiAnalysisResult(null);
+
+    const result = await analyzeMathStep({
+      problemTitle: currentProb.title,
+      problemQuestion: currentProb.question,
+      equation: currentProb.equation,
+      studentInput: equationInput,
+      correctAnswers: currentProb.correctAnswers,
+      unit: currentProb.unit,
+      topic: currentProb.topic,
+      grade: currentProb.stage
+    });
+
+    setAiAnalyzing(false);
+    setAiAnalysisResult(result);
+
+    if (result.isCorrect && !solvedList[currentProblemIdx]) {
+      setSolvedList(prev => ({ ...prev, [currentProblemIdx]: true }));
+      setTotalXpEarned(prev => prev + currentProb.xp);
+      if (user?.id) {
+        addStudentXP(user.id, currentProb.xp);
+      }
+    }
+  };
+
+  // سؤال المعلم الذكي
+  const handleAskTutor = async (e) => {
+    e.preventDefault();
+    if (!tutorQuestion.trim()) return;
+
+    setTutorLoading(true);
+    const res = await askMathTutor({
+      question: tutorQuestion,
+      topic: currentProb.topic,
+      grade: currentProb.stage
+    });
+    setTutorLoading(false);
+    setTutorResponse(res.answer);
   };
 
   const handleNextProblem = () => {
@@ -115,6 +180,7 @@ export const InteractiveProblemSolving = () => {
       setCurrentProblemIdx(prev => prev + 1);
       setEquationInput('');
       setShowHint(false);
+      setAiAnalysisResult(null);
     }
   };
 
@@ -123,6 +189,7 @@ export const InteractiveProblemSolving = () => {
       setCurrentProblemIdx(prev => prev - 1);
       setEquationInput('');
       setShowHint(false);
+      setAiAnalysisResult(null);
     }
   };
 
@@ -169,9 +236,18 @@ export const InteractiveProblemSolving = () => {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <span className="badge badge-warning">⭐ {totalXpEarned} XP تم جمعها</span>
+          <button
+            onClick={() => setShowTutorModal(true)}
+            className="btn btn-secondary"
+            style={{ padding: '6px 14px', fontSize: '12px', borderColor: '#818cf8', color: '#818cf8' }}
+          >
+            💬 اسأل المعلم الذكي
+          </button>
+          <span className="badge badge-warning">⭐ {totalXpEarned} XP</span>
           <span className="badge badge-success">✓ {solvedCount} من {problems.length} منجزة</span>
-          <span className="badge badge-cyan" style={{ fontFamily: 'var(--font-en)' }}>⏱️ نشط</span>
+          <span className="badge badge-cyan">
+            {isGeminiConfigured ? '⚡ Gemini 2.5 نشط' : '🤖 ذكاء اصطناعي محلي'}
+          </span>
         </div>
       </div>
 
@@ -194,108 +270,107 @@ export const InteractiveProblemSolving = () => {
                 setCurrentProblemIdx(idx);
                 setEquationInput('');
                 setShowHint(false);
+                setAiAnalysisResult(null);
               }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '10px 16px',
-                borderRadius: '14px',
-                border: isSelected ? '2px solid #6366f1' : '1px solid var(--border-card)',
-                background: isSelected
-                  ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.35), rgba(6, 182, 212, 0.25))'
-                  : 'rgba(255, 255, 255, 0.04)',
-                color: isSelected ? '#fff' : 'var(--text-muted)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-ar)',
-                fontSize: '13px',
+                padding: '8px 16px',
+                borderRadius: '12px',
+                fontSize: '12px',
                 fontWeight: '700',
+                cursor: 'pointer',
+                border: isSelected ? '1px solid #4f46e5' : '1px solid var(--border-card)',
+                background: isSelected ? 'rgba(79, 70, 229, 0.25)' : 'rgba(255, 255, 255, 0.03)',
+                color: isSelected ? '#fff' : 'var(--text-muted)',
                 transition: 'all 0.2s'
               }}
             >
-              <span>{isSolved ? '✅' : '🔢'}</span>
-              <span>مسألة {prob.id}</span>
-              <span style={{ fontSize: '11px', opacity: 0.8 }}>({prob.xp} XP)</span>
+              <span>{isSolved ? '✅' : `0${idx + 1}`}</span>
+              <span>{prob.title.slice(0, 22)}...</span>
             </button>
           );
         })}
       </div>
 
-      {/* Grid: Left Question & Keypad, Right Scratchpad */}
+      {/* TWO COLUMN WORKSPACE: LEFT PROBLEM/KEYPAD + RIGHT SCRATCHPAD */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
         gap: '24px',
         alignItems: 'start'
       }}>
-        {/* Left Column: Problem & Input & Virtual Keypad */}
+        {/* Left Column: Problem Details, Inputs, and Virtual Keypad */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Question Card */}
+          {/* Problem Card */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <span className="badge badge-primary">
-                {currentProb.stage}
-              </span>
-              <span style={{ fontSize: '12px', color: '#fbbf24', fontWeight: '800' }}>
-                +{currentProb.xp} XP
-              </span>
+              <span className="badge badge-primary">{currentProb.stage}</span>
+              <span className="badge badge-warning">+{currentProb.xp} XP</span>
             </div>
 
-            <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#fff', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>
               {currentProb.title}
             </h3>
 
-            {/* Diagram Image if available */}
+            <p style={{ fontSize: '14px', lineHeight: 1.8, color: 'var(--text-body)', marginBottom: '16px' }}>
+              {currentProb.question}
+            </p>
+
+            {/* If diagram exists */}
             {currentProb.diagram && (
               <div style={{
-                background: '#040711',
-                borderRadius: '14px',
+                background: 'rgba(0, 0, 0, 0.3)',
                 padding: '16px',
+                borderRadius: '16px',
                 textAlign: 'center',
                 marginBottom: '16px',
                 border: '1px solid var(--border-card)'
               }}>
                 <img
                   src={currentProb.diagram}
-                  alt="Balance diagram"
-                  style={{ maxHeight: '180px', maxWidth: '100%', objectFit: 'contain' }}
+                  alt="مخطط المسألة"
+                  style={{ maxWidth: '100%', maxHeight: '180px', objectFit: 'contain' }}
                 />
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
+                  ميزان كتل جبري تفاعلي: الكفة اليمنى (2س + 4) = الكفة اليسرى (14)
+                </div>
               </div>
             )}
 
-            <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'var(--text-body)', marginBottom: '14px' }}>
-              {currentProb.question}
-            </p>
-
+            {/* Mathematical Equation Display */}
             <div style={{
-              background: 'rgba(79, 70, 229, 0.12)',
+              background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(6, 182, 212, 0.1))',
               border: '1px solid rgba(79, 70, 229, 0.3)',
-              borderRadius: '12px',
+              borderRadius: '14px',
               padding: '12px 18px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '16px'
+              marginBottom: '20px'
             }}>
-              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>الصيغة الرياضية:</span>
-              <strong style={{ fontSize: '20px', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>
-                {currentProb.equation}
-              </strong>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>المعادلة الأساسية:</span>
+                <div style={{ fontSize: '18px', fontWeight: '900', color: '#38bdf8', direction: 'ltr', textAlign: 'right' }}>
+                  {currentProb.equation}
+                </div>
+              </div>
+              <span className="badge badge-cyan">{currentProb.unit ? `الوحدة: ${currentProb.unit}` : 'معادلة'}</span>
             </div>
 
-            {/* Answer Input Box */}
+            {/* Student Answer Input Box */}
             <div style={{ marginBottom: '16px' }}>
-              <label className="form-label">اكتب حلك النهائي لقيمة ({currentProb.unit}):</label>
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <label className="form-label">اكتب الحل أو القيمة النهائية للمجهول (س):</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 <input
                   type="text"
-                  placeholder="مثال: 5 أو س = 5"
                   value={equationInput}
                   onChange={(e) => setEquationInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleCheckAnswer(); }}
+                  placeholder="مثال: 5 أو س = 5"
                   style={{
                     flex: 1,
-                    padding: '14px 18px',
+                    padding: '12px 16px',
                     fontSize: '18px',
                     fontWeight: '800',
                     background: 'rgba(15, 23, 42, 0.9)',
@@ -325,22 +400,76 @@ export const InteractiveProblemSolving = () => {
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <button
                 onClick={handleCheckAnswer}
                 className="btn btn-success"
-                style={{ flex: 2, minWidth: '150px', padding: '14px', fontSize: '15px' }}
+                style={{ flex: 1.5, minWidth: '130px', padding: '12px', fontSize: '14px' }}
               >
                 {isCurrentSolved ? '✓ إجابة معتمدة ومبرهنة!' : 'التحقق من الحل 🔍'}
               </button>
+
+              <button
+                onClick={handleAiAnalysis}
+                disabled={aiAnalyzing}
+                className="btn btn-primary"
+                style={{
+                  flex: 1.5,
+                  minWidth: '140px',
+                  padding: '12px',
+                  fontSize: '14px',
+                  background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                  borderColor: '#a855f7'
+                }}
+              >
+                {aiAnalyzing ? 'جاري الفحص بالذكاء الاصطناعي...' : 'تحليل الخطوة بالـ AI 🤖'}
+              </button>
+
               <button
                 onClick={() => setShowHint(!showHint)}
                 className="btn btn-secondary"
-                style={{ flex: 1, minWidth: '100px', padding: '14px', fontSize: '13px', color: '#fbbf24' }}
+                style={{ flex: 1, minWidth: '80px', padding: '12px', fontSize: '13px', color: '#fbbf24' }}
               >
-                {showHint ? 'إخفاء التلميح' : 'تلميح 💡'}
+                {showHint ? 'إخفاء' : 'تلميح 💡'}
               </button>
             </div>
+
+            {/* AI Analysis Result Drawer */}
+            {aiAnalysisResult && (
+              <div style={{
+                marginTop: '16px',
+                padding: '16px',
+                background: aiAnalysisResult.isCorrect
+                  ? 'rgba(16, 185, 129, 0.15)'
+                  : 'rgba(239, 68, 68, 0.12)',
+                border: aiAnalysisResult.isCorrect
+                  ? '1px solid rgba(16, 185, 129, 0.4)'
+                  : '1px solid rgba(239, 68, 68, 0.4)',
+                borderRadius: '14px',
+                fontSize: '13px',
+                lineHeight: 1.7
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <div style={{ fontWeight: '800', color: aiAnalysisResult.isCorrect ? '#34d399' : '#f87171' }}>
+                    {aiAnalysisResult.isCorrect ? '✅ تقييم المعلم الذكي: صائب!' : '⚠️ توجيه المعلم الذكي:'}
+                  </div>
+                  <span className="badge badge-cyan" style={{ fontSize: '10px' }}>
+                    {aiAnalysisResult.isLiveAi ? 'Gemini 2.5 Flash' : 'Math AI Engine'}
+                  </span>
+                </div>
+                <div style={{ color: '#fff', marginBottom: '6px' }}>{aiAnalysisResult.feedback}</div>
+                {aiAnalysisResult.hint && (
+                  <div style={{ color: '#fbbf24', fontSize: '12px', marginTop: '4px' }}>
+                    💡 <strong>تلميح:</strong> {aiAnalysisResult.hint}
+                  </div>
+                )}
+                {aiAnalysisResult.encouragement && (
+                  <div style={{ color: '#38bdf8', fontSize: '12px', marginTop: '6px', fontStyle: 'italic' }}>
+                    {aiAnalysisResult.encouragement}
+                  </div>
+                )}
+              </div>
+            )}
 
             {showHint && (
               <div style={{
@@ -436,6 +565,85 @@ export const InteractiveProblemSolving = () => {
           </div>
         </div>
       </div>
+
+      {/* Ask Math Tutor Modal */}
+      {showTutorModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div className="glass-card" style={{ maxWidth: '560px', width: '100%', padding: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '24px' }}>🤖</span>
+                <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff' }}>اسأل المعلم الذكي</h3>
+              </div>
+              <button
+                onClick={() => setShowTutorModal(false)}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
+              هل تجد صعوبة في فهم فكرة المسألة؟ اسأل المعلم الذكي أي استفسار وسيشرح لك المفهوم ببساطة!
+            </p>
+
+            <form onSubmit={handleAskTutor}>
+              <textarea
+                value={tutorQuestion}
+                onChange={(e) => setTutorQuestion(e.target.value)}
+                placeholder="اكتب سؤالك هنا.. مثلاً: كيف أطرح 4 من طرفي الميزان؟"
+                rows={3}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  background: 'rgba(15, 23, 42, 0.9)',
+                  border: '1px solid var(--border-card)',
+                  color: '#fff',
+                  fontSize: '14px',
+                  marginBottom: '12px',
+                  outline: 'none',
+                  resize: 'none'
+                }}
+              />
+              <button
+                type="submit"
+                disabled={tutorLoading || !tutorQuestion.trim()}
+                className="btn btn-primary"
+                style={{ width: '100%', padding: '12px' }}
+              >
+                {tutorLoading ? 'جاري التفكير وصياغة الشرح...' : 'إرسال السؤال للمعلم الذكي 🚀'}
+              </button>
+            </form>
+
+            {tutorResponse && (
+              <div style={{
+                marginTop: '16px',
+                padding: '16px',
+                background: 'rgba(79, 70, 229, 0.15)',
+                border: '1px solid rgba(79, 70, 229, 0.3)',
+                borderRadius: '12px',
+                fontSize: '13px',
+                lineHeight: 1.8,
+                color: '#fff'
+              }}>
+                <div style={{ fontWeight: '800', color: '#38bdf8', marginBottom: '6px' }}>إجابة المعلم الذكي:</div>
+                {tutorResponse}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

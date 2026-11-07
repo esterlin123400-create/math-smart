@@ -19,3 +19,4 @@ if (!isSupabaseConfigured) {
     'ℹ️ Supabase credentials not found. Math Smart is running in offline demo mode. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file to activate live backend.'
   );
 }
+
