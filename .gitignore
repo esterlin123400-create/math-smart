@@ -39,3 +39,6 @@ Thumbs.db
 *.bak
 *.broken_bak
 *.mojibake_bak
+
+# Root temporary lock
+/package-lock.json
