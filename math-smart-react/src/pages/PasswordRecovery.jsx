@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 
 export const PasswordRecovery = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { resetPassword, isLiveBackend } = useAuth();
   const [step, setStep] = useState(1); // 1: contact, 2: OTP, 3: new pass, 4: success
   const [contact, setContact] = useState('fahad.salem@math.edu.sa');
   const [otp, setOtp] = useState(['', '', '', '']);
@@ -19,10 +21,20 @@ export const PasswordRecovery = () => {
 
   const strength = calculateStrength(newPassword);
 
-  const handleSendCode = (e) => {
+  const handleSendCode = async (e) => {
     e.preventDefault();
-    setStep(2);
-    showToast(`تم إرسال رمز التحقق إلى ${contact}`, 'success');
+    if (isLiveBackend && contact.includes('@')) {
+      const res = await resetPassword(contact.trim());
+      if (res.success) {
+        setStep(2);
+        showToast(`تم إرسال رابط ورمز الاستعادة إلى ${contact}`, 'success');
+      } else {
+        showToast(res.error || 'تعذر إرسال رمز الاستعادة', 'danger');
+      }
+    } else {
+      setStep(2);
+      showToast(`تم إرسال رمز التحقق إلى ${contact}`, 'success');
+    }
   };
 
   const handleVerifyOtp = (e) => {

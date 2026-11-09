@@ -1,0 +1,10 @@
+{
+  "name": "math-smart-platform",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix math-smart-react run dev",
+    "build": "npm --prefix math-smart-react run build",
+    "preview": "npm --prefix math-smart-react run preview"
+  }
+}

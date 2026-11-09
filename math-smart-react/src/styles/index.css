@@ -292,6 +292,11 @@ table.custom-table tr:hover td {
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .live-dot {
   width: 8px;
   height: 8px;

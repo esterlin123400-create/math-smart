@@ -1,14 +1,69 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { mockQuestionsResult } from '../data/mockData';
+import { generateSmartAssessmentFeedback } from '../services/aiService';
+import { saveQuizResult } from '../services/dbService';
 
 export const SmartAssessmentResult = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { user } = useAuth();
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const data = mockQuestionsResult;
+  const [aiFeedback, setAiFeedback] = useState(data.aiFeedback);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [savingResult, setSavingResult] = useState(false);
 
   const toggleQuestion = (id) => {
     setExpandedQuestion(expandedQuestion === id ? null : id);
+  };
+
+  const handleRefreshAiReport = async () => {
+    setAiLoading(true);
+    const res = await generateSmartAssessmentFeedback({
+      examTitle: data.examTitle,
+      grade: data.grade,
+      score: data.score,
+      correctCount: data.correctAnswers,
+      totalQuestions: data.totalQuestions,
+      duration: data.duration
+    });
+    setAiLoading(false);
+    if (res.success) {
+      setAiFeedback({
+        summary: res.summary,
+        strengths: res.strengths || data.aiFeedback.strengths,
+        recommendation: Array.isArray(res.recommendations)
+          ? res.recommendations.join(' • ')
+          : res.recommendations || data.aiFeedback.recommendation
+      });
+      showToast(
+        res.isLiveAi ? 'تم توليد تحليل جديد عبر Gemini 2.5 Flash!' : 'تم تحديث التقرير التشخيصي الذكي بنجاح!',
+        'success'
+      );
+    }
+  };
+
+  const handleSaveToCloud = async () => {
+    setSavingResult(true);
+    const res = await saveQuizResult({
+      studentId: user?.id || 'demo-student',
+      examTitle: data.examTitle,
+      grade: data.grade,
+      score: data.score,
+      totalQuestions: data.totalQuestions,
+      correctAnswers: data.correctAnswers,
+      earnedXp: data.earnedXp,
+      duration: data.duration,
+      aiFeedback
+    });
+    setSavingResult(false);
+    if (res.success) {
+      showToast(
+        res.mode === 'demo' ? 'تم حفظ النتيجة محلياً في سجل الأداء!' : 'تم توثيق النتيجة وإضافة الـ XP في سحابة Supabase!',
+        'success'
+      );
+    }
   };
 
   return (
@@ -110,6 +165,14 @@ export const SmartAssessmentResult = () => {
             🚀 إعادة الاختبار وتحدي جديد
           </button>
           <button
+            onClick={handleSaveToCloud}
+            disabled={savingResult}
+            className="btn btn-success"
+            style={{ padding: '12px 24px' }}
+          >
+            {savingResult ? 'جاري الحفظ...' : '💾 حفظ النتيجة في السجل'}
+          </button>
+          <button
             onClick={() => showToast('تم تنزيل شهادة الإتقان والتقرير بصيغة PDF بنجاح!', 'success')}
             className="btn btn-secondary"
             style={{ padding: '12px 24px' }}
@@ -121,31 +184,42 @@ export const SmartAssessmentResult = () => {
 
       {/* AI FEEDBACK ANALYSIS CARD */}
       <div className="glass-card" style={{ marginBottom: '32px', borderColor: 'rgba(99, 102, 241, 0.4)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #6366f1, #a855f7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '20px'
-          }}>
-            🤖
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '20px'
+            }}>
+              🤖
+            </div>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
+                تقرير وتحليل المرشد الذكي (Math AI Tutor)
+              </h3>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                تحليل دقيق لنقاط القوة والمسائل التي تحتاج تعزيزاً
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
-              تقرير وتحليل المرشد الذكي (Math AI Tutor)
-            </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-              تحليل دقيق لنقاط القوة والمسائل التي تحتاج تعزيزاً
-            </p>
-          </div>
+
+          <button
+            onClick={handleRefreshAiReport}
+            disabled={aiLoading}
+            className="btn btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '12px', borderColor: '#818cf8', color: '#818cf8' }}
+          >
+            {aiLoading ? 'جاري التوليد...' : '🔄 تحديث التحليل الذكي'}
+          </button>
         </div>
 
         <p style={{ fontSize: '14px', lineHeight: 1.8, marginBottom: '18px', color: 'var(--text-body)' }}>
-          {data.aiFeedback.summary}
+          {aiFeedback.summary}
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
@@ -154,7 +228,7 @@ export const SmartAssessmentResult = () => {
               🌟 نقاط القوة المكتشفة:
             </div>
             <ul style={{ paddingRight: '20px', fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7 }}>
-              {data.aiFeedback.strengths.map((s, i) => (
+              {aiFeedback.strengths.map((s, i) => (
                 <li key={i}>{s}</li>
               ))}
             </ul>
@@ -165,7 +239,7 @@ export const SmartAssessmentResult = () => {
               💡 الخطة التدريبية الموصى بها:
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7 }}>
-              {data.aiFeedback.recommendation}
+              {aiFeedback.recommendation}
             </p>
           </div>
         </div>

@@ -4,10 +4,11 @@ import { useAuth } from '../context/AuthContext';
 
 export const SupervisorTeacherRegistration = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { loginAs } = useAuth();
+  const { loginAs, registerWithSupabase, updateProfile, isLiveBackend, loading } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     role: 'teacher',
     schoolName: '',
     city: 'الرياض',
@@ -16,11 +17,34 @@ export const SupervisorTeacherRegistration = () => {
     assignedStage: 'الصف السادس الابتدائي'
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    loginAs('teacher');
-    showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} بنجاح!`, 'success');
-    setCurrentScreen('02'); // Jump to teacher dashboard
+    if (isLiveBackend && formData.email.includes('@')) {
+      const res = await registerWithSupabase({
+        email: formData.email.trim(),
+        password: formData.password || 'Teacher@2026',
+        fullName: formData.name || 'معلم جديد',
+        role: formData.role,
+        grade: formData.assignedStage,
+        school: formData.schoolName || 'مدارس النخبة',
+        avatarUrl: '/assets/avatar_math_wizard.svg'
+      });
+
+      if (res.success) {
+        showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} في السحابة بنجاح!`, 'success');
+        setCurrentScreen('02');
+      } else {
+        showToast(res.error || 'تعذر التسجيل، تأكد من البريد الإلكتروني وكلمة المرور', 'danger');
+      }
+    } else {
+      loginAs('teacher');
+      updateProfile({
+        name: formData.name || 'أ. طارق العمري',
+        school: formData.schoolName || 'مدارس النخبة الأهلية'
+      });
+      showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} بنجاح!`, 'success');
+      setCurrentScreen('02'); // Jump to teacher dashboard
+    }
   };
 
   return (
@@ -148,8 +172,8 @@ export const SupervisorTeacherRegistration = () => {
             </label>
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px' }}>
-            توثيق الحساب والدخول لمنصة المعلم 🎓
+          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px' }}>
+            {loading ? 'جاري التوثيق والإنشاء...' : 'توثيق الحساب والدخول لمنصة المعلم 🎓'}
           </button>
         </form>
 

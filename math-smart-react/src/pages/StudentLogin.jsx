@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export const StudentLogin = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { loginAs } = useAuth();
+  const { loginAs, loginWithSupabase, isLiveBackend, updateProfile, loading } = useAuth();
   const [studentCode, setStudentCode] = useState('STU-9024');
   const [pin, setPin] = useState('1234');
   const [selectedAvatar, setSelectedAvatar] = useState('/assets/avatar_fahad_hero.svg');
@@ -17,11 +17,23 @@ export const StudentLogin = () => {
     { src: '/assets/avatar_math_wizard.svg', name: 'الساحر العبقري' }
   ];
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    loginAs('student');
-    showToast('أهلاً بك يا بطل الرياضيات في منصتك!', 'success');
-    setCurrentScreen('13'); // Navigate to Student Dashboard
+    if (isLiveBackend && studentCode.includes('@')) {
+      const res = await loginWithSupabase(studentCode.trim(), pin);
+      if (res.success) {
+        await updateProfile({ avatar: selectedAvatar });
+        showToast('أهلاً بك يا بطل الرياضيات في منصتك السحابية!', 'success');
+        setCurrentScreen('13');
+      } else {
+        showToast(res.error || 'تعذر تسجيل الدخول، تأكد من البريد والرمز السري', 'danger');
+      }
+    } else {
+      loginAs('student');
+      updateProfile({ avatar: selectedAvatar });
+      showToast('أهلاً بك يا بطل الرياضيات في منصتك!', 'success');
+      setCurrentScreen('13'); // Navigate to Student Dashboard
+    }
   };
 
   const handleDemoFill = () => {
@@ -108,13 +120,13 @@ export const StudentLogin = () => {
 
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label className="form-label">رمز الطالب التعريفي:</label>
+              <label className="form-label">البريد الإلكتروني أو رمز الطالب التعريفي:</label>
               <input
                 type="text"
                 required
                 value={studentCode}
                 onChange={(e) => setStudentCode(e.target.value)}
-                placeholder="STU-XXXX"
+                placeholder="STU-XXXX أو email@example.com"
                 className="form-input"
               />
             </div>
@@ -148,8 +160,8 @@ export const StudentLogin = () => {
               </button>
             </div>
 
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '14px' }}>
-              دخول إلى منصة الأذكياء 🎯
+            <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px' }}>
+              {loading ? 'جاري تسجيل الدخول...' : 'دخول إلى منصة الأذكياء 🎯'}
             </button>
           </form>
 

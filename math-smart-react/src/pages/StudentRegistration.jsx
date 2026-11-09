@@ -4,8 +4,9 @@ import { useAuth } from '../context/AuthContext';
 
 export const StudentRegistration = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { loginAs, updateProfile } = useAuth();
+  const { loginAs, updateProfile, registerWithSupabase, isLiveBackend, loading } = useAuth();
   const [studentName, setStudentName] = useState('');
+  const [email, setEmail] = useState('');
   const [grade, setGrade] = useState('الصف السادس الابتدائي');
   const [parentPhone, setParentPhone] = useState('05XXXXXXXX');
   const [pin, setPin] = useState('');
@@ -19,16 +20,35 @@ export const StudentRegistration = () => {
     { src: '/assets/avatar_math_wizard.svg', name: 'الساحر' }
   ];
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    loginAs('student');
-    updateProfile({
-      name: studentName || 'طالب جديد',
-      grade,
-      avatar: selectedAvatar
-    });
-    showToast(`مرحباً بك يا بطل الرياضيات ${studentName}! تم إنشاء حسابك بنجاح!`, 'success');
-    setCurrentScreen('13'); // Go to student dashboard
+    if (isLiveBackend && email.includes('@')) {
+      const res = await registerWithSupabase({
+        email: email.trim(),
+        password: pin.length >= 6 ? pin : `${pin}000000`.slice(0, 6),
+        fullName: studentName || 'طالب جديد',
+        role: 'student',
+        grade,
+        school: 'مدرسة رواد المعرفة',
+        avatarUrl: selectedAvatar
+      });
+
+      if (res.success) {
+        showToast(`مرحباً بك يا بطل الرياضيات ${studentName}! تم تسجيل حسابك بنجاح!`, 'success');
+        setCurrentScreen('13');
+      } else {
+        showToast(res.error || 'تعذر إنشاء الحساب، تأكد من البيانات', 'danger');
+      }
+    } else {
+      loginAs('student');
+      updateProfile({
+        name: studentName || 'طالب جديد',
+        grade,
+        avatar: selectedAvatar
+      });
+      showToast(`مرحباً بك يا بطل الرياضيات ${studentName}! تم إنشاء حسابك بنجاح!`, 'success');
+      setCurrentScreen('13'); // Go to student dashboard
+    }
   };
 
   return (
@@ -135,6 +155,17 @@ export const StudentRegistration = () => {
           </div>
 
           <div className="form-group">
+            <label className="form-label">البريد الإلكتروني (اختياري للمزامنة السحابية):</label>
+            <input
+              type="email"
+              placeholder="student@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
             <label className="form-label">رقم جوال ولي الأمر (لتلقي تقارير الإنجاز):</label>
             <input
               type="tel"
@@ -158,8 +189,8 @@ export const StudentRegistration = () => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px', marginTop: '10px' }}>
-            إنشاء الحساب وبدء المغامرة الآن 🚀
+          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px', marginTop: '10px' }}>
+            {loading ? 'جاري تسجيل الحساب...' : 'إنشاء الحساب وبدء المغامرة الآن 🚀'}
           </button>
         </form>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
-import { addStudentXP } from '../services/dbService';
+import { addStudentXP, createChallengeRoom, subscribeToRoom } from '../services/dbService';
 
 export const LiveChallengeArena = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -96,6 +96,28 @@ export const LiveChallengeArena = () => {
   });
 
   const currentQ = battleQuestions[currentRoundIdx];
+
+  // Subscribe to Realtime Room Updates (when connected to Supabase)
+  useEffect(() => {
+    const unsubscribe = subscribeToRoom(roomCode, (updatedRoom) => {
+      if (updatedRoom && typeof updatedRoom.guest_score === 'number') {
+        setPlayer2(prev => ({
+          ...prev,
+          score: updatedRoom.guest_score,
+          status: updatedRoom.status === 'in_progress' ? 'ينافس الآن في الوقت الفعلي!' : prev.status
+        }));
+      }
+    });
+    return () => unsubscribe();
+  }, [roomCode]);
+
+  const handleCreateLiveRoom = async () => {
+    const res = await createChallengeRoom(user?.id || 'demo-host', currentQ.category, user?.grade || 'الصف السادس');
+    if (res.success && res.roomCode) {
+      setRoomCode(`ARENA-${res.roomCode}`);
+      showToast(`تم توليد غرفة تحدي جديدة برمز: ARENA-${res.roomCode}`, 'success');
+    }
+  };
 
   // Timer countdown
   useEffect(() => {
@@ -290,6 +312,14 @@ export const LiveChallengeArena = () => {
               📋
             </button>
           </div>
+
+          <button
+            onClick={handleCreateLiveRoom}
+            className="btn btn-primary"
+            style={{ padding: '6px 14px', fontSize: '12px' }}
+          >
+            غرفة جديدة ⚡
+          </button>
 
           <button
             onClick={() => setJoinModalOpen(true)}

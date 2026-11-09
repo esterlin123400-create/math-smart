@@ -1,6 +1,7 @@
 {
+  "buildCommand": "npm install --prefix math-smart-react && npm --prefix math-smart-react run build",
+  "outputDirectory": "math-smart-react/dist",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/math-smart-react/dist/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
-

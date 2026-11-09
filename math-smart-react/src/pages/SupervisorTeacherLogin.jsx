@@ -4,17 +4,27 @@ import { useAuth } from '../context/AuthContext';
 
 export const SupervisorTeacherLogin = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { loginAs } = useAuth();
+  const { loginAs, loginWithSupabase, isLiveBackend, loading } = useAuth();
   const [email, setEmail] = useState('tariq.omari@schools.edu.sa');
   const [password, setPassword] = useState('Teacher@2026');
   const [schoolCode, setSchoolCode] = useState('SCH-1088');
   const [require2FA, setRequire2FA] = useState(true);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    loginAs('teacher');
-    showToast('أهلاً بك أ. طارق العمري في لوحة تحكم المعلم!', 'success');
-    setCurrentScreen('02'); // Navigate to Teacher Dashboard
+    if (isLiveBackend && email.includes('@')) {
+      const res = await loginWithSupabase(email.trim(), password);
+      if (res.success) {
+        showToast('أهلاً بك في لوحة تحكم المعلم السحابية!', 'success');
+        setCurrentScreen('02');
+      } else {
+        showToast(res.error || 'تعذر تسجيل الدخول، تأكد من البريد وكلمة المرور', 'danger');
+      }
+    } else {
+      loginAs('teacher');
+      showToast('أهلاً بك أ. طارق العمري في لوحة تحكم المعلم!', 'success');
+      setCurrentScreen('02'); // Navigate to Teacher Dashboard
+    }
   };
 
   const handleDemoFill = () => {
@@ -116,8 +126,8 @@ export const SupervisorTeacherLogin = () => {
             </button>
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px' }}>
-            تسجيل الدخول إلى لوحة المعلم 🛡️
+          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: '15px' }}>
+            {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول إلى لوحة المعلم 🛡️'}
           </button>
 
           <button
