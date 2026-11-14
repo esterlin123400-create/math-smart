@@ -20,9 +20,13 @@ export const SupervisorTeacherRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLiveBackend && formData.email.includes('@')) {
+      if (formData.password.length < 6) {
+        showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'warning');
+        return;
+      }
       const res = await registerWithSupabase({
         email: formData.email.trim(),
-        password: formData.password || 'Teacher@2026',
+        password: formData.password,
         fullName: formData.name || 'معلم جديد',
         role: formData.role,
         grade: formData.assignedStage,
@@ -31,18 +35,23 @@ export const SupervisorTeacherRegistration = () => {
       });
 
       if (res.success) {
-        showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} في السحابة بنجاح!`, 'success');
-        setCurrentScreen('02');
+        if (res.requiresEmailConfirmation) {
+          showToast('تم إنشاء الحساب السحابي! يرجى تأكيد بريدك الإلكتروني ثم تسجيل الدخول.', 'info');
+          setCurrentScreen('10');
+        } else {
+          showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} في السحابة بنجاح!`, 'success');
+          setCurrentScreen('02');
+        }
       } else {
         showToast(res.error || 'تعذر التسجيل، تأكد من البريد الإلكتروني وكلمة المرور', 'danger');
       }
     } else {
-      loginAs('teacher');
-      updateProfile({
+      loginAs(formData.role === 'supervisor' ? 'supervisor' : 'teacher');
+      await updateProfile({
         name: formData.name || 'أ. طارق العمري',
         school: formData.schoolName || 'مدارس النخبة الأهلية'
       });
-      showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name} بنجاح!`, 'success');
+      showToast(`تم إنشاء وتوثيق حساب المعلم/المشرف ${formData.name || 'الجديد'} بنجاح!`, 'success');
       setCurrentScreen('02'); // Jump to teacher dashboard
     }
   };
@@ -51,6 +60,7 @@ export const SupervisorTeacherRegistration = () => {
     <div style={{ maxWidth: '680px', margin: '30px auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -78,7 +88,7 @@ export const SupervisorTeacherRegistration = () => {
               onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
             />
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#fff', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '6px' }}>
             إنشاء حساب معلم أو مشرف تربوي جديد
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
@@ -87,7 +97,7 @@ export const SupervisorTeacherRegistration = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '16px' }}>
             <div className="form-group">
               <label className="form-label">الاسم الثلاثي أو الرباعي:</label>
               <input
@@ -113,14 +123,26 @@ export const SupervisorTeacherRegistration = () => {
             </div>
 
             <div className="form-group">
+              <label className="form-label">كلمة المرور (6 أحرف فأكثر):</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                placeholder="••••••"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
               <label className="form-label">الصفة المهنية:</label>
               <select
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 className="form-select"
               >
-                <option value="teacher">معلم رياضيات ممارس</option>
-                <option value="lead">رئيس قسم الرياضيات</option>
+                <option value="teacher">معلم رياضيات ممارس / رئيس قسم</option>
                 <option value="supervisor">مشرف تربوي رياضيات</option>
               </select>
             </div>
@@ -180,6 +202,7 @@ export const SupervisorTeacherRegistration = () => {
         <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>
           لديك حساب مسجل بالفعل؟{' '}
           <button
+            type="button"
             onClick={() => setCurrentScreen('10')}
             style={{ background: 'none', border: 'none', color: '#38bdf8', fontWeight: '800', cursor: 'pointer' }}
           >

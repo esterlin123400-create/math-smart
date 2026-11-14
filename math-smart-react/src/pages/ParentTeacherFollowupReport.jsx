@@ -1,22 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
+import { playSuccessChime } from '../utils/soundEffects';
 
 export const ParentTeacherFollowupReport = () => {
   const { setCurrentScreen, showToast } = useApp();
   const [showMeetingModal, setShowMeetingModal] = useState(false);
   const [parentNote, setParentNote] = useState('');
   const [selectedMeetingTime, setSelectedMeetingTime] = useState('الثلاثاء 04:30 مساءً (عن بُعد)');
+  const [meetingTopic, setMeetingTopic] = useState('');
+  const [notesHistory, setNotesHistory] = useState(() => readStorageJson('math_smart_parent_notes_v1', []));
+  const [meetingsHistory, setMeetingsHistory] = useState(() => readStorageJson('math_smart_meetings_v1', []));
+
+  useEffect(() => {
+    writeStorageJson('math_smart_parent_notes_v1', notesHistory);
+  }, [notesHistory]);
+
+  useEffect(() => {
+    writeStorageJson('math_smart_meetings_v1', meetingsHistory);
+  }, [meetingsHistory]);
 
   const handleSendNote = (e) => {
     e.preventDefault();
-    if (!parentNote.trim()) return;
-    showToast('تم إرسال رسالتكم وملاحظاتكم إلى الأستاذ طارق العمري بنجاح!', 'success');
+    if (!parentNote.trim()) {
+      showToast('يرجى كتابة الرسالة قبل الإرسال!', 'warning');
+      return;
+    }
+    const newEntry = {
+      id: Date.now(),
+      text: parentNote.trim(),
+      sentAt: new Date().toLocaleDateString('ar-SA')
+    };
+    setNotesHistory(prev => [newEntry, ...prev]);
+    playSuccessChime();
+    showToast('تم إرسال وحفظ رسالتكم إلى الأستاذ طارق العمري بنجاح!', 'success');
     setParentNote('');
   };
 
   const handleBookMeeting = (e) => {
     e.preventDefault();
+    const newMeeting = {
+      id: Date.now(),
+      time: selectedMeetingTime,
+      topic: meetingTopic.trim() || 'متابعة الخطة الإثرائية والأداء الدراسي',
+      bookedAt: new Date().toLocaleDateString('ar-SA')
+    };
+    setMeetingsHistory(prev => [newMeeting, ...prev]);
+    playSuccessChime();
     showToast(`تم حجز موعد الاجتماع مع المعلم: ${selectedMeetingTime}`, 'success');
+    setMeetingTopic('');
     setShowMeetingModal(false);
   };
 
@@ -24,6 +56,7 @@ export const ParentTeacherFollowupReport = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -45,30 +78,30 @@ export const ParentTeacherFollowupReport = () => {
             </p>
           </div>
 
-          <button onClick={() => setShowMeetingModal(true)} className="btn btn-primary">
+          <button type="button" onClick={() => setShowMeetingModal(true)} className="btn btn-primary">
             📅 حجز موعد اجتماع مع المعلم
           </button>
         </div>
       </div>
 
       {/* METRICS ROW */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>الحضور والتفاعل الصفي</div>
           <div style={{ fontSize: '32px', fontWeight: '900', color: '#10b981', fontFamily: 'var(--font-en)' }}>98%</div>
-          <span style={{ fontSize: '11px', color: '#34d399' }}>ملتزم ومبادر جداً</span>
+          <span style={{ fontSize: '11px', color: '#10b981' }}>ملتزم ومبادر جداً</span>
         </div>
 
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>تسليم الواجبات في موعدها</div>
-          <div style={{ fontSize: '32px', fontWeight: '900', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>100%</div>
-          <span style={{ fontSize: '11px', color: '#38bdf8' }}>14 من 14 واجب مكتمل</span>
+          <div style={{ fontSize: '32px', fontWeight: '900', color: '#0284c7', fontFamily: 'var(--font-en)' }}>100%</div>
+          <span style={{ fontSize: '11px', color: '#0284c7' }}>14 من 14 واجب مكتمل</span>
         </div>
 
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>التقييم الذكي التراكمي</div>
-          <div style={{ fontSize: '32px', fontWeight: '900', color: '#fbbf24', fontFamily: 'var(--font-en)' }}>92%</div>
-          <span style={{ fontSize: '11px', color: '#fbbf24' }}>مستوى متقدم (Advanced)</span>
+          <div style={{ fontSize: '32px', fontWeight: '900', color: '#f59e0b', fontFamily: 'var(--font-en)' }}>92%</div>
+          <span style={{ fontSize: '11px', color: '#f59e0b' }}>مستوى متقدم (Advanced)</span>
         </div>
 
         <div className="glass-card" style={{ textAlign: 'center' }}>
@@ -81,11 +114,11 @@ export const ParentTeacherFollowupReport = () => {
       {/* TEACHER NOTE CARD */}
       <div className="glass-card" style={{ marginBottom: '32px', padding: '30px', borderColor: 'rgba(79, 70, 229, 0.4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#4f46e5', padding: '6px' }}>
+          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#4f46e5', padding: '6px', flexShrink: 0 }}>
             <img src="/assets/avatar_math_wizard.svg" alt="Teacher" style={{ width: '100%', height: '100%' }} />
           </div>
           <div>
-            <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
+            <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)' }}>
               ملاحظة وتوصية معلم المادة: أ. طارق عبدالملك العمري
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -95,7 +128,7 @@ export const ParentTeacherFollowupReport = () => {
         </div>
 
         <div style={{
-          background: 'rgba(0, 0, 0, 0.25)',
+          background: 'var(--bg-inset)',
           borderRight: '4px solid #4f46e5',
           padding: '20px 24px',
           borderRadius: '12px',
@@ -109,6 +142,7 @@ export const ParentTeacherFollowupReport = () => {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <button
+            type="button"
             onClick={() => setCurrentScreen('01')}
             className="btn btn-primary"
             style={{ fontSize: '13px' }}
@@ -116,6 +150,7 @@ export const ParentTeacherFollowupReport = () => {
             استعراض آخر تقييم ذكي للطالب (01) 📊
           </button>
           <button
+            type="button"
             onClick={() => setCurrentScreen('08')}
             className="btn btn-secondary"
             style={{ fontSize: '13px' }}
@@ -127,7 +162,7 @@ export const ParentTeacherFollowupReport = () => {
 
       {/* PARENT INTERACTIVE FEEDBACK */}
       <div className="glass-card" style={{ padding: '30px' }}>
-        <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '14px' }}>
+        <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '14px' }}>
           إرسال رسالة أو استفسار للمعلم:
         </h3>
         <form onSubmit={handleSendNote}>
@@ -144,6 +179,40 @@ export const ParentTeacherFollowupReport = () => {
             إرسال الملاحظة للمعلم 📨
           </button>
         </form>
+
+        {(meetingsHistory.length > 0 || notesHistory.length > 0) && (
+          <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--border-card)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {meetingsHistory.length > 0 && (
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: '800', color: '#0284c7', marginBottom: '8px' }}>
+                  📅 مواعيد الاجتماعات المحجوزة ({meetingsHistory.length}):
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {meetingsHistory.map(m => (
+                    <div key={m.id} style={{ padding: '10px 14px', background: 'var(--bg-inset)', borderRadius: '10px', border: '1px solid var(--border-card)', fontSize: '13px' }}>
+                      <strong style={{ color: 'var(--text-heading)' }}>{m.time}</strong> — <span style={{ color: 'var(--text-body)' }}>{m.topic}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {notesHistory.length > 0 && (
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: '800', color: '#10b981', marginBottom: '8px' }}>
+                  📨 سجل الرسائل المرسلة ({notesHistory.length}):
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {notesHistory.map(n => (
+                    <div key={n.id} style={{ padding: '10px 14px', background: 'var(--bg-inset)', borderRadius: '10px', border: '1px solid var(--border-card)', fontSize: '13px', color: 'var(--text-body)' }}>
+                      {n.text} <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>({n.sentAt})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* BOOK MEETING MODAL */}
@@ -160,14 +229,14 @@ export const ParentTeacherFollowupReport = () => {
           padding: '20px'
         }}>
           <div style={{
-            background: 'rgba(15, 23, 42, 0.95)',
+            background: 'var(--bg-modal)',
             border: '1px solid var(--border-card)',
             borderRadius: '20px',
             width: '100%',
             maxWidth: '480px',
             padding: '30px'
           }}>
-            <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#fff', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '16px' }}>
               حجز موعد اجتماع تشاوري مع المعلم
             </h3>
             <form onSubmit={handleBookMeeting}>
@@ -188,6 +257,8 @@ export const ParentTeacherFollowupReport = () => {
                 <label className="form-label">محور النقاش الأساسي:</label>
                 <input
                   type="text"
+                  value={meetingTopic}
+                  onChange={(e) => setMeetingTopic(e.target.value)}
                   placeholder="مثال: الخطة الإثرائية للاستعداد لأولمبياد الرياضيات"
                   className="form-input"
                 />

@@ -36,7 +36,7 @@ export const PlatformHub = () => {
       {/* HERO BANNER */}
       <div className="page-hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flex: '1', minWidth: '300px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flex: '1', minWidth: 'min(100%, 260px)' }}>
             <div style={{
               width: '84px',
               height: '84px',
@@ -50,12 +50,13 @@ export const PlatformHub = () => {
               <img
                 src="/assets/math_smart_logo.jpg"
                 alt="أذكياء الرياضيات"
+                decoding="async"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
               />
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
                 <span className="badge badge-success">منصة أذكياء الرياضيات التفاعلية</span>
                 <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>نظام React الموحد والشامل</span>
               </div>
@@ -67,15 +68,16 @@ export const PlatformHub = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-card)', padding: '10px 20px', borderRadius: '16px', textAlign: 'center' }}>
-              <div style={{ fontSize: '26px', fontWeight: '900', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>18</div>
+            <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-card)', padding: '10px 20px', borderRadius: '16px', textAlign: 'center' }}>
+              <div style={{ fontSize: '26px', fontWeight: '900', color: '#0284c7', fontFamily: 'var(--font-en)' }}>18</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>واجهة متكاملة</div>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-card)', padding: '10px 20px', borderRadius: '16px', textAlign: 'center' }}>
+            <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-card)', padding: '10px 20px', borderRadius: '16px', textAlign: 'center' }}>
               <div style={{ fontSize: '26px', fontWeight: '900', color: '#10b981', fontFamily: 'var(--font-en)' }}>100%</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>مكونات تفاعلية نشطة</div>
             </div>
             <button
+              type="button"
               onClick={handleStartTour}
               className="btn btn-primary"
               style={{ padding: '12px 20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}
@@ -100,8 +102,8 @@ export const PlatformHub = () => {
         >
           <div style={{ fontSize: '26px', background: 'rgba(236, 72, 153, 0.15)', padding: '8px', borderRadius: '12px' }}>⚡</div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff' }}>حلبة التحديات الحية</div>
-            <div style={{ fontSize: '11px', color: '#f472b6' }}>مبارزات ومؤقت مباشر ⏱️</div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)' }}>حلبة التحديات الحية</div>
+            <div style={{ fontSize: '11px', color: '#ec4899' }}>مبارزات ومؤقت مباشر ⏱️</div>
           </div>
         </div>
 
@@ -112,8 +114,8 @@ export const PlatformHub = () => {
         >
           <div style={{ fontSize: '26px', background: 'rgba(99, 102, 241, 0.15)', padding: '8px', borderRadius: '12px' }}>✍️</div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff' }}>مساحة حل المسائل</div>
-            <div style={{ fontSize: '11px', color: '#818cf8' }}>سبورة ذكية ولوحة رموز ⌨️</div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)' }}>مساحة حل المسائل</div>
+            <div style={{ fontSize: '11px', color: '#6366f1' }}>سبورة ذكية ولوحة رموز ⌨️</div>
           </div>
         </div>
 
@@ -124,8 +126,8 @@ export const PlatformHub = () => {
         >
           <div style={{ fontSize: '26px', background: 'rgba(16, 185, 129, 0.15)', padding: '8px', borderRadius: '12px' }}>📖</div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff' }}>خارطة المناهج والوحدات</div>
-            <div style={{ fontSize: '11px', color: '#34d399' }}>12 وحدة لجميع المراحل 📚</div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)' }}>خارطة المناهج والوحدات</div>
+            <div style={{ fontSize: '11px', color: '#10b981' }}>12 وحدة لجميع المراحل 📚</div>
           </div>
         </div>
 
@@ -136,8 +138,8 @@ export const PlatformHub = () => {
         >
           <div style={{ fontSize: '26px', background: 'rgba(6, 182, 212, 0.15)', padding: '8px', borderRadius: '12px' }}>👨‍🏫</div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff' }}>لوحة تحكم المعلم</div>
-            <div style={{ fontSize: '11px', color: '#38bdf8' }}>إدارة الفصول والواجبات 📊</div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)' }}>لوحة تحكم المعلم</div>
+            <div style={{ fontSize: '11px', color: '#0284c7' }}>إدارة الفصول والواجبات 📊</div>
           </div>
         </div>
       </div>
@@ -159,6 +161,7 @@ export const PlatformHub = () => {
           </span>
           {searchQuery && (
             <button
+              type="button"
               onClick={() => setSearchQuery('')}
               style={{
                 position: 'absolute',
@@ -181,14 +184,15 @@ export const PlatformHub = () => {
         <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '6px', flexWrap: 'wrap' }}>
           {phasesList.map(ph => (
             <button
+              type="button"
               key={ph.id}
               onClick={() => setSelectedPhase(ph.id)}
               style={{
                 padding: '8px 16px',
                 borderRadius: '16px',
-                border: selectedPhase === ph.id ? '1px solid #38bdf8' : '1px solid var(--border-card)',
-                background: selectedPhase === ph.id ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255, 255, 255, 0.04)',
-                color: selectedPhase === ph.id ? '#38bdf8' : 'var(--text-muted)',
+                border: selectedPhase === ph.id ? '1px solid #0284c7' : '1px solid var(--border-card)',
+                background: selectedPhase === ph.id ? 'rgba(56, 189, 248, 0.16)' : 'var(--bg-subtle)',
+                color: selectedPhase === ph.id ? '#0ea5e9' : 'var(--text-muted)',
                 cursor: 'pointer',
                 fontSize: '12px',
                 fontWeight: '700',
@@ -209,13 +213,14 @@ export const PlatformHub = () => {
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {categoriesList.map(cat => (
             <button
+              type="button"
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               style={{
                 padding: '6px 14px',
                 borderRadius: '24px',
-                border: 'none',
-                background: selectedCategory === cat ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--border-card)',
+                background: selectedCategory === cat ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
                 color: selectedCategory === cat ? '#fff' : 'var(--text-muted)',
                 cursor: 'pointer',
                 fontSize: '12px',
@@ -234,7 +239,7 @@ export const PlatformHub = () => {
       {/* 18 SCREENS GRID */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
         gap: '24px'
       }}>
         {filteredScreens.map((screen) => (
@@ -252,14 +257,14 @@ export const PlatformHub = () => {
           >
             <div>
               {/* Card Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                 <span className="badge badge-primary">
                   {screen.category}
                 </span>
                 <span style={{
                   fontSize: '12px',
                   fontWeight: '800',
-                  color: '#38bdf8',
+                  color: '#0284c7',
                   fontFamily: 'var(--font-ar)',
                   background: 'rgba(56, 189, 248, 0.12)',
                   border: '1px solid rgba(56, 189, 248, 0.25)',
@@ -276,7 +281,7 @@ export const PlatformHub = () => {
                   width: '52px',
                   height: '52px',
                   borderRadius: '16px',
-                  background: `linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))`,
+                  background: 'var(--bg-subtle)',
                   border: '1px solid var(--border-card)',
                   display: 'flex',
                   alignItems: 'center',
@@ -287,7 +292,7 @@ export const PlatformHub = () => {
                   {screen.icon}
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff', marginBottom: '4px', lineHeight: 1.4 }}>
+                  <h3 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '4px', lineHeight: 1.4 }}>
                     {screen.title}
                   </h3>
                   <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
@@ -296,7 +301,7 @@ export const PlatformHub = () => {
                 </div>
               </div>
 
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', opacity: 0.8, marginBottom: '6px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', opacity: 0.85, marginBottom: '6px' }}>
                 {screen.phase}
               </div>
             </div>
@@ -310,10 +315,11 @@ export const PlatformHub = () => {
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
-              <span style={{ fontSize: '12px', color: '#38bdf8', fontWeight: '700' }}>
+              <span style={{ fontSize: '12px', color: '#0284c7', fontWeight: '700' }}>
                 {screen.badge}
               </span>
               <button
+                type="button"
                 className="btn btn-secondary"
                 style={{
                   padding: '6px 14px',

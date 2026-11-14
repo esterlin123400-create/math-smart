@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 
 export const GradeLevelSelection = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { updateProfile } = useAuth();
-  const [selectedStage, setSelectedStage] = useState('elementary'); // 'elementary' | 'middle' | 'high'
-  const [activeGrade, setActiveGrade] = useState('الصف السادس الابتدائي');
+  const { user, updateProfile } = useAuth();
+  const [selectedStage, setSelectedStage] = useState('elementary'); // 'elementary' | 'middle' | 'high' | 'calculus'
+  const [activeGrade, setActiveGrade] = useState(user?.grade || 'الصف السادس الابتدائي');
+
+  useEffect(() => {
+    if (user?.grade) {
+      setActiveGrade(user.grade);
+    }
+  }, [user?.grade]);
 
   const stages = [
     { id: 'elementary', name: 'المرحلة الابتدائية', icon: '🌱', desc: 'تأسيس الحساب الذهني، العمليات الأساسية، والكسور' },
@@ -41,9 +47,9 @@ export const GradeLevelSelection = () => {
     ]
   };
 
-  const handleSelectGrade = (gradeTitle) => {
+  const handleSelectGrade = async (gradeTitle) => {
     setActiveGrade(gradeTitle);
-    updateProfile({ grade: gradeTitle });
+    await updateProfile({ grade: gradeTitle });
     showToast(`تم تعيين مرحلتك الدراسية إلى: ${gradeTitle}`, 'success');
   };
 
@@ -51,6 +57,7 @@ export const GradeLevelSelection = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -69,7 +76,7 @@ export const GradeLevelSelection = () => {
       {/* Stage Tabs */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
         gap: '16px',
         marginBottom: '32px'
       }}>
@@ -78,7 +85,7 @@ export const GradeLevelSelection = () => {
             key={st.id}
             onClick={() => setSelectedStage(st.id)}
             style={{
-              background: selectedStage === st.id ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(6, 182, 212, 0.15))' : 'var(--bg-card)',
+              background: selectedStage === st.id ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.22), rgba(6, 182, 212, 0.14))' : 'var(--bg-card)',
               border: selectedStage === st.id ? '2px solid #6366f1' : '1px solid var(--border-card)',
               borderRadius: '20px',
               padding: '24px',
@@ -91,7 +98,7 @@ export const GradeLevelSelection = () => {
           >
             <div style={{ fontSize: '36px' }}>{st.icon}</div>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>{st.name}</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '4px' }}>{st.name}</h3>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{st.desc}</p>
             </div>
           </div>
@@ -99,13 +106,13 @@ export const GradeLevelSelection = () => {
       </div>
 
       {/* Grade Cards Grid */}
-      <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#fff', marginBottom: '18px' }}>
+      <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '18px' }}>
         الصفوف المتاحة في هذه المرحلة:
       </h2>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
         gap: '20px',
         marginBottom: '32px'
       }}>
@@ -118,14 +125,14 @@ export const GradeLevelSelection = () => {
               className="glass-card"
               style={{
                 borderColor: isSelected ? '#10b981' : 'var(--border-card)',
-                background: isSelected ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.85))' : 'var(--bg-card)',
-                boxShadow: isSelected ? '0 0 25px rgba(16, 185, 129, 0.25)' : 'none'
+                background: isSelected ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.14), var(--bg-card))' : 'var(--bg-card)',
+                boxShadow: isSelected ? '0 0 25px rgba(16, 185, 129, 0.22)' : 'none'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '28px' }}>{grade.icon}</span>
-                  <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>{grade.title}</h3>
+                  <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)' }}>{grade.title}</h3>
                 </div>
                 {isSelected && (
                   <span className="badge badge-success">الصف الحالي النشط</span>
@@ -138,15 +145,16 @@ export const GradeLevelSelection = () => {
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {grade.topics.map((t, i) => (
-                    <span key={i} style={{ background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '8px', fontSize: '12px', color: 'var(--text-body)' }}>
+                    <span key={i} style={{ background: 'var(--bg-subtle)', padding: '4px 10px', borderRadius: '8px', fontSize: '12px', color: 'var(--text-body)' }}>
                       • {t}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <button
+                  type="button"
                   onClick={() => handleSelectGrade(grade.title)}
                   className={`btn ${isSelected ? 'btn-success' : 'btn-primary'}`}
                   style={{ flex: 1, padding: '10px' }}
@@ -154,8 +162,9 @@ export const GradeLevelSelection = () => {
                   {isSelected ? '✓ الصف المختار' : 'تحديد هذا الصف'}
                 </button>
                 <button
-                  onClick={() => {
-                    handleSelectGrade(grade.title);
+                  type="button"
+                  onClick={async () => {
+                    await handleSelectGrade(grade.title);
                     setCurrentScreen('17'); // View units
                   }}
                   className="btn btn-secondary"

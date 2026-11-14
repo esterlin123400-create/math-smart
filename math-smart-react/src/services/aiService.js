@@ -1,15 +1,58 @@
-import { GoogleGenAI } from '@google/genai';
+/**
+ * Math Smart AI Service
+ * يستدعي نقطة النهاية الآمنة /api/gemini على الخادم دون تضمين أي مفتاح API داخل حزمة المتصفح،
+ * مع الرجوع التلقائي لمحرك التحليل التربوي المحلي عند عدم توفر الخادم أو المفتاح.
+ */
 
-const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+export let isGeminiConfigured = false;
 
-export const isGeminiConfigured = Boolean(
-  geminiApiKey && 
-  geminiApiKey !== 'your-gemini-api-key-here' &&
-  !geminiApiKey.includes('your-key')
-);
+export const checkGeminiAvailability = async () => {
+  try {
+    if (typeof window === 'undefined') return false;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2500);
+    const res = await fetch('/api/gemini', { method: 'GET', signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) return false;
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) return false;
+    const data = await res.json();
+    isGeminiConfigured = Boolean(data?.configured);
+    return isGeminiConfigured;
+  } catch {
+    return false;
+  }
+};
 
-// Initialize Gemini Client
-const ai = isGeminiConfigured ? new GoogleGenAI({ apiKey: geminiApiKey }) : null;
+const postToGeminiProxy = async (action, payload) => {
+  if (typeof window === 'undefined') return null;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const res = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, payload }),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) return null;
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) return null;
+
+    const data = await res.json();
+    if (data?.success) {
+      isGeminiConfigured = true;
+      return data;
+    }
+    return null;
+  } catch {
+    clearTimeout(timer);
+    return null;
+  }
+};
 
 /**
  * 1. تحليل خطوة حل الطالب بالذكاء الاصطناعي
@@ -28,52 +71,19 @@ export const analyzeMathStep = async ({
     ans => studentInput.trim().replace(/\s+/g, '') === ans.replace(/\s+/g, '')
   );
 
-  // If Gemini API Key is configured, use live Gemini Flash model
-  if (isGeminiConfigured && ai) {
-    try {
-      const prompt = `
-أنت "المعلم الذكي للرياضيات" في منصة Math Smart التعليمية.
-مهمتك تقييم خطوة الطالب بأسلوب تربوي لطيف ومشجع باللغة العربية الفصحى.
+  const liveResult = await postToGeminiProxy('analyzeMathStep', {
+    problemTitle,
+    problemQuestion,
+    equation,
+    studentInput,
+    correctAnswers,
+    topic,
+    grade,
+    isCorrectDirectly
+  });
 
-بيانات المسألة:
-- العنوان: ${problemTitle}
-- الموضوع: ${topic}
-- الصف: ${grade}
-- نص السؤال: ${problemQuestion}
-- المعادلة الأصلية: ${equation}
-- الإجابات النموذجية الصحيحة: ${correctAnswers.join(' أو ')}
-- مدخل/خطوة الطالب: ${studentInput}
-
-المطلوب:
-حلل خطوة الطالب وقدم له إرشاداً ذكياً:
-1. هل إجابته أو خطوته صحيحة؟
-2. تعليق دقيق ومختصر (لا تعطِه الحل النهائي مباشرة إذا أخطأ، بل دله على الفكرة لتشغيل عقله).
-3. تلميح ذكي موجه للخطوة التالية.
-4. عبارة تشجيعية دافئة.
-
-أرجع الإجابة ككائن JSON صالح فقط بالشكل التالي:
-{
-  "isCorrect": ${isCorrectDirectly ? 'true' : 'false'},
-  "feedback": "شرح وتحليل الخطوة",
-  "hint": "تلميح ذكي للخطوة التالية",
-  "encouragement": "عبارة تحفيزية ممتازة"
-}
-`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json'
-        }
-      });
-
-      const text = response.text;
-      const parsed = JSON.parse(text);
-      return { success: true, ...parsed, isLiveAi: true };
-    } catch (err) {
-      console.warn('Live Gemini API call notice, falling back to smart engine:', err.message);
-    }
+  if (liveResult) {
+    return liveResult;
   }
 
   // Smart Offline/Demo Rule-based Fallback
@@ -86,41 +96,25 @@ export const analyzeMathStep = async ({
       encouragement: '🌟 تفكير رياضي عبقري ومنظم! استمر بهذا الإبداع يا بطل!',
       isLiveAi: false
     };
-  } else {
-    return {
-      success: true,
-      isCorrect: false,
-      feedback: `الخطوة (${studentInput}) تحتاج إلى إعادة تدقيق. انتبه للعمليات الحسابية المتطابقة على طرفي المعادلة.`,
-      hint: `فكر في عزل المجهول: ما العملية العكسية المطلوبة لنقل الحدود وتبسيط المعادلة؟`,
-      encouragement: '💪 المحاولة هي أول خطوة في طريق العباقرة! جرب مرة أخرى، أنت قادر على حلها!',
-      isLiveAi: false
-    };
   }
+
+  return {
+    success: true,
+    isCorrect: false,
+    feedback: `الخطوة (${studentInput}) تحتاج إلى إعادة تدقيق. انتبه للعمليات الحسابية المتطابقة على طرفي المعادلة.`,
+    hint: 'فكر في عزل المجهول: ما العملية العكسية المطلوبة لنقل الحدود وتبسيط المعادلة؟',
+    encouragement: '💪 المحاولة هي أول خطوة في طريق العباقرة! جرب مرة أخرى، أنت قادر على حلها!',
+    isLiveAi: false
+  };
 };
 
 /**
  * 2. المعلم الذكي الصوتي/النصي (Ask Math Tutor)
  */
 export const askMathTutor = async ({ question, grade = 'الصف السادس الابتدائي', topic = 'عام' }) => {
-  if (isGeminiConfigured && ai) {
-    try {
-      const prompt = `
-أنت "المرشد الذكي للرياضيات" في منصة Math Smart.
-طالب في مرحلة (${grade}) يسألك السؤال التالي حول موضوع (${topic}):
-"${question}"
-
-أجب باختصار (في 3-4 أسطر)، بأسلوب مبسط ومشوق ومناسب لعمر الطالب، مع استخدام أمثلة واقعية مبسطة ورموز رياضية واضحة.
-`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt
-      });
-
-      return { success: true, answer: response.text, isLiveAi: true };
-    } catch (err) {
-      console.warn('Gemini tutor call error:', err);
-    }
+  const liveResult = await postToGeminiProxy('askMathTutor', { question, grade, topic });
+  if (liveResult) {
+    return liveResult;
   }
 
   // Simulated Tutor Response
@@ -142,35 +136,17 @@ export const generateSmartAssessmentFeedback = async ({
   totalQuestions,
   duration
 }) => {
-  if (isGeminiConfigured && ai) {
-    try {
-      const prompt = `
-قم بصفتك خبيراً تربوياً في تدريس الرياضيات بإعداد تقرير تشخيصي ذكي وموجز باللغة العربية لطالب:
-- عنوان الاختبار: ${examTitle}
-- الصف: ${grade}
-- الدرجة المحققة: ${score}% (${correctCount} من ${totalQuestions})
-- وقت الإنجاز: ${duration}
+  const liveResult = await postToGeminiProxy('generateSmartAssessmentFeedback', {
+    examTitle,
+    grade,
+    score,
+    correctCount,
+    totalQuestions,
+    duration
+  });
 
-أرجع الإجابة كـ JSON:
-{
-  "summary": "ملخص الأداء العام بأسلوب محفز",
-  "strengths": ["نقطة قوة 1", "نقطة قوة 2"],
-  "recommendations": ["توصية عملية 1", "توصية عملية 2"]
-}
-`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json'
-        }
-      });
-
-      return { success: true, ...JSON.parse(response.text), isLiveAi: true };
-    } catch (err) {
-      console.warn('Gemini assessment error:', err);
-    }
+  if (liveResult) {
+    return liveResult;
   }
 
   return {
@@ -188,4 +164,3 @@ export const generateSmartAssessmentFeedback = async ({
     isLiveAi: false
   };
 };
-

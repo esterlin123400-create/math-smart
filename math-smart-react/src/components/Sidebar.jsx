@@ -30,47 +30,31 @@ export const Sidebar = () => {
 
   if (!isSidebarOpen) {
     return (
-      <aside style={{
-        width: '60px',
-        background: 'var(--bg-sidebar)',
-        borderLeft: '1px solid var(--border-card)',
-        padding: '16px 8px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '12px'
-      }}>
+      <aside className="app-sidebar-collapsed">
         <button
+          type="button"
           onClick={() => setIsSidebarOpen(true)}
           style={{
             background: 'none',
             border: 'none',
             color: 'var(--text-muted)',
             fontSize: '18px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontFamily: 'var(--font-ar)'
           }}
           title="توسيع القائمة"
         >
-          ☰
+          <span>☰</span>
         </button>
       </aside>
     );
   }
 
   return (
-    <aside style={{
-      width: '280px',
-      background: 'var(--bg-sidebar)',
-      borderLeft: '1px solid var(--border-card)',
-      padding: '20px 16px',
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 0,
-      height: 'calc(100vh - 73px)',
-      position: 'sticky',
-      top: '73px',
-      overflowY: 'auto'
-    }}>
+    <aside className="app-sidebar">
       {/* Sidebar Top / Toggle */}
       <div style={{
         display: 'flex',
@@ -84,6 +68,7 @@ export const Sidebar = () => {
           فهرس شاشات المنصة
         </span>
         <button
+          type="button"
           onClick={() => setIsSidebarOpen(false)}
           style={{
             background: 'none',
@@ -100,6 +85,7 @@ export const Sidebar = () => {
 
       {/* Main Hub Link */}
       <button
+        type="button"
         onClick={() => setCurrentScreen('hub')}
         style={{
           width: '100%',
@@ -107,10 +93,10 @@ export const Sidebar = () => {
           alignItems: 'center',
           gap: '12px',
           padding: '12px 14px',
-          background: currentScreen === 'hub' ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'rgba(255, 255, 255, 0.04)',
+          background: currentScreen === 'hub' ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
           border: '1px solid var(--border-card)',
           borderRadius: '12px',
-          color: '#fff',
+          color: currentScreen === 'hub' ? '#fff' : 'var(--text-heading)',
           fontFamily: 'var(--font-ar)',
           fontSize: '13px',
           fontWeight: '800',
@@ -126,7 +112,7 @@ export const Sidebar = () => {
           <div style={{ fontSize: '10px', opacity: 0.8 }}>استعراض الواجهات الـ 18</div>
         </div>
         <span style={{
-          background: 'rgba(255,255,255,0.2)',
+          background: currentScreen === 'hub' ? 'rgba(255,255,255,0.22)' : 'var(--bg-subtle-strong)',
           padding: '2px 8px',
           borderRadius: '10px',
           fontSize: '11px'
@@ -157,6 +143,7 @@ export const Sidebar = () => {
 
                 return (
                   <button
+                    type="button"
                     key={screen.id}
                     onClick={() => setCurrentScreen(screen.id)}
                     style={{
@@ -165,10 +152,10 @@ export const Sidebar = () => {
                       alignItems: 'center',
                       gap: '10px',
                       padding: '9px 12px',
-                      background: isActive ? 'rgba(79, 70, 229, 0.2)' : 'transparent',
+                      background: isActive ? 'rgba(79, 70, 229, 0.18)' : 'transparent',
                       border: isActive ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid transparent',
                       borderRadius: '10px',
-                      color: isActive ? '#fff' : 'var(--text-body)',
+                      color: isActive ? 'var(--text-heading)' : 'var(--text-body)',
                       fontFamily: 'var(--font-ar)',
                       fontSize: '12px',
                       fontWeight: isActive ? '800' : '600',

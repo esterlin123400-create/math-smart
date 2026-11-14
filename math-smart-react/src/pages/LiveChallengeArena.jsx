@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
-import { addStudentXP, createChallengeRoom, subscribeToRoom } from '../services/dbService';
+import { createChallengeRoom, subscribeToRoom, joinChallengeRoom, updateChallengeRoomScore } from '../services/dbService';
+import { copyToClipboard } from '../utils/platformHelpers';
+import { playSuccessChime, playErrorTone, playLevelUpFanfare } from '../utils/soundEffects';
 
 export const LiveChallengeArena = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
 
   const battleQuestions = [
     {
@@ -75,8 +77,8 @@ export const LiveChallengeArena = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isMatchFinished, setIsMatchFinished] = useState(false);
-  const [matchMode, setMatchMode] = useState('online'); // 'online' | 'bot'
   const [roomCode, setRoomCode] = useState('ARENA-8491');
+  const [isHost, setIsHost] = useState(true);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [inputRoomCode, setInputRoomCode] = useState('');
 
@@ -87,6 +89,14 @@ export const LiveChallengeArena = () => {
     avatar: user?.avatar || '/assets/avatar_fahad_hero.svg',
     ping: '24ms'
   });
+
+  useEffect(() => {
+    setPlayer1(prev => ({
+      ...prev,
+      name: user?.name || 'فهد السالم (أنت)',
+      avatar: user?.avatar || '/assets/avatar_fahad_hero.svg'
+    }));
+  }, [user?.name, user?.avatar]);
 
   const [player2, setPlayer2] = useState({
     name: 'زياد الغامدي (منافس مباشر)',
@@ -99,23 +109,30 @@ export const LiveChallengeArena = () => {
 
   // Subscribe to Realtime Room Updates (when connected to Supabase)
   useEffect(() => {
-    const unsubscribe = subscribeToRoom(roomCode, (updatedRoom) => {
-      if (updatedRoom && typeof updatedRoom.guest_score === 'number') {
-        setPlayer2(prev => ({
-          ...prev,
-          score: updatedRoom.guest_score,
-          status: updatedRoom.status === 'in_progress' ? 'ينافس الآن في الوقت الفعلي!' : prev.status
-        }));
+    const cleanCode = roomCode.replace(/^ARENA-/i, '');
+    const unsubscribe = subscribeToRoom(cleanCode, (updatedRoom) => {
+      if (updatedRoom) {
+        const opponentScore = isHost ? updatedRoom.guest_score : updatedRoom.host_score;
+        if (typeof opponentScore === 'number') {
+          setPlayer2(prev => ({
+            ...prev,
+            score: opponentScore,
+            status: updatedRoom.status === 'in_progress' ? 'ينافس الآن في الوقت الفعلي!' : prev.status
+          }));
+        }
       }
     });
     return () => unsubscribe();
-  }, [roomCode]);
+  }, [roomCode, isHost]);
 
   const handleCreateLiveRoom = async () => {
     const res = await createChallengeRoom(user?.id || 'demo-host', currentQ.category, user?.grade || 'الصف السادس');
     if (res.success && res.roomCode) {
+      setIsHost(true);
       setRoomCode(`ARENA-${res.roomCode}`);
       showToast(`تم توليد غرفة تحدي جديدة برمز: ARENA-${res.roomCode}`, 'success');
+    } else {
+      showToast(res.error || 'تعذر إنشاء غرفة تحدي حالياً', 'danger');
     }
   };
 
@@ -132,7 +149,7 @@ export const LiveChallengeArena = () => {
       setTimeLeft(prev => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, isAnswered, isMatchFinished]);
+  }, [timeLeft, isAnswered, isMatchFinished, showToast]);
 
   // Simulate live opponent reactions and answers
   useEffect(() => {
@@ -165,22 +182,26 @@ export const LiveChallengeArena = () => {
     if (opt.correct) {
       const bonus = timeLeft * 4; // speed bonus
       const roundScore = 120 + bonus;
+      const newTotalScore = player1.score + roundScore;
       setPlayer1(prev => ({
         ...prev,
-        score: prev.score + roundScore,
+        score: newTotalScore,
         streak: prev.streak + 1
       }));
+      updateChallengeRoomScore(roomCode, isHost ? 'host_score' : 'guest_score', newTotalScore, 'in_progress');
+      playSuccessChime();
       showToast(`🎉 إجابة خارقة السرعة! حصلت على +${roundScore} نقطة!`, 'success');
     } else {
       setPlayer1(prev => ({
         ...prev,
         streak: 0
       }));
+      playErrorTone();
       showToast('❌ إجابة خاطئة! ركّز في الجولة القادمة', 'danger');
     }
   };
 
-  const handleNextRound = () => {
+  const handleNextRound = async () => {
     if (currentRoundIdx < battleQuestions.length - 1) {
       setCurrentRoundIdx(prev => prev + 1);
       setSelectedOption(null);
@@ -191,9 +212,9 @@ export const LiveChallengeArena = () => {
     } else {
       setIsMatchFinished(true);
       const earnedXp = player1.score >= player2.score ? 250 : 100;
-      if (user?.id) {
-        addStudentXP(user.id, earnedXp);
-      }
+      await updateProfile({ xp: (user?.xp || 0) + earnedXp });
+      updateChallengeRoomScore(roomCode, isHost ? 'host_score' : 'guest_score', player1.score, 'completed');
+      playLevelUpFanfare();
       showToast(`🏆 انتهت المبارزة الرياضية! حصلت على +${earnedXp} XP!`, 'success');
     }
   };
@@ -209,23 +230,31 @@ export const LiveChallengeArena = () => {
     showToast('بدأت جولة جديدة من المبارزة! بالتوفيق يا بطل!', 'info');
   };
 
-  const handleCopyRoomCode = () => {
-    navigator.clipboard.writeText(roomCode);
-    showToast(`تم نسخ كود الغرفة (${roomCode}) بنجاح! شاركه مع زميلك`, 'success');
+  const handleCopyRoomCode = async () => {
+    const ok = await copyToClipboard(roomCode);
+    if (ok) {
+      showToast(`تم نسخ كود الغرفة (${roomCode}) بنجاح! شاركه مع زميلك`, 'success');
+    } else {
+      showToast(`كود الغرفة: ${roomCode}`, 'info');
+    }
   };
 
-  const handleJoinRoom = (e) => {
+  const handleJoinRoom = async (e) => {
     e.preventDefault();
     if (!inputRoomCode.trim()) return;
-    setRoomCode(inputRoomCode.toUpperCase());
+    const formattedCode = inputRoomCode.trim().toUpperCase();
+    const res = await joinChallengeRoom(formattedCode, user?.id);
+    setIsHost(false);
+    setRoomCode(formattedCode.startsWith('ARENA-') ? formattedCode : `ARENA-${formattedCode}`);
     setJoinModalOpen(false);
+    setInputRoomCode('');
     setPlayer2({
       name: 'زميل متصل (مباشر)',
       score: 0,
-      status: 'انضم إلى الغرفة للتو!',
+      status: res.mode === 'demo' ? 'انضم إلى الغرفة للتو!' : 'متصل في الغرفة السحابية!',
       avatar: '/assets/avatar_ninja.svg'
     });
-    showToast(`تم الانضمام للغرفة ${inputRoomCode.toUpperCase()} بنجاح!`, 'success');
+    showToast(`تم الانضمام للغرفة ${formattedCode} بنجاح!`, 'success');
   };
 
   return (
@@ -235,7 +264,7 @@ export const LiveChallengeArena = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: 'rgba(15, 23, 42, 0.75)',
+        background: 'var(--bg-navbar)',
         backdropFilter: 'blur(16px)',
         padding: '16px 24px',
         borderRadius: '20px',
@@ -246,6 +275,7 @@ export const LiveChallengeArena = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <button
+            type="button"
             onClick={() => setCurrentScreen('hub')}
             style={{
               background: 'none',
@@ -288,7 +318,7 @@ export const LiveChallengeArena = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--bg-subtle)',
             border: '1px solid var(--border-card)',
             borderRadius: '12px',
             padding: '6px 12px',
@@ -299,13 +329,14 @@ export const LiveChallengeArena = () => {
             <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>كود الغرفة:</span>
             <strong style={{ color: '#38bdf8', fontFamily: 'var(--font-en)', fontSize: '13px' }}>{roomCode}</strong>
             <button
+              type="button"
               onClick={handleCopyRoomCode}
               title="نسخ كود الغرفة"
               style={{
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: '#fff',
+                color: 'var(--text-heading)',
                 fontSize: '14px'
               }}
             >
@@ -314,6 +345,7 @@ export const LiveChallengeArena = () => {
           </div>
 
           <button
+            type="button"
             onClick={handleCreateLiveRoom}
             className="btn btn-primary"
             style={{ padding: '6px 14px', fontSize: '12px' }}
@@ -322,6 +354,7 @@ export const LiveChallengeArena = () => {
           </button>
 
           <button
+            type="button"
             onClick={() => setJoinModalOpen(true)}
             className="btn btn-secondary"
             style={{ padding: '6px 14px', fontSize: '12px' }}
@@ -336,26 +369,20 @@ export const LiveChallengeArena = () => {
       </div>
 
       {/* BATTLE STAGE VS */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        gap: '24px',
-        alignItems: 'center',
-        marginBottom: '32px'
-      }}>
+      <div className="battle-stage-grid">
         {/* Player 1 Card */}
         <div className="glass-card" style={{
           borderColor: 'rgba(56, 189, 248, 0.4)',
-          background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.8))'
+          background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.12), var(--bg-card))'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#0284c7', padding: '6px' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#0284c7', padding: '6px', flexShrink: 0 }}>
               <img src={player1.avatar} alt="P1" style={{ width: '100%', height: '100%' }} />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff' }}>{player1.name}</div>
-              <div style={{ fontSize: '12px', color: '#38bdf8' }}>سلسلة الفوز: 🔥 {player1.streak} متتالية</div>
-              <div style={{ fontSize: '26px', fontWeight: '900', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>
+              <div style={{ fontSize: '16px', fontWeight: '900', color: 'var(--text-heading)' }}>{player1.name}</div>
+              <div style={{ fontSize: '12px', color: '#0ea5e9' }}>سلسلة الفوز: 🔥 {player1.streak} متتالية</div>
+              <div style={{ fontSize: '26px', fontWeight: '900', color: '#0284c7', fontFamily: 'var(--font-en)' }}>
                 {player1.score} <span style={{ fontSize: '13px' }}>نقطة</span>
               </div>
             </div>
@@ -383,7 +410,7 @@ export const LiveChallengeArena = () => {
             fontSize: '22px',
             fontWeight: '900',
             fontFamily: 'var(--font-en)',
-            color: timeLeft <= 5 ? '#ef4444' : '#fbbf24'
+            color: timeLeft <= 5 ? '#ef4444' : '#f59e0b'
           }}>
             ⏱️ {timeLeft}s
           </div>
@@ -395,17 +422,17 @@ export const LiveChallengeArena = () => {
         {/* Player 2 Card */}
         <div className="glass-card" style={{
           borderColor: 'rgba(236, 72, 153, 0.4)',
-          background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(15, 23, 42, 0.8))'
+          background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.12), var(--bg-card))'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ flex: 1, textAlign: 'left' }}>
-              <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff' }}>{player2.name}</div>
-              <div style={{ fontSize: '12px', color: '#f472b6' }}>الحالة: {player2.status}</div>
-              <div style={{ fontSize: '26px', fontWeight: '900', color: '#f472b6', fontFamily: 'var(--font-en)' }}>
+              <div style={{ fontSize: '16px', fontWeight: '900', color: 'var(--text-heading)' }}>{player2.name}</div>
+              <div style={{ fontSize: '12px', color: '#ec4899' }}>الحالة: {player2.status}</div>
+              <div style={{ fontSize: '26px', fontWeight: '900', color: '#db2777', fontFamily: 'var(--font-en)' }}>
                 {player2.score} <span style={{ fontSize: '13px' }}>نقطة</span>
               </div>
             </div>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#be185d', padding: '6px' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#be185d', padding: '6px', flexShrink: 0 }}>
               <img src={player2.avatar} alt="P2" style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
@@ -418,7 +445,7 @@ export const LiveChallengeArena = () => {
           <span className="badge badge-warning" style={{ marginBottom: '14px' }}>
             الجولة {currentRoundIdx + 1}: {currentQ.category}
           </span>
-          <h2 style={{ fontSize: '26px', fontWeight: '900', color: '#fff', marginBottom: '14px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '14px' }}>
             {currentQ.text}
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '28px' }}>
@@ -428,18 +455,18 @@ export const LiveChallengeArena = () => {
           {/* Options Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: '16px',
             maxWidth: '600px',
             margin: '0 auto 24px'
           }}>
             {currentQ.options.map(opt => {
-              let optStyle = {
+              const optStyle = {
                 padding: '18px 24px',
                 borderRadius: '16px',
                 border: '1px solid var(--border-card)',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: '#fff',
+                background: 'var(--bg-subtle)',
+                color: 'var(--text-heading)',
                 fontSize: '20px',
                 fontWeight: '900',
                 fontFamily: 'var(--font-en)',
@@ -451,14 +478,17 @@ export const LiveChallengeArena = () => {
                 if (opt.correct) {
                   optStyle.background = 'linear-gradient(135deg, #10b981, #059669)';
                   optStyle.borderColor = '#34d399';
+                  optStyle.color = '#fff';
                 } else if (selectedOption === opt.id) {
                   optStyle.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
                   optStyle.borderColor = '#f87171';
+                  optStyle.color = '#fff';
                 }
               }
 
               return (
                 <button
+                  type="button"
                   key={opt.id}
                   onClick={() => handleSelectOption(opt)}
                   style={optStyle}
@@ -471,7 +501,7 @@ export const LiveChallengeArena = () => {
 
           {isAnswered && (
             <div style={{ marginTop: '20px' }}>
-              <button onClick={handleNextRound} className="btn btn-primary" style={{ padding: '12px 32px' }}>
+              <button type="button" onClick={handleNextRound} className="btn btn-primary" style={{ padding: '12px 32px' }}>
                 {currentRoundIdx < battleQuestions.length - 1 ? 'الانتقال للجولة التالية ⏭️' : 'استعراض النتيجة النهائية والتتويج 🏆'}
               </button>
             </div>
@@ -483,7 +513,7 @@ export const LiveChallengeArena = () => {
           <div style={{ fontSize: '50px', marginBottom: '14px' }}>
             {player1.score >= player2.score ? '👑' : '🥈'}
           </div>
-          <h2 style={{ fontSize: '32px', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>
+          <h2 style={{ fontSize: '32px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '10px' }}>
             {player1.score >= player2.score ? 'مبروك الفوز الساحق بالنزال!' : 'مباراة قوية ومستوى رائع!'}
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '15px', maxWidth: '600px', margin: '0 auto 28px' }}>
@@ -493,13 +523,13 @@ export const LiveChallengeArena = () => {
           </p>
 
           <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={handleRematch} className="btn btn-primary" style={{ padding: '12px 28px' }}>
+            <button type="button" onClick={handleRematch} className="btn btn-primary" style={{ padding: '12px 28px' }}>
               🔄 إعادة المبارزة
             </button>
-            <button onClick={() => setCurrentScreen('01')} className="btn btn-secondary" style={{ padding: '12px 28px' }}>
+            <button type="button" onClick={() => setCurrentScreen('01')} className="btn btn-secondary" style={{ padding: '12px 28px' }}>
               📊 التقييم ومراجعة الحل
             </button>
-            <button onClick={() => setCurrentScreen('hub')} className="btn btn-secondary" style={{ padding: '12px 28px' }}>
+            <button type="button" onClick={() => setCurrentScreen('hub')} className="btn btn-secondary" style={{ padding: '12px 28px' }}>
               🏛️ العودة للمعرض
             </button>
           </div>
@@ -519,10 +549,11 @@ export const LiveChallengeArena = () => {
           zIndex: 1000,
           padding: '20px'
         }}>
-          <div className="glass-card" style={{ maxWidth: '420px', width: '100%', padding: '28px' }}>
+          <div className="glass-card" style={{ maxWidth: '420px', width: '100%', padding: '28px', background: 'var(--bg-modal)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff' }}>الانضمام إلى غرفة منافس</h3>
+              <h3 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-heading)' }}>الانضمام إلى غرفة منافس</h3>
               <button
+                type="button"
                 onClick={() => setJoinModalOpen(false)}
                 style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}
               >
@@ -543,9 +574,9 @@ export const LiveChallengeArena = () => {
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
-                  background: 'rgba(15, 23, 42, 0.9)',
+                  background: 'var(--bg-input)',
                   border: '1px solid var(--border-card)',
-                  color: '#fff',
+                  color: 'var(--text-heading)',
                   fontSize: '16px',
                   fontWeight: '800',
                   textAlign: 'center',

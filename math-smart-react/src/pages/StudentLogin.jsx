@@ -30,7 +30,7 @@ export const StudentLogin = () => {
       }
     } else {
       loginAs('student');
-      updateProfile({ avatar: selectedAvatar });
+      await updateProfile({ avatar: selectedAvatar });
       showToast('أهلاً بك يا بطل الرياضيات في منصتك!', 'success');
       setCurrentScreen('13'); // Navigate to Student Dashboard
     }
@@ -47,6 +47,7 @@ export const StudentLogin = () => {
     <div style={{ maxWidth: '960px', margin: '0 auto', padding: '20px 0' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -57,7 +58,7 @@ export const StudentLogin = () => {
 
       <div className="glass-card" style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
         gap: '40px',
         padding: '40px',
         alignItems: 'center'
@@ -72,14 +73,14 @@ export const StudentLogin = () => {
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#fff', marginBottom: '8px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '8px' }}>
             بوابة عباقرة الرياضيات 🚀
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
             انضم الآن لخوض التحديات اليومية، جمع نقاط الخبرة XP، والتنافس مع زملائك على صدارة المتصدرين!
           </p>
 
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <span className="badge badge-warning">🔥 تحدي أسبوعي</span>
             <span className="badge badge-success">🏆 جوائز وأوسمة</span>
           </div>
@@ -87,7 +88,7 @@ export const StudentLogin = () => {
 
         {/* Right Form Column */}
         <div>
-          <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#fff', marginBottom: '20px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '20px' }}>
             تسجيل دخول الطالب
           </h3>
 
@@ -96,14 +97,15 @@ export const StudentLogin = () => {
             <label className="form-label">اختر شخصيتك الرمزية المفضلة:</label>
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '6px' }}>
               {avatars.map((av, idx) => (
-                <div
+                <button
+                  type="button"
                   key={idx}
                   onClick={() => setSelectedAvatar(av.src)}
                   style={{
                     width: '52px',
                     height: '52px',
                     borderRadius: '50%',
-                    background: selectedAvatar === av.src ? '#4f46e5' : 'rgba(255, 255, 255, 0.05)',
+                    background: selectedAvatar === av.src ? '#4f46e5' : 'var(--bg-subtle)',
                     border: selectedAvatar === av.src ? '3px solid #38bdf8' : '1px solid var(--border-card)',
                     padding: '6px',
                     cursor: 'pointer',
@@ -113,7 +115,7 @@ export const StudentLogin = () => {
                   title={av.name}
                 >
                   <img src={av.src} alt={av.name} style={{ width: '100%', height: '100%' }} />
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -168,6 +170,7 @@ export const StudentLogin = () => {
           <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>
             ليس لديك حساب طالب؟{' '}
             <button
+              type="button"
               onClick={() => setCurrentScreen('15')}
               style={{ background: 'none', border: 'none', color: '#ec4899', fontWeight: '800', cursor: 'pointer' }}
             >

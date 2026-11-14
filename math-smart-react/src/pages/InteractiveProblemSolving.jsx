@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { MathKeypad } from '../components/MathKeypad';
 import { ScratchpadCanvas } from '../components/ScratchpadCanvas';
-import { analyzeMathStep, askMathTutor, isGeminiConfigured } from '../services/aiService';
-import { addStudentXP } from '../services/dbService';
+import { analyzeMathStep, askMathTutor, isGeminiConfigured, checkGeminiAvailability } from '../services/aiService';
+import { saveQuizResult } from '../services/dbService';
+import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
+import { playSuccessChime, playErrorTone, playLevelUpFanfare } from '../utils/soundEffects';
 
 export const InteractiveProblemSolving = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [currentProblemIdx, setCurrentProblemIdx] = useState(0);
   const [equationInput, setEquationInput] = useState('');
   const [showHint, setShowHint] = useState(false);
-  const [solvedList, setSolvedList] = useState({}); // { 0: true, 1: true, ... }
-  const [totalXpEarned, setTotalXpEarned] = useState(0);
+  const [solvedList, setSolvedList] = useState(() => readStorageJson('math_smart_solved_problems_v1', {})); // { 0: true, ... }
+  const [submittedAnswers, setSubmittedAnswers] = useState(() => readStorageJson('math_smart_problem_answers_v1', {}));
+  const [totalXpEarned, setTotalXpEarned] = useState(() => readStorageJson('math_smart_problems_xp_v1', 0));
 
   // AI States
+  const [aiLiveAvailable, setAiLiveAvailable] = useState(isGeminiConfigured);
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    checkGeminiAvailability().then((available) => {
+      if (mounted && available) setAiLiveAvailable(true);
+    });
+    return () => { mounted = false; };
+  }, []);
   const [aiAnalysisResult, setAiAnalysisResult] = useState(null);
   const [showTutorModal, setShowTutorModal] = useState(false);
   const [tutorQuestion, setTutorQuestion] = useState('');
@@ -94,6 +106,12 @@ export const InteractiveProblemSolving = () => {
   const currentProb = problems[currentProblemIdx];
   const isCurrentSolved = !!solvedList[currentProblemIdx];
 
+  useEffect(() => {
+    writeStorageJson('math_smart_solved_problems_v1', solvedList);
+    writeStorageJson('math_smart_problem_answers_v1', submittedAnswers);
+    writeStorageJson('math_smart_problems_xp_v1', totalXpEarned);
+  }, [solvedList, submittedAnswers, totalXpEarned]);
+
   const handleInsertChar = (char) => {
     setEquationInput(prev => prev + char);
   };
@@ -103,8 +121,21 @@ export const InteractiveProblemSolving = () => {
     setAiAnalysisResult(null);
   };
 
+  const recordSolvedProblem = async (idx, studentAns) => {
+    const prob = problems[idx];
+    setSubmittedAnswers(prev => ({ ...prev, [idx]: studentAns }));
+    if (!solvedList[idx]) {
+      setSolvedList(prev => ({ ...prev, [idx]: true }));
+      setTotalXpEarned(prev => prev + prob.xp);
+      await updateProfile({ xp: (user?.xp || 0) + prob.xp });
+      playSuccessChime();
+      return true;
+    }
+    return false;
+  };
+
   // التحقق المباشر
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = async () => {
     const clean = equationInput.trim().replace(/\s+/g, '');
     if (!clean) {
       showToast('يرجى كتابة إجابتك أولاً في مربع الحل!', 'warning');
@@ -112,17 +143,15 @@ export const InteractiveProblemSolving = () => {
     }
 
     if (currentProb.correctAnswers.some(ans => clean === ans.replace(/\s+/g, ''))) {
-      if (!solvedList[currentProblemIdx]) {
-        setSolvedList(prev => ({ ...prev, [currentProblemIdx]: true }));
-        setTotalXpEarned(prev => prev + currentProb.xp);
-        if (user?.id) {
-          addStudentXP(user.id, currentProb.xp);
-        }
+      const newlySolved = await recordSolvedProblem(currentProblemIdx, equationInput.trim());
+      if (newlySolved) {
         showToast(`🎉 إجابة عبقرية صحيحة! أحسنت! (+${currentProb.xp} XP)`, 'success');
       } else {
         showToast('هذه المسألة محلولة بنجاح مسبقاً!', 'info');
       }
     } else {
+      playErrorTone();
+      setSubmittedAnswers(prev => ({ ...prev, [currentProblemIdx]: equationInput.trim() }));
       showToast('الجواب غير دقيق بعد، جرب التحليل بالذكاء الاصطناعي 🤖', 'warning');
     }
   };
@@ -151,13 +180,60 @@ export const InteractiveProblemSolving = () => {
     setAiAnalyzing(false);
     setAiAnalysisResult(result);
 
-    if (result.isCorrect && !solvedList[currentProblemIdx]) {
-      setSolvedList(prev => ({ ...prev, [currentProblemIdx]: true }));
-      setTotalXpEarned(prev => prev + currentProb.xp);
-      if (user?.id) {
-        addStudentXP(user.id, currentProb.xp);
-      }
+    if (result.isCorrect) {
+      await recordSolvedProblem(currentProblemIdx, equationInput.trim());
+    } else {
+      playErrorTone();
     }
+  };
+
+  const handleFinishAndOpenAssessment = async () => {
+    const correctCount = problems.filter((_, idx) => !!solvedList[idx]).length;
+    const scorePct = Math.round((correctCount / problems.length) * 100);
+    const earnedXp = problems.reduce((acc, p, idx) => acc + (solvedList[idx] ? p.xp : 0), 0);
+
+    const resultSnapshot = {
+      examTitle: 'تقييم مختبر حل المسائل التفاعلية',
+      grade: user?.grade || 'الصف السادس الابتدائي',
+      completedAt: new Date().toISOString().slice(0, 10),
+      duration: 'جلسة تدريبية ذكية',
+      totalQuestions: problems.length,
+      correctAnswers: correctCount,
+      score: scorePct,
+      earnedXp,
+      aiFeedback: {
+        summary: correctCount === problems.length
+          ? 'أداء متفوق! أكملت جميع مسائل المختبر التفاعلي بدقة كاملة وفهم راسخ للخطوات الرياضية.'
+          : `أنجزت ${correctCount} من أصل ${problems.length} مسائل بنجاح. يمكنك مراجعة خطوات الحل المقترحة لتعزيز إتقانك.`,
+        strengths: ['توظيف لوحة الرموز الرياضية بدقة', 'القدرة على تحليل المعادلات والمسائل اللفظية'],
+        recommendation: 'واصل التدريب في حلبة التحديات المباشرة أو راجع المسائل غير المكتملة.'
+      },
+      questions: problems.map((p, idx) => ({
+        id: p.id,
+        text: p.question,
+        userAnswer: submittedAnswers[idx] || (solvedList[idx] ? p.correctAnswers[0] : 'لم يُجب بعد'),
+        correctAnswer: p.correctAnswers[0],
+        status: solvedList[idx] ? 'correct' : 'incorrect',
+        xp: solvedList[idx] ? p.xp : 0,
+        steps: [p.equation, p.hintText]
+      }))
+    };
+
+    writeStorageJson('math_smart_latest_result_v1', resultSnapshot);
+    await saveQuizResult({
+      studentId: user?.id || 'demo-student',
+      examTitle: resultSnapshot.examTitle,
+      grade: resultSnapshot.grade,
+      score: resultSnapshot.score,
+      totalQuestions: resultSnapshot.totalQuestions,
+      correctAnswers: resultSnapshot.correctAnswers,
+      earnedXp: resultSnapshot.earnedXp,
+      duration: resultSnapshot.duration,
+      aiFeedback: resultSnapshot.aiFeedback
+    });
+    playLevelUpFanfare();
+    setCurrentScreen('01');
+    showToast('تهانينا على إكمال التحدي! تم حفظ النتيجة وفتح التقييم الذكي 📊', 'success');
   };
 
   // سؤال المعلم الذكي
@@ -202,7 +278,7 @@ export const InteractiveProblemSolving = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: 'rgba(13, 18, 34, 0.9)',
+        background: 'var(--bg-navbar)',
         backdropFilter: 'blur(16px)',
         padding: '14px 24px',
         borderRadius: '18px',
@@ -213,13 +289,14 @@ export const InteractiveProblemSolving = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <button
+            type="button"
             onClick={() => setCurrentScreen('hub')}
             style={{
               padding: '6px 14px',
               borderRadius: '10px',
               border: '1px solid var(--border-card)',
-              background: 'rgba(255, 255, 255, 0.05)',
-              color: '#fff',
+              background: 'var(--bg-subtle)',
+              color: 'var(--text-heading)',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: '700'
@@ -228,7 +305,7 @@ export const InteractiveProblemSolving = () => {
             ← إنهاء الجلسة
           </button>
           <div>
-            <h2 style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>مختبر حل المسائل التفاعلية</h2>
+            <h2 style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text-heading)' }}>مختبر حل المسائل التفاعلية</h2>
             <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
               المسألة {currentProblemIdx + 1} من {problems.length} • {currentProb.topic}
             </p>
@@ -237,6 +314,7 @@ export const InteractiveProblemSolving = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <button
+            type="button"
             onClick={() => setShowTutorModal(true)}
             className="btn btn-secondary"
             style={{ padding: '6px 14px', fontSize: '12px', borderColor: '#818cf8', color: '#818cf8' }}
@@ -246,7 +324,7 @@ export const InteractiveProblemSolving = () => {
           <span className="badge badge-warning">⭐ {totalXpEarned} XP</span>
           <span className="badge badge-success">✓ {solvedCount} من {problems.length} منجزة</span>
           <span className="badge badge-cyan">
-            {isGeminiConfigured ? '⚡ Gemini 2.5 نشط' : '🤖 ذكاء اصطناعي محلي'}
+            {aiLiveAvailable ? '⚡ Gemini 2.5 نشط' : '🤖 ذكاء اصطناعي محلي'}
           </span>
         </div>
       </div>
@@ -265,6 +343,7 @@ export const InteractiveProblemSolving = () => {
           const isSolved = !!solvedList[idx];
           return (
             <button
+              type="button"
               key={prob.id}
               onClick={() => {
                 setCurrentProblemIdx(idx);
@@ -282,8 +361,8 @@ export const InteractiveProblemSolving = () => {
                 fontWeight: '700',
                 cursor: 'pointer',
                 border: isSelected ? '1px solid #4f46e5' : '1px solid var(--border-card)',
-                background: isSelected ? 'rgba(79, 70, 229, 0.25)' : 'rgba(255, 255, 255, 0.03)',
-                color: isSelected ? '#fff' : 'var(--text-muted)',
+                background: isSelected ? 'rgba(79, 70, 229, 0.18)' : 'var(--bg-subtle)',
+                color: isSelected ? 'var(--text-heading)' : 'var(--text-muted)',
                 transition: 'all 0.2s'
               }}
             >
@@ -297,7 +376,7 @@ export const InteractiveProblemSolving = () => {
       {/* TWO COLUMN WORKSPACE: LEFT PROBLEM/KEYPAD + RIGHT SCRATCHPAD */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
         gap: '24px',
         alignItems: 'start'
       }}>
@@ -310,7 +389,7 @@ export const InteractiveProblemSolving = () => {
               <span className="badge badge-warning">+{currentProb.xp} XP</span>
             </div>
 
-            <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '10px' }}>
               {currentProb.title}
             </h3>
 
@@ -321,7 +400,7 @@ export const InteractiveProblemSolving = () => {
             {/* If diagram exists */}
             {currentProb.diagram && (
               <div style={{
-                background: 'rgba(0, 0, 0, 0.3)',
+                background: 'var(--bg-inset)',
                 padding: '16px',
                 borderRadius: '16px',
                 textAlign: 'center',
@@ -348,6 +427,8 @@ export const InteractiveProblemSolving = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '10px',
               marginBottom: '20px'
             }}>
               <div>
@@ -367,16 +448,23 @@ export const InteractiveProblemSolving = () => {
                   type="text"
                   value={equationInput}
                   onChange={(e) => setEquationInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleCheckAnswer();
+                    }
+                  }}
                   placeholder="مثال: 5 أو س = 5"
                   style={{
                     flex: 1,
+                    minWidth: 0,
                     padding: '12px 16px',
                     fontSize: '18px',
                     fontWeight: '800',
-                    background: 'rgba(15, 23, 42, 0.9)',
+                    background: 'var(--bg-input)',
                     border: isCurrentSolved ? '2px solid #10b981' : '1px solid var(--border-card)',
                     borderRadius: '12px',
-                    color: '#fff',
+                    color: 'var(--text-heading)',
                     fontFamily: 'var(--font-en), var(--font-ar)',
                     outline: 'none'
                   }}
@@ -386,7 +474,7 @@ export const InteractiveProblemSolving = () => {
                   onClick={handleClear}
                   style={{
                     padding: '0 16px',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--bg-subtle)',
                     border: '1px solid var(--border-card)',
                     borderRadius: '12px',
                     color: 'var(--text-muted)',
@@ -402,6 +490,7 @@ export const InteractiveProblemSolving = () => {
             {/* Action Buttons */}
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <button
+                type="button"
                 onClick={handleCheckAnswer}
                 className="btn btn-success"
                 style={{ flex: 1.5, minWidth: '130px', padding: '12px', fontSize: '14px' }}
@@ -410,6 +499,7 @@ export const InteractiveProblemSolving = () => {
               </button>
 
               <button
+                type="button"
                 onClick={handleAiAnalysis}
                 disabled={aiAnalyzing}
                 className="btn btn-primary"
@@ -426,6 +516,7 @@ export const InteractiveProblemSolving = () => {
               </button>
 
               <button
+                type="button"
                 onClick={() => setShowHint(!showHint)}
                 className="btn btn-secondary"
                 style={{ flex: 1, minWidth: '80px', padding: '12px', fontSize: '13px', color: '#fbbf24' }}
@@ -457,14 +548,14 @@ export const InteractiveProblemSolving = () => {
                     {aiAnalysisResult.isLiveAi ? 'Gemini 2.5 Flash' : 'Math AI Engine'}
                   </span>
                 </div>
-                <div style={{ color: '#fff', marginBottom: '6px' }}>{aiAnalysisResult.feedback}</div>
+                <div style={{ color: 'var(--text-body)', marginBottom: '6px' }}>{aiAnalysisResult.feedback}</div>
                 {aiAnalysisResult.hint && (
-                  <div style={{ color: '#fbbf24', fontSize: '12px', marginTop: '4px' }}>
+                  <div style={{ color: '#f59e0b', fontSize: '12px', marginTop: '4px' }}>
                     💡 <strong>تلميح:</strong> {aiAnalysisResult.hint}
                   </div>
                 )}
                 {aiAnalysisResult.encouragement && (
-                  <div style={{ color: '#38bdf8', fontSize: '12px', marginTop: '6px', fontStyle: 'italic' }}>
+                  <div style={{ color: '#0284c7', fontSize: '12px', marginTop: '6px', fontStyle: 'italic' }}>
                     {aiAnalysisResult.encouragement}
                   </div>
                 )}
@@ -480,7 +571,7 @@ export const InteractiveProblemSolving = () => {
                 borderRadius: '12px',
                 fontSize: '13px',
                 lineHeight: 1.6,
-                color: '#fbbf24'
+                color: '#d97706'
               }}>
                 {currentProb.hintText}
               </div>
@@ -495,13 +586,14 @@ export const InteractiveProblemSolving = () => {
                 borderRadius: '16px',
                 textAlign: 'center'
               }}>
-                <div style={{ fontSize: '24px', marginBottom: '6px' }}>🏆 عبقري! أحسنت!</div>
-                <div style={{ fontSize: '13px', color: '#fff', marginBottom: '14px' }}>
+                <div style={{ fontSize: '24px', marginBottom: '6px', color: 'var(--text-heading)' }}>🏆 عبقري! أحسنت!</div>
+                <div style={{ fontSize: '13px', color: 'var(--text-body)', marginBottom: '14px' }}>
                   لقد حصلت على +{currentProb.xp} نقطة XP لهذه المسألة!
                 </div>
                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                   {currentProblemIdx < problems.length - 1 ? (
                     <button
+                      type="button"
                       onClick={handleNextProblem}
                       className="btn btn-primary"
                       style={{ padding: '8px 20px', fontSize: '13px' }}
@@ -510,10 +602,8 @@ export const InteractiveProblemSolving = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => {
-                        setCurrentScreen('01');
-                        showToast('تهانينا على إكمال جميع المسائل! جاري فتح التقييم الذكي...', 'success');
-                      }}
+                      type="button"
+                      onClick={handleFinishAndOpenAssessment}
                       className="btn btn-primary"
                       style={{ padding: '8px 20px', fontSize: '13px' }}
                     >
@@ -527,6 +617,7 @@ export const InteractiveProblemSolving = () => {
             {/* Prev / Next navigation */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', paddingTop: '14px', borderTop: '1px solid var(--border-card)' }}>
               <button
+                type="button"
                 onClick={handlePrevProblem}
                 disabled={currentProblemIdx === 0}
                 className="btn btn-secondary"
@@ -538,6 +629,7 @@ export const InteractiveProblemSolving = () => {
                 {currentProblemIdx + 1} من {problems.length}
               </span>
               <button
+                type="button"
                 onClick={handleNextProblem}
                 disabled={currentProblemIdx === problems.length - 1}
                 className="btn btn-secondary"
@@ -550,7 +642,7 @@ export const InteractiveProblemSolving = () => {
 
           {/* Virtual Math Keypad */}
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '8px' }}>
               لوحة الرموز السريعة لإدراج المعادلات:
             </div>
             <MathKeypad onInsert={handleInsertChar} compact={true} />
@@ -579,13 +671,14 @@ export const InteractiveProblemSolving = () => {
           zIndex: 1000,
           padding: '20px'
         }}>
-          <div className="glass-card" style={{ maxWidth: '560px', width: '100%', padding: '28px' }}>
+          <div className="glass-card" style={{ maxWidth: '560px', width: '100%', padding: '28px', background: 'var(--bg-modal)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '24px' }}>🤖</span>
-                <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#fff' }}>اسأل المعلم الذكي</h3>
+                <h3 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-heading)' }}>اسأل المعلم الذكي</h3>
               </div>
               <button
+                type="button"
                 onClick={() => setShowTutorModal(false)}
                 style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}
               >
@@ -607,9 +700,9 @@ export const InteractiveProblemSolving = () => {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '12px',
-                  background: 'rgba(15, 23, 42, 0.9)',
+                  background: 'var(--bg-input)',
                   border: '1px solid var(--border-card)',
-                  color: '#fff',
+                  color: 'var(--text-heading)',
                   fontSize: '14px',
                   marginBottom: '12px',
                   outline: 'none',
@@ -635,7 +728,7 @@ export const InteractiveProblemSolving = () => {
                 borderRadius: '12px',
                 fontSize: '13px',
                 lineHeight: 1.8,
-                color: '#fff'
+                color: 'var(--text-body)'
               }}>
                 <div style={{ fontWeight: '800', color: '#38bdf8', marginBottom: '6px' }}>إجابة المعلم الذكي:</div>
                 {tutorResponse}

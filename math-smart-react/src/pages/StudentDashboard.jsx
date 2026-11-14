@@ -2,16 +2,29 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockUserData } from '../data/mockData';
+import { readStorageJson } from '../utils/platformHelpers';
 
 export const StudentDashboard = () => {
   const { setCurrentScreen, showToast } = useApp();
   const { user } = useAuth();
   const student = mockUserData.student;
+  const xp = user?.xp ?? student.xp;
+  const level = user?.level ?? student.level;
+  const streak = user?.streak ?? student.streak;
+  const rank = user?.rank ?? student.rank;
+  const accuracy = user?.accuracy ?? student.accuracy;
+  const badges = user?.badges?.length ? user.badges : student.badges;
+  const solvedMap = readStorageJson('math_smart_solved_problems_v1', {});
+  const solvedCount = Object.keys(solvedMap).filter(k => solvedMap[k]).length;
+  const questCompleted = solvedCount >= 3;
+  const nextLevelXp = Math.max(student.nextLevelXp, Math.ceil((xp + 1) / 500) * 500);
+  const progressPct = Math.min(100, Math.max(0, Math.round((xp / nextLevelXp) * 100)));
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -22,7 +35,7 @@ export const StudentDashboard = () => {
 
       {/* GAMIFIED HERO */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95))',
+        background: 'var(--hero-bg)',
         backdropFilter: 'blur(20px)',
         border: '1px solid var(--border-card)',
         borderRadius: '28px',
@@ -42,7 +55,7 @@ export const StudentDashboard = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
           {/* Avatar and Info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
             <div style={{
               width: '100px',
               height: '100px',
@@ -52,7 +65,7 @@ export const StudentDashboard = () => {
               boxShadow: '0 12px 30px rgba(245, 158, 11, 0.4)'
             }}>
               <img
-                src={user.avatar || student.avatar}
+                src={user?.avatar || student.avatar}
                 alt="Avatar"
                 className="float-anim"
                 style={{ width: '100%', height: '100%' }}
@@ -60,25 +73,25 @@ export const StudentDashboard = () => {
             </div>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#fff' }}>
-                  {user.name || student.name}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                <h1 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)' }}>
+                  {user?.name || student.name}
                 </h1>
-                <span className="badge badge-warning">المستوى {student.level}</span>
+                <span className="badge badge-warning">المستوى {level}</span>
               </div>
               <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '12px' }}>
-                {student.title} • {user.grade || student.grade}
+                {student.title} • {user?.grade || student.grade}
               </p>
 
               {/* XP Progress Bar */}
               <div style={{ width: '320px', maxWidth: '100%' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  <span>نقاط الخبرة: {student.xp} XP</span>
-                  <span>المستوى التالي: {student.nextLevelXp} XP</span>
+                  <span>نقاط الخبرة: {xp} XP</span>
+                  <span>المستوى التالي: {nextLevelXp} XP</span>
                 </div>
-                <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ height: '8px', background: 'var(--bg-subtle-strong)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{
-                    width: `${(student.xp / student.nextLevelXp) * 100}%`,
+                    width: `${progressPct}%`,
                     height: '100%',
                     background: 'linear-gradient(90deg, #f59e0b, #ec4899)'
                   }} />
@@ -89,18 +102,18 @@ export const StudentDashboard = () => {
 
           {/* Quick Badges / KPIs */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
-              <div style={{ fontSize: '24px', fontWeight: '900', color: '#f59e0b', fontFamily: 'var(--font-en)' }}>🔥 {student.streak}</div>
+            <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', fontWeight: '900', color: '#f59e0b', fontFamily: 'var(--font-en)' }}>🔥 {streak}</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>أيام حماس متتالية</div>
             </div>
 
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
-              <div style={{ fontSize: '24px', fontWeight: '900', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>#{student.rank}</div>
+            <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', fontWeight: '900', color: '#38bdf8', fontFamily: 'var(--font-en)' }}>#{rank}</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>الترتيب على الصف</div>
             </div>
 
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
-              <div style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', fontFamily: 'var(--font-en)' }}>{student.accuracy}%</div>
+            <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-card)', padding: '14px 20px', borderRadius: '18px', textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', fontFamily: 'var(--font-en)' }}>{accuracy}%</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>دقة الإجابات</div>
             </div>
           </div>
@@ -123,11 +136,13 @@ export const StudentDashboard = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ fontSize: '36px' }}>🎯</div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
-                المهمة اليومية: تحدي موازين الكتل الجبرية
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)' }}>
+                المهمة اليومية: تحدي موازين الكتل الجبرية ({Math.min(solvedCount, 3)}/3)
               </h3>
-              <span className="badge badge-warning">+120 XP</span>
+              <span className={`badge ${questCompleted ? 'badge-success' : 'badge-warning'}`}>
+                {questCompleted ? 'مكتملة ✓ +120 XP' : '+120 XP'}
+              </span>
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-body)' }}>
               أكمل حل 3 مسائل في مختبر المسائل التفاعلية لتحافظ على سلسلة أيامك وتفتح شارة "صائد المعادلات"!
@@ -136,6 +151,7 @@ export const StudentDashboard = () => {
         </div>
 
         <button
+          type="button"
           onClick={() => {
             setCurrentScreen('09');
             showToast('بدء المهمة اليومية في حل المسائل...', 'info');
@@ -148,10 +164,10 @@ export const StudentDashboard = () => {
       </div>
 
       {/* 2-COLUMN HUB SECTIONS */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px', marginBottom: '32px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px', marginBottom: '32px' }}>
         {/* Quick Launch Arenas */}
         <div className="glass-card">
-          <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '16px' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '16px' }}>
             بوابات التدريب والمبارزات:
           </h3>
 
@@ -172,7 +188,7 @@ export const StudentDashboard = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '24px' }}>⚡</span>
                 <div>
-                  <div style={{ fontWeight: '800', color: '#fff' }}>حلبة التحديات المباشرة</div>
+                  <div style={{ fontWeight: '800', color: 'var(--text-heading)' }}>حلبة التحديات المباشرة</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>مبارزة حية 1 ضد 1 مع طلاب المملكة</div>
                 </div>
               </div>
@@ -195,7 +211,7 @@ export const StudentDashboard = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '24px' }}>✍️</span>
                 <div>
-                  <div style={{ fontWeight: '800', color: '#fff' }}>مساحة حل المسائل التفاعلية</div>
+                  <div style={{ fontWeight: '800', color: 'var(--text-heading)' }}>مساحة حل المسائل التفاعلية</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>سبورة ذكية ولوحة رموز رياضيات</div>
                 </div>
               </div>
@@ -218,7 +234,7 @@ export const StudentDashboard = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '24px' }}>📚</span>
                 <div>
-                  <div style={{ fontWeight: '800', color: '#fff' }}>شجرة المناهج والوحدات</div>
+                  <div style={{ fontWeight: '800', color: 'var(--text-heading)' }}>شجرة المناهج والوحدات</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>دروس تفاعلية وتمارين لكل وحدة</div>
                 </div>
               </div>
@@ -230,18 +246,18 @@ export const StudentDashboard = () => {
         {/* Badges Showcase */}
         <div className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
-              أوسمة الإنجاز المكتسبة ({student.badges.length}):
+            <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)' }}>
+              أوسمة الإنجاز المكتسبة ({badges.length}):
             </h3>
             <span style={{ fontSize: '12px', color: '#fbbf24', fontWeight: '700' }}>مكتملة 🏅</span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-            {student.badges.map(b => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+            {badges.map(b => (
               <div
                 key={b.id}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--bg-subtle)',
                   border: '1px solid var(--border-card)',
                   borderRadius: '14px',
                   padding: '14px',
@@ -249,7 +265,7 @@ export const StudentDashboard = () => {
                 }}
               >
                 <div style={{ fontSize: '28px', marginBottom: '6px' }}>{b.icon}</div>
-                <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff', marginBottom: '4px' }}>{b.name}</div>
+                <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '4px' }}>{b.name}</div>
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.4 }}>{b.desc}</div>
               </div>
             ))}

@@ -1,6 +1,6 @@
 -- ========================================================
--- Math Smart Platform: Complete Supabase Database Schema
--- منصة الرياضيات الذكية - مخطط قاعدة البيانات الشامل
+-- Math Smart Platform: Hardened Supabase Database Schema
+-- منصة الرياضيات الذكية - مخطط قاعدة البيانات وسياسات الأمان المشددة
 -- ========================================================
 
 -- 1. Create Profiles Table (حسابات الطلاب والمعلمين والمشرفين)
@@ -11,30 +11,105 @@ create table if not exists public.profiles (
   role text not null check (role in ('student', 'teacher', 'supervisor', 'admin')) default 'student',
   grade text default 'الصف السادس الابتدائي',
   school text default 'مدرسة رواد المعرفة',
+  parent_phone text,
   avatar_url text default '/assets/avatar_fahad_hero.svg',
-  xp integer default 100,
-  level integer default 1,
-  streak integer default 1,
-  accuracy numeric(5,2) default 95.0,
+  xp integer default 100 check (xp >= 0),
+  level integer default 1 check (level >= 1),
+  streak integer default 1 check (streak >= 0),
+  accuracy numeric(5,2) default 95.0 check (accuracy >= 0 and accuracy <= 100),
   created_at timestamptz default timezone('utc'::text, now()) not null,
   updated_at timestamptz default timezone('utc'::text, now()) not null
 );
 
+alter table public.profiles add column if not exists parent_phone text;
+
+-- Helper function to check staff role without RLS recursion
+create or replace function public.is_staff()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid()
+      and role in ('teacher', 'supervisor', 'admin')
+  );
+$$;
+
 -- Enable RLS
 alter table public.profiles enable row level security;
 
--- Policies for Profiles
-create policy "Allow public read of profiles"
+-- Hardened Policies for Profiles (منع كشف البريد والبيانات الشخصية للعموم)
+drop policy if exists "Allow public read of profiles" on public.profiles;
+drop policy if exists "Users can view own profile or staff can view profiles" on public.profiles;
+create policy "Users can view own profile or staff can view profiles"
   on public.profiles for select
-  using (true);
+  using (auth.uid() = id or public.is_staff());
 
+drop policy if exists "Allow users to update their own profile" on public.profiles;
 create policy "Allow users to update their own profile"
   on public.profiles for update
-  using (auth.uid() = id);
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
 
+drop policy if exists "Allow users to insert their profile" on public.profiles;
 create policy "Allow users to insert their profile"
   on public.profiles for insert
-  with check (auth.uid() = id);
+  with check (
+    auth.uid() = id
+    and role in ('student', 'teacher', 'supervisor')
+  );
+
+-- Prevent client-side privilege escalation (منع ترقية الدور أو التلاعب به من المتصفح)
+create or replace function public.protect_profile_role()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if current_setting('request.jwt.claim.role', true) is distinct from 'service_role' then
+    if new.role is distinct from old.role then
+      raise exception 'Role modification is not permitted';
+    end if;
+    if new.xp < 0 or new.level < 1 then
+      raise exception 'Invalid progression values';
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists protect_profile_role_trigger on public.profiles;
+create trigger protect_profile_role_trigger
+  before update on public.profiles
+  for each row execute procedure public.protect_profile_role();
+
+-- Safe Public Leaderboard RPC (يُرجع المتصدرين فقط بدون كشف البريد الإلكتروني أو الهاتف)
+create or replace function public.get_public_leaderboard()
+returns table (
+  id uuid,
+  full_name text,
+  xp integer,
+  level integer,
+  avatar_url text,
+  school text
+)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select p.id, p.full_name, p.xp, p.level, p.avatar_url, p.school
+  from public.profiles p
+  where p.role = 'student'
+  order by p.xp desc nulls last
+  limit 10;
+$$;
+
+grant execute on function public.get_public_leaderboard() to anon, authenticated;
 
 -- 2. Create Quiz Results Table (نتائج الاختبارات والتقييم الذكي)
 create table if not exists public.quiz_results (
@@ -42,10 +117,10 @@ create table if not exists public.quiz_results (
   student_id uuid references public.profiles(id) on delete cascade not null,
   exam_title text not null,
   grade text default 'الصف السادس الابتدائي',
-  score integer not null,
-  total_questions integer not null,
-  correct_answers integer not null,
-  earned_xp integer default 0,
+  score integer not null check (score >= 0 and score <= 100),
+  total_questions integer not null check (total_questions > 0),
+  correct_answers integer not null check (correct_answers >= 0),
+  earned_xp integer default 0 check (earned_xp >= 0 and earned_xp <= 2000),
   duration text,
   ai_feedback jsonb default '{}'::jsonb,
   created_at timestamptz default timezone('utc'::text, now()) not null
@@ -53,15 +128,19 @@ create table if not exists public.quiz_results (
 
 alter table public.quiz_results enable row level security;
 
+drop policy if exists "Students can view their own quiz results" on public.quiz_results;
 create policy "Students can view their own quiz results"
   on public.quiz_results for select
-  using (auth.uid() = student_id or exists (
-    select 1 from public.profiles where id = auth.uid() and role in ('teacher', 'supervisor')
-  ));
+  using (auth.uid() = student_id or public.is_staff());
 
+drop policy if exists "Students can insert their quiz results" on public.quiz_results;
 create policy "Students can insert their quiz results"
   on public.quiz_results for insert
-  with check (auth.uid() = student_id);
+  with check (
+    auth.uid() = student_id
+    and score between 0 and 100
+    and earned_xp between 0 and 2000
+  );
 
 -- 3. Create Badges Table (أوسمة وشارات الإنجاز للطالب)
 create table if not exists public.badges (
@@ -75,10 +154,13 @@ create table if not exists public.badges (
 
 alter table public.badges enable row level security;
 
-create policy "Anyone can view badges"
+drop policy if exists "Anyone can view badges" on public.badges;
+drop policy if exists "Authenticated users can view badges" on public.badges;
+create policy "Authenticated users can view badges"
   on public.badges for select
-  using (true);
+  using (auth.role() = 'authenticated');
 
+drop policy if exists "System or owner can manage badges" on public.badges;
 create policy "System or owner can manage badges"
   on public.badges for insert
   with check (auth.uid() = profile_id);
@@ -91,44 +173,68 @@ create table if not exists public.challenge_rooms (
   guest_id uuid references public.profiles(id) on delete set null,
   topic text default 'العمليات على الدوال والمعادلات',
   grade text default 'الصف السادس الابتدائي',
-  host_score integer default 0,
-  guest_score integer default 0,
+  host_score integer default 0 check (host_score >= 0),
+  guest_score integer default 0 check (guest_score >= 0),
   status text check (status in ('waiting', 'in_progress', 'completed')) default 'waiting',
   created_at timestamptz default timezone('utc'::text, now()) not null
 );
 
 alter table public.challenge_rooms enable row level security;
 
-create policy "Anyone can view and join active challenge rooms"
+drop policy if exists "Anyone can view and join active challenge rooms" on public.challenge_rooms;
+drop policy if exists "Authenticated users can view active challenge rooms" on public.challenge_rooms;
+create policy "Authenticated users can view active challenge rooms"
   on public.challenge_rooms for select
-  using (true);
+  using (auth.role() = 'authenticated');
 
+drop policy if exists "Authenticated users can create challenge rooms" on public.challenge_rooms;
 create policy "Authenticated users can create challenge rooms"
   on public.challenge_rooms for insert
-  with check (auth.role() = 'authenticated');
+  with check (
+    auth.role() = 'authenticated'
+    and auth.uid() = host_id
+  );
 
+drop policy if exists "Participants can update challenge room state" on public.challenge_rooms;
 create policy "Participants can update challenge room state"
   on public.challenge_rooms for update
-  using (auth.uid() = host_id or auth.uid() = guest_id);
+  using (
+    auth.uid() = host_id
+    or auth.uid() = guest_id
+    or (guest_id is null and status = 'waiting' and auth.role() = 'authenticated')
+  )
+  with check (auth.uid() = host_id or auth.uid() = guest_id);
 
 -- 5. Automatic User Profile Trigger on Sign Up
--- يقوم بإنشاء ملف تعريف تلقائي للمستخدم فور تسجيله عبر Supabase Auth
+-- يقوم بإنشاء ملف تعريف تلقائي للمستخدم فور تسجيله مع تقييد الدور المسموح به
 create or replace function public.handle_new_user()
-returns trigger as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  requested_role text;
 begin
-  insert into public.profiles (id, email, full_name, role, grade, school, avatar_url)
+  requested_role := coalesce(new.raw_user_meta_data->>'role', 'student');
+  if requested_role not in ('student', 'teacher', 'supervisor') then
+    requested_role := 'student';
+  end if;
+
+  insert into public.profiles (id, email, full_name, role, grade, school, parent_phone, avatar_url)
   values (
     new.id,
     new.email,
     coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
-    coalesce(new.raw_user_meta_data->>'role', 'student'),
+    requested_role,
     coalesce(new.raw_user_meta_data->>'grade', 'الصف السادس الابتدائي'),
     coalesce(new.raw_user_meta_data->>'school', 'مدرسة رواد المعرفة'),
+    new.raw_user_meta_data->>'parent_phone',
     coalesce(new.raw_user_meta_data->>'avatar_url', '/assets/avatar_fahad_hero.svg')
   );
   return new;
 end;
-$$ language plpgsql security definer;
+$$;
 
 -- Trigger definition
 drop trigger if exists on_auth_user_created on auth.users;
@@ -137,6 +243,18 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 -- Enable Realtime for Live Challenge Arena (تفعيل الوقت الفعلي لحلبة التحدي)
-alter publication supabase_realtime add table public.challenge_rooms;
-alter publication supabase_realtime add table public.quiz_results;
-
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'challenge_rooms'
+  ) then
+    alter publication supabase_realtime add table public.challenge_rooms;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'quiz_results'
+  ) then
+    alter publication supabase_realtime add table public.quiz_results;
+  end if;
+end $$;

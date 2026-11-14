@@ -38,6 +38,7 @@ export const SupervisorTeacherLogin = () => {
     <div style={{ maxWidth: '520px', margin: '40px auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -65,7 +66,7 @@ export const SupervisorTeacherLogin = () => {
               onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
             />
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#fff', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '6px' }}>
             بوابة المعلمين والمشرفين التربويين
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
@@ -137,7 +138,7 @@ export const SupervisorTeacherLogin = () => {
               width: '100%',
               marginTop: '12px',
               padding: '10px',
-              background: 'rgba(255, 255, 255, 0.05)',
+              background: 'var(--bg-subtle)',
               border: '1px solid var(--border-card)',
               borderRadius: '10px',
               color: '#fbbf24',
@@ -153,6 +154,7 @@ export const SupervisorTeacherLogin = () => {
         <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'var(--text-muted)' }}>
           معلم أو مشرف جديد؟{' '}
           <button
+            type="button"
             onClick={() => setCurrentScreen('14')}
             style={{ background: 'none', border: 'none', color: '#10b981', fontWeight: '800', cursor: 'pointer' }}
           >

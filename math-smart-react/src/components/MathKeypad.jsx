@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { mathSymbolCategories } from '../data/mathSymbols';
 import { useApp } from '../context/AppContext';
+import { copyToClipboard } from '../utils/platformHelpers';
 
 export const MathKeypad = ({ onInsert, compact = false }) => {
   const [activeTab, setActiveTab] = useState('basic');
   const { showToast } = useApp();
 
-  const handleKeyClick = (char) => {
+  const handleKeyClick = async (char) => {
     if (onInsert) {
       onInsert(char);
     } else {
-      navigator.clipboard?.writeText(char);
-      showToast(`تم نسخ الرمز "${char}" إلى الحافظة!`, 'success');
+      const ok = await copyToClipboard(char);
+      showToast(ok ? `تم نسخ الرمز "${char}" إلى الحافظة!` : `الرمز المحدد: "${char}"`, ok ? 'success' : 'info');
     }
   };
 
@@ -19,7 +20,7 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
 
   return (
     <div style={{
-      background: 'rgba(15, 23, 42, 0.85)',
+      background: 'var(--bg-card)',
       backdropFilter: 'blur(16px)',
       border: '1px solid var(--border-card)',
       borderRadius: '18px',
@@ -35,30 +36,34 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
         overflowX: 'auto',
         paddingBottom: '4px'
       }}>
-        {mathSymbolCategories.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveTab(cat.id)}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '10px',
-              border: 'none',
-              background: activeTab === cat.id ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === cat.id ? '#fff' : 'var(--text-muted)',
-              fontSize: '12px',
-              fontWeight: '700',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              fontFamily: 'var(--font-ar)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <span>{cat.icon}</span>
-            <span>{cat.name}</span>
-          </button>
-        ))}
+        {mathSymbolCategories.map(cat => {
+          const isActive = activeTab === cat.id;
+          return (
+            <button
+              type="button"
+              key={cat.id}
+              onClick={() => setActiveTab(cat.id)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '10px',
+                border: 'none',
+                background: isActive ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
+                color: isActive ? '#fff' : 'var(--text-muted)',
+                fontSize: '12px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                fontFamily: 'var(--font-ar)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>{cat.icon}</span>
+              <span>{cat.name}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Grid of Keys */}
@@ -69,14 +74,15 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
       }}>
         {currentCategory.symbols.map((sym, idx) => (
           <button
+            type="button"
             key={idx}
             onClick={() => handleKeyClick(sym.char)}
             style={{
               padding: compact ? '8px 4px' : '12px 8px',
-              background: 'rgba(255, 255, 255, 0.05)',
+              background: 'var(--bg-subtle)',
               border: '1px solid var(--border-card)',
               borderRadius: '10px',
-              color: '#fff',
+              color: 'var(--text-heading)',
               fontFamily: 'var(--font-en), var(--font-ar)',
               fontSize: '16px',
               fontWeight: '700',
@@ -89,12 +95,12 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
               gap: '2px'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(79, 70, 229, 0.25)';
+              e.currentTarget.style.background = 'rgba(79, 70, 229, 0.22)';
               e.currentTarget.style.borderColor = '#818cf8';
               e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.background = 'var(--bg-subtle)';
               e.currentTarget.style.borderColor = 'var(--border-card)';
               e.currentTarget.style.transform = 'scale(1)';
             }}

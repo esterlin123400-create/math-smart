@@ -23,30 +23,40 @@ export const StudentRegistration = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (isLiveBackend && email.includes('@')) {
+      if (pin.trim().length < 6) {
+        showToast('الرمز السري يجب أن يكون 6 أحرف أو أرقام على الأقل للحساب السحابي', 'warning');
+        return;
+      }
       const res = await registerWithSupabase({
         email: email.trim(),
-        password: pin.length >= 6 ? pin : `${pin}000000`.slice(0, 6),
+        password: pin.trim(),
         fullName: studentName || 'طالب جديد',
         role: 'student',
         grade,
         school: 'مدرسة رواد المعرفة',
+        parentPhone: parentPhone.trim(),
         avatarUrl: selectedAvatar
       });
 
       if (res.success) {
-        showToast(`مرحباً بك يا بطل الرياضيات ${studentName}! تم تسجيل حسابك بنجاح!`, 'success');
-        setCurrentScreen('13');
+        if (res.requiresEmailConfirmation) {
+          showToast('تم إنشاء الحساب! يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.', 'info');
+          setCurrentScreen('04');
+        } else {
+          showToast(`مرحباً بك يا بطل الرياضيات ${studentName || 'الجديد'}! تم تسجيل حسابك بنجاح!`, 'success');
+          setCurrentScreen('13');
+        }
       } else {
-        showToast(res.error || 'تعذر إنشاء الحساب، تأكد من البيانات', 'danger');
+        showToast(res.error || 'تعذر إنشاء الحساب، تأكد من البريد الإلكتروني وكلمة المرور', 'danger');
       }
     } else {
       loginAs('student');
-      updateProfile({
+      await updateProfile({
         name: studentName || 'طالب جديد',
         grade,
         avatar: selectedAvatar
       });
-      showToast(`مرحباً بك يا بطل الرياضيات ${studentName}! تم إنشاء حسابك بنجاح!`, 'success');
+      showToast(`مرحباً بك يا بطل الرياضيات ${studentName || 'الجديد'}! تم إنشاء حسابك بنجاح!`, 'success');
       setCurrentScreen('13'); // Go to student dashboard
     }
   };
@@ -55,6 +65,7 @@ export const StudentRegistration = () => {
     <div style={{ maxWidth: '640px', margin: '30px auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -73,7 +84,7 @@ export const StudentRegistration = () => {
               style={{ width: '100%', height: '100%' }}
             />
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#fff', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '6px' }}>
             انضمام بطل رياضيات جديد 🌟
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
@@ -84,16 +95,17 @@ export const StudentRegistration = () => {
         {/* Avatar Picker */}
         <div style={{ marginBottom: '24px', textAlign: 'center' }}>
           <label className="form-label">اختر شخصيتك الرمزية الأولى:</label>
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {avatars.map((av, idx) => (
-              <div
+              <button
+                type="button"
                 key={idx}
                 onClick={() => setSelectedAvatar(av.src)}
                 style={{
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
-                  background: selectedAvatar === av.src ? '#4f46e5' : 'rgba(255, 255, 255, 0.05)',
+                  background: selectedAvatar === av.src ? '#4f46e5' : 'var(--bg-subtle)',
                   border: selectedAvatar === av.src ? '3px solid #38bdf8' : '1px solid var(--border-card)',
                   padding: '6px',
                   cursor: 'pointer',
@@ -103,7 +115,7 @@ export const StudentRegistration = () => {
                 title={av.name}
               >
                 <img src={av.src} alt={av.name} style={{ width: '100%', height: '100%' }} />
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -197,6 +209,7 @@ export const StudentRegistration = () => {
         <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-muted)' }}>
           لديك حساب بالفعل؟{' '}
           <button
+            type="button"
             onClick={() => setCurrentScreen('04')}
             style={{ background: 'none', border: 'none', color: '#06b6d4', fontWeight: '800', cursor: 'pointer' }}
           >

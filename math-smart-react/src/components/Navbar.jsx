@@ -2,35 +2,38 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { screensCatalog } from '../data/screensCatalog';
 
 export const Navbar = () => {
-  const { currentScreen, setCurrentScreen, setIsQuickSwitcherOpen, searchQuery, setSearchQuery, isSidebarOpen, setIsSidebarOpen } = useApp();
-  const { user, role, loginAs } = useAuth();
+  const {
+    currentScreen,
+    setCurrentScreen,
+    setIsQuickSwitcherOpen,
+    searchQuery,
+    setSearchQuery,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    showToast
+  } = useApp();
+  const { user, role, loginAs, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showRoleMenu, setShowRoleMenu] = useState(false);
 
+  const getRoleLabel = () => {
+    if (role === 'student') return `طالب (المستوى ${user?.level || 1})`;
+    if (role === 'teacher') return 'معلم رياضيات';
+    if (role === 'supervisor') return 'مشرف تربوي';
+    return 'زائر المنصة';
+  };
+
   return (
-    <header style={{
-      background: 'rgba(13, 18, 34, 0.82)',
-      backdropFilter: 'blur(20px)',
-      borderBottom: '1px solid var(--border-card)',
-      padding: '14px 28px',
-      position: 'sticky',
-      top: 0,
-      zIndex: 40,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: '20px'
-    }}>
+    <header className="app-navbar">
       {/* Brand & Hub Link */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        {/* Sidebar Toggle Button */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
         <button
+          type="button"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--bg-subtle)',
             border: '1px solid var(--border-card)',
             color: 'var(--text-muted)',
             width: '38px',
@@ -49,6 +52,7 @@ export const Navbar = () => {
         </button>
 
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{
             display: 'flex',
@@ -76,19 +80,13 @@ export const Navbar = () => {
             <img
               src="/assets/math_smart_logo.jpg"
               alt="شعار أذكياء الرياضيات"
+              decoding="async"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
             />
           </div>
           <div>
-            <div style={{
-              fontSize: '18px',
-              fontWeight: '900',
-              background: 'linear-gradient(135deg, #ffffff 40%, #93c5fd)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              lineHeight: 1.2
-            }}>
+            <div className="app-navbar-brand-title">
               أذكياء الرياضيات
             </div>
             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -97,31 +95,32 @@ export const Navbar = () => {
           </div>
         </button>
 
-        {/* 18 Screens Badge */}
-        <span
+        <button
+          type="button"
           onClick={() => setIsQuickSwitcherOpen(true)}
           style={{
             cursor: 'pointer',
-            background: 'rgba(16, 185, 129, 0.12)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            color: '#34d399',
+            background: 'rgba(16, 185, 129, 0.14)',
+            border: '1px solid rgba(16, 185, 129, 0.35)',
+            color: 'var(--accent-emerald)',
             padding: '4px 12px',
             borderRadius: '20px',
             fontSize: '12px',
             fontWeight: '800',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '6px',
+            fontFamily: 'var(--font-ar)'
           }}
           title="فتح القافز السريع بين الواجهات الـ 18"
         >
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
           18 واجهة مفعلة بالكامل
-        </span>
+        </button>
       </div>
 
       {/* Center Search & Quick Navigator trigger */}
-      <div style={{ flex: '1', maxWidth: '420px', position: 'relative' }}>
+      <div className="app-navbar-search">
         <input
           type="text"
           placeholder="ابحث في الواجهات الـ 18، المسائل، أو الأدوات..."
@@ -134,11 +133,11 @@ export const Navbar = () => {
           }}
           style={{
             width: '100%',
-            padding: '10px 42px 10px 16px',
-            background: 'rgba(15, 23, 42, 0.75)',
+            padding: '10px 42px 10px 58px',
+            background: 'var(--bg-input)',
             border: '1px solid var(--border-card)',
             borderRadius: '30px',
-            color: '#fff',
+            color: 'var(--text-heading)',
             fontFamily: 'var(--font-ar)',
             fontSize: '13px',
             outline: 'none',
@@ -151,18 +150,20 @@ export const Navbar = () => {
           top: '50%',
           transform: 'translateY(-50%)',
           color: 'var(--text-muted)',
-          fontSize: '15px'
+          fontSize: '15px',
+          pointerEvents: 'none'
         }}>
           🔍
         </span>
         <button
+          type="button"
           onClick={() => setIsQuickSwitcherOpen(true)}
           style={{
             position: 'absolute',
             left: '10px',
             top: '50%',
             transform: 'translateY(-50%)',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--bg-subtle-strong)',
             border: '1px solid var(--border-card)',
             borderRadius: '6px',
             padding: '2px 7px',
@@ -177,9 +178,9 @@ export const Navbar = () => {
       </div>
 
       {/* Actions & Role Switcher */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        {/* Hub Button */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           className={`btn ${currentScreen === 'hub' ? 'btn-primary' : 'btn-secondary'}`}
           style={{ padding: '8px 16px', fontSize: '13px', borderRadius: '12px' }}
@@ -187,16 +188,16 @@ export const Navbar = () => {
           🏛️ معرض كل الواجهات
         </button>
 
-        {/* Theme Toggle */}
         <button
+          type="button"
           onClick={toggleTheme}
           style={{
             width: '38px',
             height: '38px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--bg-subtle)',
             border: '1px solid var(--border-card)',
             borderRadius: '10px',
-            color: '#fff',
+            color: 'var(--text-heading)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -211,12 +212,13 @@ export const Navbar = () => {
         {/* Role Switcher Pill */}
         <div style={{ position: 'relative' }}>
           <button
+            type="button"
             onClick={() => setShowRoleMenu(!showRoleMenu)}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: 'rgba(255, 255, 255, 0.05)',
+              background: 'var(--bg-subtle)',
               border: '1px solid var(--border-card)',
               borderRadius: '24px',
               padding: '6px 14px',
@@ -228,18 +230,18 @@ export const Navbar = () => {
               width: '28px',
               height: '28px',
               borderRadius: '50%',
-              background: role === 'student' ? '#f59e0b' : '#4f46e5',
+              background: role === 'student' ? '#f59e0b' : role === 'guest' ? '#64748b' : '#4f46e5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '14px'
             }}>
-              {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : '🛡️'}
+              {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : '👤'}
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '12px', fontWeight: '800' }}>{user.name}</div>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text-heading)' }}>{user?.name || 'زائر المنصة'}</div>
               <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                {role === 'student' ? 'طالب (المستوى 8)' : role === 'teacher' ? 'معلم رياضيات' : 'مشرف تربوي'}
+                {getRoleLabel()}
               </div>
             </div>
             <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>▼</span>
@@ -249,13 +251,13 @@ export const Navbar = () => {
             <div style={{
               position: 'absolute',
               left: 0,
-              top: '46px',
-              width: '210px',
-              background: 'rgba(15, 23, 42, 0.95)',
+              top: '48px',
+              width: '220px',
+              background: 'var(--bg-modal)',
               backdropFilter: 'blur(20px)',
               border: '1px solid var(--border-card)',
               borderRadius: '14px',
-              boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
+              boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
               padding: '8px',
               zIndex: 50
             }}>
@@ -263,46 +265,51 @@ export const Navbar = () => {
                 تبديل الدور للتجربة:
               </div>
               <button
-                onClick={() => { loginAs('student'); setShowRoleMenu(false); }}
+                type="button"
+                onClick={() => { loginAs('student'); setShowRoleMenu(false); showToast('تم التبديل إلى حساب الطالب (فهد السالم)', 'info'); }}
                 style={{
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   padding: '10px',
-                  background: role === 'student' ? 'rgba(245, 158, 11, 0.15)' : 'none',
+                  background: role === 'student' ? 'rgba(245, 158, 11, 0.16)' : 'none',
                   border: 'none',
                   borderRadius: '8px',
-                  color: role === 'student' ? '#fbbf24' : '#fff',
+                  color: role === 'student' ? '#f59e0b' : 'var(--text-heading)',
                   cursor: 'pointer',
                   fontFamily: 'var(--font-ar)',
                   fontSize: '13px',
+                  fontWeight: '700',
                   textAlign: 'right'
                 }}
               >
                 🎒 طالب (فهد السالم)
               </button>
               <button
-                onClick={() => { loginAs('teacher'); setShowRoleMenu(false); }}
+                type="button"
+                onClick={() => { loginAs('teacher'); setShowRoleMenu(false); showToast('تم التبديل إلى حساب المعلم (أ. طارق العمري)', 'info'); }}
                 style={{
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   padding: '10px',
-                  background: role === 'teacher' ? 'rgba(79, 70, 229, 0.15)' : 'none',
+                  background: role === 'teacher' ? 'rgba(79, 70, 229, 0.16)' : 'none',
                   border: 'none',
                   borderRadius: '8px',
-                  color: role === 'teacher' ? '#818cf8' : '#fff',
+                  color: role === 'teacher' ? 'var(--primary-light)' : 'var(--text-heading)',
                   cursor: 'pointer',
                   fontFamily: 'var(--font-ar)',
                   fontSize: '13px',
+                  fontWeight: '700',
                   textAlign: 'right'
                 }}
               >
                 👨‍🏫 معلم (أ. طارق العمري)
               </button>
               <button
+                type="button"
                 onClick={() => { setCurrentScreen('11'); setShowRoleMenu(false); }}
                 style={{
                   width: '100%',
@@ -311,8 +318,9 @@ export const Navbar = () => {
                   gap: '10px',
                   padding: '10px',
                   background: 'none',
+                  border: 'none',
                   borderTop: '1px solid var(--border-card)',
-                  color: '#94a3b8',
+                  color: 'var(--text-muted)',
                   cursor: 'pointer',
                   fontFamily: 'var(--font-ar)',
                   fontSize: '12px',
@@ -321,6 +329,33 @@ export const Navbar = () => {
                 }}
               >
                 ⚙️ الملف الشخصي والإعدادات
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await logout();
+                  setShowRoleMenu(false);
+                  showToast('تم تسجيل الخروج بنجاح', 'info');
+                  setCurrentScreen('04');
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px',
+                  background: 'none',
+                  border: 'none',
+                  borderTop: '1px solid var(--border-card)',
+                  color: '#ef4444',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-ar)',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  textAlign: 'right'
+                }}
+              >
+                🚪 تسجيل الخروج
               </button>
             </div>
           )}

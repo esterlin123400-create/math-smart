@@ -35,7 +35,7 @@ export const QuickSwitcherModal = () => {
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0, 0, 0, 0.75)',
+        background: 'rgba(0, 0, 0, 0.72)',
         backdropFilter: 'blur(8px)',
         zIndex: 100,
         display: 'flex',
@@ -49,10 +49,10 @@ export const QuickSwitcherModal = () => {
         style={{
           width: '100%',
           maxWidth: '680px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          background: 'var(--bg-modal)',
+          border: '1px solid var(--border-card)',
           borderRadius: '20px',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.45)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -72,16 +72,17 @@ export const QuickSwitcherModal = () => {
               flex: 1,
               background: 'none',
               border: 'none',
-              color: '#fff',
+              color: 'var(--text-heading)',
               fontSize: '16px',
               fontFamily: 'var(--font-ar)',
               outline: 'none'
             }}
           />
           <button
+            type="button"
             onClick={() => setIsQuickSwitcherOpen(false)}
             style={{
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'var(--bg-subtle-strong)',
               border: 'none',
               color: 'var(--text-muted)',
               borderRadius: '8px',
@@ -98,11 +99,12 @@ export const QuickSwitcherModal = () => {
         <div style={{ padding: '12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
-              لم يتم العثور على شاشة مطابقة للبحث "{filterText}"
+              لم يتم العثور على شاشة مطابقة للبحث &quot;{filterText}&quot;
             </div>
           ) : (
             filtered.map((screen) => (
               <button
+                type="button"
                 key={screen.id}
                 onClick={() => {
                   setCurrentScreen(screen.id);
@@ -113,21 +115,21 @@ export const QuickSwitcherModal = () => {
                   alignItems: 'center',
                   gap: '16px',
                   padding: '12px 16px',
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--bg-subtle)',
                   border: '1px solid transparent',
                   borderRadius: '12px',
-                  color: '#fff',
+                  color: 'var(--text-heading)',
                   cursor: 'pointer',
                   textAlign: 'right',
                   transition: 'all 0.2s',
                   fontFamily: 'var(--font-ar)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(79, 70, 229, 0.2)';
+                  e.currentTarget.style.background = 'rgba(79, 70, 229, 0.16)';
                   e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.background = 'var(--bg-subtle)';
                   e.currentTarget.style.borderColor = 'transparent';
                 }}
               >
@@ -135,7 +137,7 @@ export const QuickSwitcherModal = () => {
                   width: '40px',
                   height: '40px',
                   borderRadius: '10px',
-                  background: 'rgba(255, 255, 255, 0.06)',
+                  background: 'var(--bg-subtle-strong)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -146,7 +148,7 @@ export const QuickSwitcherModal = () => {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '14px', fontWeight: '800' }}>{screen.title}</span>
-                    <span style={{ fontSize: '11px', background: 'rgba(255, 255, 255, 0.08)', padding: '2px 8px', borderRadius: '10px', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '11px', background: 'var(--bg-subtle-strong)', padding: '2px 8px', borderRadius: '10px', color: 'var(--text-muted)' }}>
                       #{screen.id}
                     </span>
                   </div>
@@ -154,7 +156,7 @@ export const QuickSwitcherModal = () => {
                     {screen.subtitle}
                   </div>
                 </div>
-                <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: '700' }}>
+                <div style={{ fontSize: '11px', color: 'var(--accent-cyan)', fontWeight: '700' }}>
                   {screen.category}
                 </div>
               </button>
@@ -165,7 +167,7 @@ export const QuickSwitcherModal = () => {
         {/* Footer shortcuts */}
         <div style={{
           padding: '12px 20px',
-          background: 'rgba(0, 0, 0, 0.3)',
+          background: 'var(--bg-inset)',
           borderTop: '1px solid var(--border-card)',
           display: 'flex',
           justifyContent: 'space-between',

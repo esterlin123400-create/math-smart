@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 
 export const PasswordRecovery = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { resetPassword, isLiveBackend } = useAuth();
+  const { resetPassword, updatePassword, isLiveBackend } = useAuth();
   const [step, setStep] = useState(1); // 1: contact, 2: OTP, 3: new pass, 4: success
   const [contact, setContact] = useState('fahad.salem@math.edu.sa');
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(['1', '2', '3', '4']);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const otpInputRefs = useRef([]);
+
+  const handleOtpChange = (index, rawVal) => {
+    const val = rawVal.replace(/\D/g, '').slice(-1);
+    const updated = [...otp];
+    updated[index] = val;
+    setOtp(updated);
+    if (val && index < 3) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+  };
 
   const calculateStrength = (pass) => {
     if (!pass) return { score: 0, text: 'أدخل كلمة المرور', color: 'var(--text-muted)' };
@@ -39,15 +50,26 @@ export const PasswordRecovery = () => {
 
   const handleVerifyOtp = (e) => {
     e.preventDefault();
+    if (otp.some((digit) => !digit.trim())) {
+      showToast('يرجى إدخال رمز التحقق المكون من 4 أرقام كاملاً', 'warning');
+      return;
+    }
     setStep(3);
     showToast('تم التحقق من الرمز بنجاح! أدخل كلمة المرور الجديدة', 'success');
   };
 
-  const handleResetPassword = (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
+    if (newPassword.length < 6) {
+      showToast('كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل!', 'warning');
+      return;
+    }
     if (newPassword !== confirmPassword) {
       showToast('كلمتا المرور غير متطابقتين!', 'danger');
       return;
+    }
+    if (!isLiveBackend) {
+      await updatePassword('', newPassword);
     }
     setStep(4);
     showToast('تم تحديث كلمة المرور بنجاح!', 'success');
@@ -57,6 +79,7 @@ export const PasswordRecovery = () => {
     <div style={{ maxWidth: '560px', margin: '40px auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('04')}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
         >
@@ -74,8 +97,8 @@ export const PasswordRecovery = () => {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                background: step >= s ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
+                background: step >= s ? '#4f46e5' : 'var(--bg-subtle-strong)',
+                color: step >= s ? '#fff' : 'var(--text-muted)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -85,7 +108,7 @@ export const PasswordRecovery = () => {
               }}>
                 {s}
               </div>
-              <span style={{ fontSize: '11px', color: step >= s ? '#fff' : 'var(--text-muted)' }}>
+              <span style={{ fontSize: '11px', color: step >= s ? 'var(--text-heading)' : 'var(--text-muted)' }}>
                 {s === 1 ? 'البريد/الهاتف' : s === 2 ? 'رمز OTP' : 'كلمة السر'}
               </span>
             </div>
@@ -97,7 +120,7 @@ export const PasswordRecovery = () => {
           <form onSubmit={handleSendCode}>
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ fontSize: '40px', marginBottom: '8px' }}>🔐</div>
-              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#fff' }}>استعادة كلمة المرور</h2>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)' }}>استعادة كلمة المرور</h2>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>أدخل بريدك الإلكتروني أو رقم الجوال المرتبط بحسابك</p>
             </div>
 
@@ -123,25 +146,28 @@ export const PasswordRecovery = () => {
           <form onSubmit={handleVerifyOtp}>
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ fontSize: '40px', marginBottom: '8px' }}>📱</div>
-              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#fff' }}>أدخل رمز التحقق</h2>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)' }}>أدخل رمز التحقق</h2>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>أرسلنا رمزاً مكوناً من 4 أرقام إلى {contact}</p>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '24px', direction: 'ltr' }}>
               {[0, 1, 2, 3].map((i) => (
                 <input
                   key={i}
+                  ref={(el) => { otpInputRefs.current[i] = el; }}
                   type="text"
+                  inputMode="numeric"
                   maxLength={1}
                   required
-                  defaultValue={i + 1}
+                  value={otp[i]}
+                  onChange={(e) => handleOtpChange(i, e.target.value)}
                   style={{
                     width: '54px',
                     height: '58px',
                     textAlign: 'center',
                     fontSize: '24px',
                     fontWeight: '900',
-                    background: 'rgba(15, 23, 42, 0.8)',
+                    background: 'var(--bg-input)',
                     border: '1px solid var(--border-card)',
                     borderRadius: '12px',
                     color: '#38bdf8',
@@ -158,10 +184,10 @@ export const PasswordRecovery = () => {
             <div style={{ textAlign: 'center', marginTop: '16px' }}>
               <button
                 type="button"
-                onClick={() => showToast('تم إعادة إرسال الرمز بنجاح!', 'info')}
+                onClick={handleSendCode}
                 style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '12px', cursor: 'pointer' }}
               >
-                لم يصلك الرمز؟ إعادة الإرسال (30 ثانية)
+                لم يصلك الرمز؟ إعادة الإرسال
               </button>
             </div>
           </form>
@@ -172,7 +198,7 @@ export const PasswordRecovery = () => {
           <form onSubmit={handleResetPassword}>
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ fontSize: '40px', marginBottom: '8px' }}>🔑</div>
-              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#fff' }}>تعيين كلمة المرور الجديدة</h2>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)' }}>تعيين كلمة المرور الجديدة</h2>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>اختر كلمة مرور قوية تحتوي أرقاماً وحروفاً</p>
             </div>
 
@@ -194,7 +220,7 @@ export const PasswordRecovery = () => {
                 <span style={{ color: 'var(--text-muted)' }}>مستوى الأمان:</span>
                 <span style={{ color: strength.color, fontWeight: '800' }}>{strength.text}</span>
               </div>
-              <div style={{ height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ height: '6px', background: 'var(--bg-subtle-strong)', borderRadius: '4px', overflow: 'hidden' }}>
                 <div style={{ width: `${strength.score}%`, height: '100%', background: strength.color, transition: 'all 0.3s' }} />
               </div>
             </div>
@@ -228,6 +254,7 @@ export const PasswordRecovery = () => {
               يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة والعودة لمغامرات الرياضيات.
             </p>
             <button
+              type="button"
               onClick={() => setCurrentScreen('04')}
               className="btn btn-primary"
               style={{ padding: '12px 30px' }}

@@ -9,12 +9,13 @@ export default defineConfig({
     host: true
   },
   build: {
+    target: 'es2020',
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'supabase-vendor': ['@supabase/supabase-js'],
-          'genai-vendor': ['@google/genai']
+          'supabase-vendor': ['@supabase/supabase-js']
         }
       }
     }

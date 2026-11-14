@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { QuickSwitcherModal } from './components/QuickSwitcherModal';
 import { NotificationToast } from './components/NotificationToast';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Lazy-loaded 18 Page Components + Hub (Code Splitting for fast mobile/desktop loading)
 const PlatformHub = lazy(() => import('./pages/PlatformHub').then(m => ({ default: m.PlatformHub })));
@@ -103,9 +104,11 @@ const MainRouter = () => {
       <Sidebar />
       <main className="main-content">
         <div className="page-wrapper">
-          <Suspense fallback={<PageLoader />}>
-            {renderScreen()}
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<PageLoader />}>
+              {renderScreen()}
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </main>
       <QuickSwitcherModal />

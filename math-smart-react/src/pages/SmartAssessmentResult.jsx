@@ -4,18 +4,99 @@ import { useAuth } from '../context/AuthContext';
 import { mockQuestionsResult } from '../data/mockData';
 import { generateSmartAssessmentFeedback } from '../services/aiService';
 import { saveQuizResult } from '../services/dbService';
+import { readStorageJson } from '../utils/platformHelpers';
+import { playSuccessChime } from '../utils/soundEffects';
+
+const escapeHtml = (value) => String(value ?? '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
 
 export const SmartAssessmentResult = () => {
   const { setCurrentScreen, showToast } = useApp();
   const { user } = useAuth();
   const [expandedQuestion, setExpandedQuestion] = useState(null);
-  const data = mockQuestionsResult;
+  const savedLatestResult = readStorageJson('math_smart_latest_result_v1', null);
+  const data = savedLatestResult && savedLatestResult.examTitle ? savedLatestResult : mockQuestionsResult;
   const [aiFeedback, setAiFeedback] = useState(data.aiFeedback);
   const [aiLoading, setAiLoading] = useState(false);
   const [savingResult, setSavingResult] = useState(false);
 
   const toggleQuestion = (id) => {
     setExpandedQuestion(expandedQuestion === id ? null : id);
+  };
+
+  const handleDownloadCertificate = () => {
+    const studentName = escapeHtml(user?.name || 'فهد عبدالعزيز السالم');
+    const gradeName = escapeHtml(user?.grade || data.grade || 'الصف السادس الابتدائي');
+    const examTitle = escapeHtml(data.examTitle);
+    const completionDate = escapeHtml(data.completedAt || new Date().toISOString().slice(0, 10));
+    const strengthsHtml = (aiFeedback.strengths || [])
+      .map(s => `<li>${escapeHtml(s)}</li>`)
+      .join('');
+
+    const htmlDoc = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>شهادة إتقان - ${studentName}</title>
+  <style>
+    body { font-family: Tahoma, Arial, sans-serif; background: #f1f5f9; color: #0f172a; margin: 0; padding: 32px; }
+    .cert { max-width: 820px; margin: 0 auto; background: #ffffff; border: 8px double #4f46e5; border-radius: 20px; padding: 40px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px; }
+    .brand { font-size: 22px; font-weight: 900; color: #4f46e5; }
+    .badge { background: #ecfdf5; color: #059669; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; border: 1px solid #10b981; }
+    h1 { text-align: center; color: #1e293b; font-size: 30px; margin: 10px 0 8px; }
+    .subtitle { text-align: center; color: #64748b; font-size: 15px; margin-bottom: 26px; }
+    .student { text-align: center; font-size: 28px; font-weight: 900; color: #4f46e5; margin: 12px 0; }
+    .metrics { display: flex; justify-content: center; gap: 28px; margin: 26px 0; flex-wrap: wrap; }
+    .metric-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 14px 26px; text-align: center; }
+    .metric-val { font-size: 28px; font-weight: 900; color: #059669; }
+    .box { background: #f8fafc; border-right: 4px solid #4f46e5; padding: 16px 20px; border-radius: 10px; margin-top: 20px; line-height: 1.8; }
+    .print-btn { display: block; margin: 26px auto 0; background: #4f46e5; color: #fff; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; cursor: pointer; }
+    @media print { body { background: #fff; padding: 0; } .cert { box-shadow: none; } .print-btn { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="cert">
+    <div class="top-bar">
+      <div class="brand">منصة أذكياء الرياضيات • Math Smart</div>
+      <div class="badge">شهادة إتقان معتمدة</div>
+    </div>
+    <h1>شهادة تفوق وإتقان رياضي</h1>
+    <p class="subtitle">تشهد منصة أذكياء الرياضيات الذكية بإتمام التقييم بنجاح وتفوق:</p>
+    <div class="student">${studentName}</div>
+    <p class="subtitle">${gradeName} • ${examTitle}</p>
+    <div class="metrics">
+      <div class="metric-box"><div class="metric-val">${escapeHtml(data.score)}%</div><div>درجة الإتقان</div></div>
+      <div class="metric-box"><div class="metric-val" style="color:#d97706">+${escapeHtml(data.earnedXp)} XP</div><div>نقاط الخبرة</div></div>
+      <div class="metric-box"><div class="metric-val" style="color:#0284c7">${escapeHtml(data.correctAnswers)}/${escapeHtml(data.totalQuestions)}</div><div>إجابات صحيحة</div></div>
+    </div>
+    <div class="box">
+      <strong>تقرير المرشد الذكي:</strong><br/>${escapeHtml(aiFeedback.summary)}
+      <br/><br/><strong>أبرز نقاط القوة:</strong>
+      <ul>${strengthsHtml}</ul>
+      <strong>تاريخ الإصدار:</strong> ${completionDate}
+    </div>
+    <button type="button" class="print-btn" onclick="window.print()">طباعة الشهادة أو حفظها PDF</button>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `شهادة_أذكياء_الرياضيات_${(user?.name || 'طالب').replace(/\s+/g, '_')}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    playSuccessChime();
+    showToast('تم تنزيل شهادة الإتقان والتقرير القابل للطباعة وحفظه PDF بنجاح!', 'success');
   };
 
   const handleRefreshAiReport = async () => {
@@ -71,6 +152,7 @@ export const SmartAssessmentResult = () => {
       {/* Header breadcrumb */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button
+          type="button"
           onClick={() => setCurrentScreen('hub')}
           style={{
             background: 'none',
@@ -91,7 +173,7 @@ export const SmartAssessmentResult = () => {
 
       {/* SCORE HERO */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95))',
+        background: 'var(--hero-bg)',
         backdropFilter: 'blur(20px)',
         border: '1px solid var(--border-card)',
         borderRadius: '28px',
@@ -102,7 +184,7 @@ export const SmartAssessmentResult = () => {
         flexWrap: 'wrap',
         gap: '24px',
         marginBottom: '32px',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.4)',
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -129,7 +211,7 @@ export const SmartAssessmentResult = () => {
           <span className="badge badge-primary" style={{ marginBottom: '10px' }}>
             تقييم ذكي فوري بالذكاء الاصطناعي
           </span>
-          <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#fff', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '8px' }}>
             {data.examTitle}
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '16px' }}>
@@ -155,6 +237,7 @@ export const SmartAssessmentResult = () => {
         {/* Actions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <button
+            type="button"
             onClick={() => {
               setCurrentScreen('09');
               showToast('جاري بدء تدريب جديد لحل المسائل...', 'info');
@@ -165,6 +248,7 @@ export const SmartAssessmentResult = () => {
             🚀 إعادة الاختبار وتحدي جديد
           </button>
           <button
+            type="button"
             onClick={handleSaveToCloud}
             disabled={savingResult}
             className="btn btn-success"
@@ -173,7 +257,8 @@ export const SmartAssessmentResult = () => {
             {savingResult ? 'جاري الحفظ...' : '💾 حفظ النتيجة في السجل'}
           </button>
           <button
-            onClick={() => showToast('تم تنزيل شهادة الإتقان والتقرير بصيغة PDF بنجاح!', 'success')}
+            type="button"
+            onClick={handleDownloadCertificate}
             className="btn btn-secondary"
             style={{ padding: '12px 24px' }}
           >
@@ -199,7 +284,7 @@ export const SmartAssessmentResult = () => {
               🤖
             </div>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)' }}>
                 تقرير وتحليل المرشد الذكي (Math AI Tutor)
               </h3>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -209,6 +294,7 @@ export const SmartAssessmentResult = () => {
           </div>
 
           <button
+            type="button"
             onClick={handleRefreshAiReport}
             disabled={aiLoading}
             className="btn btn-secondary"
@@ -222,7 +308,7 @@ export const SmartAssessmentResult = () => {
           {aiFeedback.summary}
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '16px' }}>
           <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '16px', borderRadius: '14px' }}>
             <div style={{ fontSize: '13px', fontWeight: '800', color: '#34d399', marginBottom: '8px' }}>
               🌟 نقاط القوة المكتشفة:
@@ -246,8 +332,8 @@ export const SmartAssessmentResult = () => {
       </div>
 
       {/* QUESTIONS REVIEW BREAKDOWN */}
-      <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#fff', marginBottom: '18px' }}>
-        مراجعة وتفصيل إجابات المسائل (5 مسائل)
+      <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '18px' }}>
+        مراجعة وتفصيل إجابات المسائل ({data.questions.length} مسائل)
       </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -268,7 +354,15 @@ export const SmartAssessmentResult = () => {
             >
               {/* Question Bar Header */}
               <div
+                role="button"
+                tabIndex={0}
                 onClick={() => toggleQuestion(q.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleQuestion(q.id);
+                  }
+                }}
                 style={{
                   padding: '16px 20px',
                   display: 'flex',
@@ -289,12 +383,13 @@ export const SmartAssessmentResult = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: '800',
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    flexShrink: 0
                   }}>
                     {isCorrect ? '✓' : '✗'}
                   </span>
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#fff' }}>
+                    <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--text-heading)' }}>
                       مسألة {q.id}: {q.text}
                     </div>
                     <div style={{ fontSize: '12px', color: isCorrect ? '#34d399' : '#f87171' }}>
@@ -312,7 +407,7 @@ export const SmartAssessmentResult = () => {
 
               {/* Collapsible Steps */}
               {isExpanded && (
-                <div style={{ padding: '20px', borderTop: '1px solid var(--border-card)', background: 'rgba(0, 0, 0, 0.2)' }}>
+                <div style={{ padding: '20px', borderTop: '1px solid var(--border-card)', background: 'var(--bg-inset)' }}>
                   <div style={{ fontSize: '13px', fontWeight: '800', color: '#38bdf8', marginBottom: '10px' }}>
                     📐 خطوات الحل النموذجية وتوضيح المرشد:
                   </div>
