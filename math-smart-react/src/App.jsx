@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
+import { Footer } from './components/Footer';
 import { QuickSwitcherModal } from './components/QuickSwitcherModal';
 import { NotificationToast } from './components/NotificationToast';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -110,6 +111,7 @@ const MainRouter = () => {
             </Suspense>
           </ErrorBoundary>
         </div>
+        <Footer />
       </main>
       <QuickSwitcherModal />
       <NotificationToast />

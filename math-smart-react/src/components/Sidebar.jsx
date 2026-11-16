@@ -7,24 +7,47 @@ export const Sidebar = () => {
 
   const groups = [
     {
-      title: '🚀 1. الهوية وبوابات الدخول (6)',
-      items: ['18', '04', '15', '10', '14', '05']
+      title: '🎒 بيئة الطالب والتعلّم',
+      items: [
+        { id: '13', badge: 'رئيسي' },
+        { id: '09', badge: 'ذكي' },
+        { id: '03', badge: 'مباشر' },
+        { id: '01', badge: 'شهادة' },
+        { id: '12', badge: null }
+      ]
     },
     {
-      title: '📚 2. المراحل والمناهج الدراسية (2)',
-      items: ['06', '17']
+      title: '📚 المناهج والمسارات',
+      items: [
+        { id: '17', badge: '12 وحدة' },
+        { id: '06', badge: null }
+      ]
     },
     {
-      title: '🎯 3. بيئة الطالب والتعلم والتقييم (5)',
-      items: ['13', '09', '12', '03', '01']
+      title: '👨‍🏫 لوحة المعلم والمتابعة',
+      items: [
+        { id: '02', badge: 'معتمد' },
+        { id: '07', badge: 'CSV' },
+        { id: '08', badge: 'تحليلات' },
+        { id: '16', badge: 'جلسات' }
+      ]
     },
     {
-      title: '👨‍🏫 4. لوحة المعلم والتقارير والمتابعة (4)',
-      items: ['02', '07', '08', '16']
+      title: '🔐 بوابات الدخول والتسجيل',
+      items: [
+        { id: '04', badge: null },
+        { id: '15', badge: 'جديد' },
+        { id: '10', badge: null },
+        { id: '14', badge: null },
+        { id: '05', badge: 'OTP' }
+      ]
     },
     {
-      title: '⚙️ 5. الملف الشخصي والإعدادات (1)',
-      items: ['11']
+      title: '⚙️ إعدادات النظام والهوية',
+      items: [
+        { id: '11', badge: null },
+        { id: '18', badge: 'الهوية' }
+      ]
     }
   ];
 
@@ -34,20 +57,11 @@ export const Sidebar = () => {
         <button
           type="button"
           onClick={() => setIsSidebarOpen(true)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-muted)',
-            fontSize: '18px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontFamily: 'var(--font-ar)'
-          }}
-          title="توسيع القائمة"
+          className="sidebar-collapsed-btn"
+          title="توسيع القائمة الجانبية"
         >
           <span>☰</span>
+          <span className="collapsed-text">القائمة</span>
         </button>
       </aside>
     );
@@ -55,89 +69,47 @@ export const Sidebar = () => {
 
   return (
     <aside className="app-sidebar">
-      {/* Sidebar Top / Toggle */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '16px',
-        paddingBottom: '12px',
-        borderBottom: '1px solid var(--border-card)'
-      }}>
-        <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-muted)' }}>
-          فهرس شاشات المنصة
-        </span>
+      {/* Sidebar Header */}
+      <div className="sidebar-header">
+        <div className="sidebar-header-title">
+          <span>فهرس بوابات المنصة</span>
+          <span className="sidebar-count-badge">18 بوابة</span>
+        </div>
         <button
           type="button"
           onClick={() => setIsSidebarOpen(false)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-muted)',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
+          className="sidebar-close-btn"
           title="تصغير القائمة الجانبية"
         >
           ✕
         </button>
       </div>
 
-      {/* Main Hub Link */}
+      {/* Main Hub Overview Card */}
       <button
         type="button"
         onClick={() => setCurrentScreen('hub')}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          padding: '12px 14px',
-          background: currentScreen === 'hub' ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
-          border: '1px solid var(--border-card)',
-          borderRadius: '12px',
-          color: currentScreen === 'hub' ? '#fff' : 'var(--text-heading)',
-          fontFamily: 'var(--font-ar)',
-          fontSize: '13px',
-          fontWeight: '800',
-          cursor: 'pointer',
-          marginBottom: '20px',
-          textAlign: 'right',
-          boxShadow: currentScreen === 'hub' ? '0 4px 15px rgba(79, 70, 229, 0.35)' : 'none'
-        }}
+        className={`sidebar-hub-card ${currentScreen === 'hub' ? 'active' : ''}`}
       >
-        <span style={{ fontSize: '18px' }}>🏛️</span>
-        <div style={{ flex: 1 }}>
-          <div>بوابة المعرض الرئيسية</div>
-          <div style={{ fontSize: '10px', opacity: 0.8 }}>استعراض الواجهات الـ 18</div>
+        <span className="hub-card-icon">🏛️</span>
+        <div className="hub-card-content">
+          <div className="hub-card-title">بوابة الاستكشاف الشاملة</div>
+          <div className="hub-card-subtitle">الصفحة الرئيسية للمنصة</div>
         </div>
-        <span style={{
-          background: currentScreen === 'hub' ? 'rgba(255,255,255,0.22)' : 'var(--bg-subtle-strong)',
-          padding: '2px 8px',
-          borderRadius: '10px',
-          fontSize: '11px'
-        }}>
-          18
-        </span>
+        <span className="hub-card-badge">الرئيسية</span>
       </button>
 
-      {/* Categorized Nav Groups */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+      {/* Navigation Sections */}
+      <div className="sidebar-groups-container">
         {groups.map((group, gIdx) => (
-          <div key={gIdx}>
-            <div style={{
-              fontSize: '11px',
-              fontWeight: '800',
-              color: 'var(--text-muted)',
-              marginBottom: '8px',
-              paddingRight: '6px'
-            }}>
+          <div key={gIdx} className="sidebar-group">
+            <div className="sidebar-group-title">
               {group.title}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {group.items.map(screenId => {
-                const screen = screensCatalog.find(s => s.id === screenId);
+            <div className="sidebar-group-items">
+              {group.items.map(itemObj => {
+                const screen = screensCatalog.find(s => s.id === itemObj.id);
                 if (!screen) return null;
                 const isActive = currentScreen === screen.id;
 
@@ -146,35 +118,22 @@ export const Sidebar = () => {
                     type="button"
                     key={screen.id}
                     onClick={() => setCurrentScreen(screen.id)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      padding: '9px 12px',
-                      background: isActive ? 'rgba(79, 70, 229, 0.18)' : 'transparent',
-                      border: isActive ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid transparent',
-                      borderRadius: '10px',
-                      color: isActive ? 'var(--text-heading)' : 'var(--text-body)',
-                      fontFamily: 'var(--font-ar)',
-                      fontSize: '12px',
-                      fontWeight: isActive ? '800' : '600',
-                      cursor: 'pointer',
-                      textAlign: 'right',
-                      transition: 'all 0.2s'
-                    }}
+                    className={`sidebar-nav-btn ${isActive ? 'active' : ''}`}
+                    title={screen.subtitle}
                   >
-                    <span style={{ fontSize: '16px' }}>{screen.icon}</span>
-                    <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <span className="sidebar-item-icon">{screen.icon}</span>
+                    <span className="sidebar-item-title">
                       {screen.title}
                     </span>
-                    <span style={{
-                      fontSize: '10px',
-                      color: 'var(--text-muted)',
-                      fontFamily: 'var(--font-en)'
-                    }}>
-                      #{screen.id}
-                    </span>
+                    {itemObj.badge ? (
+                      <span className={`sidebar-item-badge ${isActive ? 'badge-active' : ''}`}>
+                        {itemObj.badge}
+                      </span>
+                    ) : (
+                      <span className="sidebar-item-id">
+                        {screen.id}
+                      </span>
+                    )}
                   </button>
                 );
               })}
