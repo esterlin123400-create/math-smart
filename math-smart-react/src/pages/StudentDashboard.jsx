@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockUserData } from '../data/mockData';
 import { readStorageJson } from '../utils/platformHelpers';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const StudentDashboard = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -22,16 +23,12 @@ export const StudentDashboard = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-warning">13 لوحة تحكم الطالب</span>
-      </div>
+      <Breadcrumb
+        items={[{ label: 'فضاء الطالب ولوحة المهام', icon: '🎒' }]}
+        backTo="hub"
+        backLabel="الرئيسية"
+        tag="التعلّم النشط"
+      />
 
       {/* GAMIFIED HERO */}
       <div style={{

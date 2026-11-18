@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { copyToClipboard } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const AcademicReports = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -58,16 +59,15 @@ export const AcademicReports = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-cyan">08 التقارير والتحليلات</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
+          { label: 'التقارير والتحليلات الأكاديمية', icon: '📈' }
+        ]}
+        backTo="02"
+        backLabel="لوحة المعلم"
+        tag="تحليلات الأداء"
+      />
 
       <div className="page-hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>

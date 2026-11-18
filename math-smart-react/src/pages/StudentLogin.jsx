@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const StudentLogin = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -45,16 +46,12 @@ export const StudentLogin = () => {
 
   return (
     <div style={{ maxWidth: '960px', margin: '0 auto', padding: '20px 0' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-cyan">04 تسجيل دخول الطالب</span>
-      </div>
+      <Breadcrumb
+        items={[{ label: 'تسجيل دخول الطالب', icon: '🔐' }]}
+        backTo="hub"
+        backLabel="الصفحة الرئيسية"
+        tag="بوابة الطالب"
+      />
 
       <div className="glass-card" style={{
         display: 'grid',

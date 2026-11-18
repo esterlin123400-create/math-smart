@@ -4,6 +4,7 @@ import { mockRecordsList } from '../data/mockData';
 import { getAllQuizResults } from '../services/dbService';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 const STATUS_META = {
   'متميز': { color: '#10b981', badgeType: 'success' },
@@ -143,16 +144,15 @@ export const RecordsManagement = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">07 إدارة السجلات</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
+          { label: 'إدارة السجلات المركزية (CSV)', icon: '📊' }
+        ]}
+        backTo="02"
+        backLabel="لوحة المعلم"
+        tag="السجلات المركزية"
+      />
 
       <div className="page-hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>

@@ -6,6 +6,7 @@ import { generateSmartAssessmentFeedback } from '../services/aiService';
 import { saveQuizResult } from '../services/dbService';
 import { readStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 const escapeHtml = (value) => String(value ?? '')
   .replace(/&/g, '&amp;')
@@ -149,27 +150,15 @@ export const SmartAssessmentResult = () => {
 
   return (
     <div>
-      {/* Header breadcrumb */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-muted)',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: '700',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-success">01 التقييم ومراجعة الحل</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: 'التقييم الذكي والشهادة المعتمدة', icon: '📋' }
+        ]}
+        backTo="13"
+        backLabel="العودة لبوابة الطالب"
+        tag="التقييم التشخيصي"
+      />
 
       {/* SCORE HERO */}
       <div style={{

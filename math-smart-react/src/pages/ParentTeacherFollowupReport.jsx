@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const ParentTeacherFollowupReport = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -54,16 +55,15 @@ export const ParentTeacherFollowupReport = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">16 تقرير متابعة ولي الأمر والمعلم</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
+          { label: 'تقرير متابعة ولي الأمر والمعلم', icon: '👨‍👩‍👧' }
+        ]}
+        backTo="02"
+        backLabel="لوحة المعلم"
+        tag="متابعة الأسرة"
+      />
 
       <div className="page-hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>

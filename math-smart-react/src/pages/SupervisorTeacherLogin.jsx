@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const SupervisorTeacherLogin = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -36,16 +37,12 @@ export const SupervisorTeacherLogin = () => {
 
   return (
     <div style={{ maxWidth: '520px', margin: '40px auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">10 دخول المشرف والمعلم</span>
-      </div>
+      <Breadcrumb
+        items={[{ label: 'تسجيل دخول المعلم والمشرف', icon: '👨‍🏫' }]}
+        backTo="hub"
+        backLabel="الصفحة الرئيسية"
+        tag="بوابة المعلمين"
+      />
 
       <div className="glass-card" style={{ padding: '36px' }}>
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>

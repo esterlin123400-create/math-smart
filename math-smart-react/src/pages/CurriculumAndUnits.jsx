@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { mockCurriculumUnits } from '../data/mockData';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 const applySavedStatuses = (baseUnits, savedStatuses) => {
   return baseUnits.map(unit => {
@@ -123,34 +124,31 @@ export const CurriculumAndUnits = () => {
 
   return (
     <div>
-      {/* Top Header Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <Breadcrumb
+        items={[{ label: 'خارطة المناهج والوحدات الدراسية', icon: '📖' }]}
+        backTo="13"
+        backLabel="بوابة الطالب"
+        tag="12 وحدة منهجية"
+      />
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
         <button
           type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
+          onClick={() => setCurrentScreen('06')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '14px',
+            border: '1px solid rgba(67, 56, 202, 0.25)',
+            background: 'rgba(67, 56, 202, 0.08)',
+            color: 'var(--primary)',
+            fontSize: '12px',
+            fontWeight: '700',
+            cursor: 'pointer',
+            fontFamily: 'var(--font-ar)'
+          }}
         >
-          ← العودة لمعرض الواجهات
+          تغيير المرحلة الدراسية ⚙️
         </button>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            onClick={() => setCurrentScreen('06')}
-            style={{
-              padding: '6px 14px',
-              borderRadius: '20px',
-              border: '1px solid rgba(99, 102, 241, 0.35)',
-              background: 'rgba(99, 102, 241, 0.12)',
-              color: '#6366f1',
-              fontSize: '12px',
-              fontWeight: '700',
-              cursor: 'pointer'
-            }}
-          >
-            تغيير المرحلة (شاشة 06) ⚙️
-          </button>
-          <span className="badge badge-primary">17 المناهج والوحدات الدراسية (مكتملة لجميع المراحل)</span>
-        </div>
       </div>
 
       {/* Hero Section */}

@@ -65,7 +65,7 @@ export const QuickSwitcherModal = () => {
           <input
             type="text"
             autoFocus
-            placeholder="ابحث بالاسم، التصنيف، أو الرقم (مثال: 'حلبة', 'معلم', '09')..."
+            placeholder="ابحث عن درس، أداة، حلبة تحديات، أو بوابة (مثال: 'حلبة', 'مناهج', 'معلم')..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
             style={{
@@ -99,7 +99,7 @@ export const QuickSwitcherModal = () => {
         <div style={{ padding: '12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
-              لم يتم العثور على شاشة مطابقة للبحث &quot;{filterText}&quot;
+              لم يتم العثور على نتيجة مطابقة للبحث &quot;{filterText}&quot;
             </div>
           ) : (
             filtered.map((screen) => (
@@ -125,8 +125,8 @@ export const QuickSwitcherModal = () => {
                   fontFamily: 'var(--font-ar)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(79, 70, 229, 0.16)';
-                  e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                  e.currentTarget.style.background = 'rgba(67, 56, 202, 0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.45)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'var(--bg-subtle)';
@@ -148,9 +148,6 @@ export const QuickSwitcherModal = () => {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '14px', fontWeight: '800' }}>{screen.title}</span>
-                    <span style={{ fontSize: '11px', background: 'var(--bg-subtle-strong)', padding: '2px 8px', borderRadius: '10px', color: 'var(--text-muted)' }}>
-                      #{screen.id}
-                    </span>
                   </div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                     {screen.subtitle}
@@ -174,8 +171,8 @@ export const QuickSwitcherModal = () => {
           fontSize: '11px',
           color: 'var(--text-muted)'
         }}>
-          <span>اضغط على أي واجهة للانتقال إليها فوراً</span>
-          <span>18 واجهة جاهزة</span>
+          <span>اختر أي بوابة أو أداة للانتقال إليها مباشرة</span>
+          <span>منصة أذكياء الرياضيات الذكية</span>
         </div>
       </div>
     </div>

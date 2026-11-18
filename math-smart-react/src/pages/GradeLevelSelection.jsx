@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const GradeLevelSelection = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -55,16 +56,15 @@ export const GradeLevelSelection = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">06 المراحل الدراسية</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'خارطة المناهج', screen: '17', icon: '📖' },
+          { label: 'اختيار وتخصيص المرحلة الدراسية', icon: '🎯' }
+        ]}
+        backTo="17"
+        backLabel="خارطة المناهج"
+        tag="المراحل والصفوف"
+      />
 
       <div className="page-hero">
         <h1 className="hero-title">اختيار وتخصيص المرحلة والمناهج الدراسية</h1>

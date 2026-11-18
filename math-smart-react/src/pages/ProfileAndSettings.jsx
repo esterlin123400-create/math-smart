@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 const ROLE_LABELS = {
   student: 'طالب',
@@ -85,16 +86,10 @@ export const ProfileAndSettings = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">11 الملف الشخصي والإعدادات</span>
-      </div>
+      <Breadcrumb
+        items={[{ label: 'الملف الشخصي وتفضيلات النظام', icon: '⚙️' }]}
+        tag="إعدادات الحساب"
+      />
 
       <div className="page-hero">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>

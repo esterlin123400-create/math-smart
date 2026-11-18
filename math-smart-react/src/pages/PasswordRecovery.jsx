@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const PasswordRecovery = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -77,16 +78,15 @@ export const PasswordRecovery = () => {
 
   return (
     <div style={{ maxWidth: '560px', margin: '40px auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('04')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لتسجيل الدخول
-        </button>
-        <span className="badge badge-warning">05 استعادة كلمة المرور</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'تسجيل الدخول', screen: '04', icon: '🔐' },
+          { label: 'استعادة كلمة المرور (OTP)', icon: '🔑' }
+        ]}
+        backTo="04"
+        backLabel="تسجيل الدخول"
+        tag="حماية الحساب"
+      />
 
       <div className="glass-card" style={{ padding: '36px' }}>
         {/* Step Indicator */}

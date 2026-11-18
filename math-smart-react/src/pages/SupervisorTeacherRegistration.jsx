@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const SupervisorTeacherRegistration = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -58,16 +59,15 @@ export const SupervisorTeacherRegistration = () => {
 
   return (
     <div style={{ maxWidth: '680px', margin: '30px auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-success">14 إنشاء حساب مشرف ومعلم</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'دخول المعلم', screen: '10', icon: '👨‍🏫' },
+          { label: 'توثيق حساب معلم ومشرف جديد', icon: '✅' }
+        ]}
+        backTo="10"
+        backLabel="دخول المعلم"
+        tag="تسجيل معتمد"
+      />
 
       <div className="glass-card" style={{ padding: '36px' }}>
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>

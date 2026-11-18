@@ -100,9 +100,11 @@ const MainRouter = () => {
     }
   };
 
+  const isFullWidthPage = currentScreen === 'hub' || ['04', '05', '10', '14', '15'].includes(currentScreen);
+
   return (
     <div className="app-container">
-      <Sidebar />
+      {!isFullWidthPage && <Sidebar />}
       <main className="main-content">
         <div className="page-wrapper">
           <ErrorBoundary>

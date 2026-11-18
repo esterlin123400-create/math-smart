@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { copyToClipboard } from '../utils/platformHelpers';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const LogoBranding = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -42,27 +43,12 @@ export const LogoBranding = () => {
 
   return (
     <div>
-      {/* Top Breadcrumb Navigation */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-muted)',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: '700',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-primary">18 الهوية والشعار الرسمي للمنصة</span>
-      </div>
+      <Breadcrumb
+        items={[{ label: 'دليل الهوية والشعار الرسمي للمنصة', icon: '🎨' }]}
+        backTo="hub"
+        backLabel="الرئيسية"
+        tag="الهوية الرسمية"
+      />
 
       {/* BRAND HERO SHOWCASE */}
       <div className="glass-card" style={{

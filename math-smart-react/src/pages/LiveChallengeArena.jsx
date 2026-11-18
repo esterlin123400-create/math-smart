@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { createChallengeRoom, subscribeToRoom, joinChallengeRoom, updateChallengeRoomScore } from '../services/dbService';
 import { copyToClipboard } from '../utils/platformHelpers';
 import { playSuccessChime, playErrorTone, playLevelUpFanfare } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const LiveChallengeArena = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -259,6 +260,15 @@ export const LiveChallengeArena = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: 'حلبة التحديات والمبارزات المباشرة', icon: '⚡' }
+        ]}
+        backTo="13"
+        backLabel="بوابة الطالب"
+        tag="تحدٍ مباشر 1v1"
+      />
       {/* Header */}
       <div style={{
         display: 'flex',

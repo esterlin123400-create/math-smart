@@ -1,55 +1,47 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { screensCatalog } from '../data/screensCatalog';
 
 export const Sidebar = () => {
   const { currentScreen, setCurrentScreen, isSidebarOpen, setIsSidebarOpen } = useApp();
+  const { role } = useAuth();
 
-  const groups = [
-    {
-      title: '🎒 بيئة الطالب والتعلّم',
-      items: [
-        { id: '13', badge: 'رئيسي' },
-        { id: '09', badge: 'ذكي' },
-        { id: '03', badge: 'مباشر' },
-        { id: '01', badge: 'شهادة' },
-        { id: '12', badge: null }
-      ]
-    },
-    {
-      title: '📚 المناهج والمسارات',
-      items: [
-        { id: '17', badge: '12 وحدة' },
-        { id: '06', badge: null }
-      ]
-    },
-    {
-      title: '👨‍🏫 لوحة المعلم والمتابعة',
-      items: [
-        { id: '02', badge: 'معتمد' },
-        { id: '07', badge: 'CSV' },
-        { id: '08', badge: 'تحليلات' },
-        { id: '16', badge: 'جلسات' }
-      ]
-    },
-    {
-      title: '🔐 بوابات الدخول والتسجيل',
-      items: [
-        { id: '04', badge: null },
-        { id: '15', badge: 'جديد' },
-        { id: '10', badge: null },
-        { id: '14', badge: null },
-        { id: '05', badge: 'OTP' }
-      ]
-    },
-    {
-      title: '⚙️ إعدادات النظام والهوية',
-      items: [
-        { id: '11', badge: null },
-        { id: '18', badge: 'الهوية' }
-      ]
-    }
-  ];
+  const studentGroup = {
+    title: '🎒 فضاء الطالب والتعلّم',
+    items: [
+      { id: '13', label: 'لوحة الطالب والمهام', badge: 'رئيسي' },
+      { id: '09', label: 'مختبر المسائل والسبورة', badge: 'ذكي' },
+      { id: '03', label: 'حلبة التحديات 1v1', badge: 'مباشر' },
+      { id: '17', label: 'المناهج والوحدات', badge: '12 وحدة' },
+      { id: '01', label: 'التقييم الذكي والشهادة', badge: 'شهادة' },
+      { id: '12', label: 'لوحة الرموز والمعادلات', badge: null },
+      { id: '06', label: 'تحديد المرحلة والصف', badge: null }
+    ]
+  };
+
+  const teacherGroup = {
+    title: '👨‍🏫 بوابة المعلم والإشراف',
+    items: [
+      { id: '02', label: 'لوحة تحكم المعلم', badge: 'قيادة' },
+      { id: '07', label: 'إدارة السجلات (CSV)', badge: 'سجلات' },
+      { id: '08', label: 'التقارير والتحليلات', badge: 'أكاديمي' },
+      { id: '16', label: 'تواصل ومتابعة ولي الأمر', badge: 'جلسات' }
+    ]
+  };
+
+  const settingsGroup = {
+    title: '⚙️ الحساب والمنظومة',
+    items: [
+      { id: '11', label: 'الملف الشخصي والإعدادات', badge: null },
+      { id: '18', label: 'دليل الهوية والشعار', badge: null }
+    ]
+  };
+
+  // Prioritize active user role at the top of the workspace sidebar
+  const groups = (role === 'teacher' || role === 'supervisor')
+    ? [teacherGroup, studentGroup, settingsGroup]
+    : [studentGroup, teacherGroup, settingsGroup];
 
   if (!isSidebarOpen) {
     return (
@@ -58,10 +50,10 @@ export const Sidebar = () => {
           type="button"
           onClick={() => setIsSidebarOpen(true)}
           className="sidebar-collapsed-btn"
-          title="توسيع القائمة الجانبية"
+          title="توسيع قائمة مساحة العمل"
         >
           <span>☰</span>
-          <span className="collapsed-text">القائمة</span>
+          <span className="collapsed-text">الأدوات</span>
         </button>
       </aside>
     );
@@ -72,20 +64,19 @@ export const Sidebar = () => {
       {/* Sidebar Header */}
       <div className="sidebar-header">
         <div className="sidebar-header-title">
-          <span>فهرس بوابات المنصة</span>
-          <span className="sidebar-count-badge">18 بوابة</span>
+          <span>{role === 'teacher' ? 'مساحة عمل المعلم' : 'مساحة التعلّم النشط'}</span>
         </div>
         <button
           type="button"
           onClick={() => setIsSidebarOpen(false)}
           className="sidebar-close-btn"
-          title="تصغير القائمة الجانبية"
+          title="طي القائمة لتوسيع مساحة العمل"
         >
           ✕
         </button>
       </div>
 
-      {/* Main Hub Overview Card */}
+      {/* Back to Platform Home Card */}
       <button
         type="button"
         onClick={() => setCurrentScreen('hub')}
@@ -93,13 +84,12 @@ export const Sidebar = () => {
       >
         <span className="hub-card-icon">🏛️</span>
         <div className="hub-card-content">
-          <div className="hub-card-title">بوابة الاستكشاف الشاملة</div>
-          <div className="hub-card-subtitle">الصفحة الرئيسية للمنصة</div>
+          <div className="hub-card-title">الصفحة الرئيسية للمنصة</div>
+          <div className="hub-card-subtitle">نظرة شاملة على المنظومة</div>
         </div>
-        <span className="hub-card-badge">الرئيسية</span>
       </button>
 
-      {/* Navigation Sections */}
+      {/* Contextual Role Groups */}
       <div className="sidebar-groups-container">
         {groups.map((group, gIdx) => (
           <div key={gIdx} className="sidebar-group">
@@ -123,15 +113,11 @@ export const Sidebar = () => {
                   >
                     <span className="sidebar-item-icon">{screen.icon}</span>
                     <span className="sidebar-item-title">
-                      {screen.title}
+                      {itemObj.label}
                     </span>
-                    {itemObj.badge ? (
+                    {itemObj.badge && (
                       <span className={`sidebar-item-badge ${isActive ? 'badge-active' : ''}`}>
                         {itemObj.badge}
-                      </span>
-                    ) : (
-                      <span className="sidebar-item-id">
-                        {screen.id}
                       </span>
                     )}
                   </button>

@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 const INITIAL_ASSIGNMENTS = [
   { id: 'ASG-101', title: 'اختبار المعادلات الخطية وميزان الكتل', targetClass: 'فصل 6A (الرياضيات المتقدمة)', createdAt: '2026-10-30', active: true },
@@ -70,12 +71,18 @@ export const TeacherDashboard = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[{ label: 'فضاء المعلم والإشراف', icon: '👨‍🏫' }]}
+        backTo="hub"
+        backLabel="الرئيسية"
+        tag="لوحة القيادة"
+      />
       {/* Header */}
       <div className="page-hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <span className="badge badge-primary">02 لوحة تحكم المعلم</span>
+              <span className="badge badge-primary">لوحة قيادة المعلم</span>
               <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>مرحباً بك، {user?.name || 'أ. طارق العمري'}</span>
             </div>
             <h1 className="hero-title">لوحة المعلم الشاملة لإدارة الرياضيات</h1>

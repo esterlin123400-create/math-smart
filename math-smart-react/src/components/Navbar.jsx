@@ -22,7 +22,8 @@ export const Navbar = () => {
   const roleMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
 
-  // Close dropdowns on outside click
+  const isFullWidthPage = currentScreen === 'hub' || ['04', '05', '10', '14', '15'].includes(currentScreen);
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (roleMenuRef.current && !roleMenuRef.current.contains(e.target)) {
@@ -37,7 +38,7 @@ export const Navbar = () => {
   }, []);
 
   const getRoleLabel = () => {
-    if (role === 'student') return `طالب (المستوى ${user?.level || 1})`;
+    if (role === 'student') return `طالب • المستوى ${user?.level || 1}`;
     if (role === 'teacher') return 'معلم رياضيات';
     if (role === 'supervisor') return 'مشرف تربوي';
     return 'زائر المنصة';
@@ -48,40 +49,42 @@ export const Navbar = () => {
     { id: '13', label: 'بوابة الطالب', icon: '🎒' },
     { id: '09', label: 'مختبر المسائل', icon: '✍️' },
     { id: '03', label: 'حلبة التحديات', icon: '⚡' },
-    { id: '17', label: 'المناهج والوحدات', icon: '📖' },
+    { id: '17', label: 'المناهج', icon: '📖' },
     { id: '02', label: 'بوابة المعلم', icon: '👨‍🏫' }
   ];
 
   const moreNavItems = [
-    { id: '01', label: 'بطاقة التقييم والشهادة', icon: '📋', desc: 'تقييم فوري وطباعة شهادة' },
+    { id: '01', label: 'التقييم الذكي والشهادة', icon: '📋', desc: 'تقييم فوري وطباعة شهادة التفوق' },
     { id: '06', label: 'تحديد المرحلة والصف', icon: '🎯', desc: 'ابتدائي، متوسط، ثانوي' },
-    { id: '07', label: 'إدارة السجلات المركزية', icon: '📊', desc: 'تصدير درجات الطلاب CSV' },
+    { id: '07', label: 'إدارة السجلات المركزية', icon: '📊', desc: 'سجلات الدرجات وتصدير CSV' },
     { id: '08', label: 'التقارير الأكاديمية', icon: '📈', desc: 'تحليلات الأداء والمهارات' },
-    { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'مدخلات رياضية متقدمة' },
-    { id: '16', label: 'متابعة ولي الأمر', icon: '👨‍👩‍👧', desc: 'حجز المقابلات والملاحظات' },
-    { id: '18', label: 'دليل الهوية والشعار', icon: '🎨', desc: 'الألوان والرموز المعتمدة' }
+    { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'محرر معادلات رياضية متخصص' },
+    { id: '16', label: 'متابعة ولي الأمر', icon: '👨‍👩‍👧', desc: 'حجز المقابلات وتقارير التقدم' },
+    { id: '18', label: 'الهوية البصرية والشعار', icon: '🎨', desc: 'دليل الألوان والرموز الرسمية' }
   ];
 
   const isMoreActive = moreNavItems.some(item => item.id === currentScreen);
 
   return (
     <header className="app-navbar">
-      {/* Brand & Sidebar Toggle */}
+      {/* Brand & Contextual Sidebar Toggle */}
       <div className="app-navbar-brand-section">
-        <button
-          type="button"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="navbar-icon-btn"
-          title={isSidebarOpen ? 'إخفاء القائمة الجانبية' : 'إظهار القائمة الجانبية'}
-        >
-          {isSidebarOpen ? '◀' : '☰'}
-        </button>
+        {!isFullWidthPage && (
+          <button
+            type="button"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="navbar-icon-btn"
+            title={isSidebarOpen ? 'طي القائمة الجانبية' : 'فتح قائمة الأدوات'}
+          >
+            {isSidebarOpen ? '◀' : '☰'}
+          </button>
+        )}
 
         <button
           type="button"
           onClick={() => setCurrentScreen('hub')}
           className="app-navbar-brand-btn"
-          title="الانتقال إلى البوابة الرئيسية"
+          title="الانتقال إلى الصفحة الرئيسية"
         >
           <div className="navbar-logo-wrapper">
             <img
@@ -94,12 +97,12 @@ export const Navbar = () => {
           </div>
           <div>
             <div className="app-navbar-brand-title">أذكياء الرياضيات</div>
-            <div className="app-navbar-brand-tagline">منظومة الرياضيات الذكية</div>
+            <div className="app-navbar-brand-tagline">منصة التعليم الذكي للرياضيات</div>
           </div>
         </button>
       </div>
 
-      {/* Primary Educational Navigation Links */}
+      {/* Main Navigation Menu */}
       <nav className="app-navbar-nav-menu" aria-label="التنقل الرئيسي">
         {primaryNavItems.map(item => {
           const isActive = currentScreen === item.id;
@@ -117,23 +120,22 @@ export const Navbar = () => {
           );
         })}
 
-        {/* More Portals Dropdown */}
+        {/* More Academic Portals Dropdown */}
         <div className="navbar-dropdown-wrapper" ref={moreMenuRef}>
           <button
             type="button"
             onClick={() => setShowMoreMenu(!showMoreMenu)}
             className={`app-navbar-nav-link ${isMoreActive ? 'active' : ''}`}
-            title="استعراض باقي بوابات النظام"
           >
             <span className="nav-item-icon">📂</span>
-            <span className="nav-item-label">المزيد</span>
+            <span className="nav-item-label">أدوات أخرى</span>
             <span className="dropdown-caret">▼</span>
             {isMoreActive && <span className="nav-item-indicator" />}
           </button>
 
           {showMoreMenu && (
             <div className="navbar-dropdown-menu">
-              <div className="dropdown-header">بوابات إضافية في المنصة:</div>
+              <div className="dropdown-header">أدوات ومرافق المنصة التعليمية</div>
               <div className="dropdown-grid">
                 {moreNavItems.map(sub => {
                   const isSubActive = currentScreen === sub.id;
@@ -161,11 +163,11 @@ export const Navbar = () => {
         </div>
       </nav>
 
-      {/* Quick Search & Switcher Bar */}
+      {/* Search Bar */}
       <div className="app-navbar-search">
         <input
           type="text"
-          placeholder="ابحث في البوابات والمسائل والأدوات..."
+          placeholder="ابحث عن درس، مسألة، أو أداة..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onClick={() => {
@@ -176,61 +178,69 @@ export const Navbar = () => {
           className="navbar-search-input"
         />
         <span className="navbar-search-icon">🔍</span>
-        <button
-          type="button"
-          onClick={() => setIsQuickSwitcherOpen(true)}
-          className="navbar-search-shortcut"
-          title="فتح القافز السريع (⌘ K)"
-        >
-          ⌘ K
-        </button>
       </div>
 
-      {/* Right Controls: Theme + Quick Switcher Badge + User Role Dropdown */}
+      {/* Right Action Bar: Theme Toggle + Auth/Role Profile */}
       <div className="app-navbar-actions">
-        {/* All Screens Indicator / Switcher Trigger */}
-        <button
-          type="button"
-          onClick={() => setIsQuickSwitcherOpen(true)}
-          className="screens-badge-pill"
-          title="عرض جميع بوابات النظام الـ 18"
-        >
-          <span className="badge-live-dot" />
-          <span className="badge-text">18 بوابة</span>
-        </button>
+        {/* Login CTA for guests or Quick XP Pill for students */}
+        {role === 'guest' ? (
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('04')}
+            className="btn btn-primary"
+            style={{ padding: '8px 16px', fontSize: '13px', borderRadius: '12px' }}
+          >
+            تسجيل الدخول
+          </button>
+        ) : role === 'student' ? (
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('13')}
+            className="screens-badge-pill"
+            style={{
+              background: 'rgba(217, 119, 6, 0.1)',
+              borderColor: 'rgba(217, 119, 6, 0.3)',
+              color: '#d97706'
+            }}
+            title="رصيد نقاط التميز XP"
+          >
+            <span>🏆</span>
+            <span>{user?.xp || 1250} XP</span>
+          </button>
+        ) : null}
 
-        {/* Theme Toggle Button */}
+        {/* Theme Switcher */}
         <button
           type="button"
           onClick={toggleTheme}
           className="navbar-icon-btn"
-          title={theme === 'dark' ? 'التحويل للوضع الفاتح ☀️' : 'التحويل للوضع الداكن 🌙'}
+          title={theme === 'dark' ? 'تفعيل المظهر المشرق المريح للعين ☀️' : 'تفعيل الوضع الليلي الهادئ 🌙'}
         >
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
 
-        {/* User Account / Role Menu */}
+        {/* Account & Role Switcher Menu */}
         <div className="navbar-user-wrapper" ref={roleMenuRef}>
           <button
             type="button"
             onClick={() => setShowRoleMenu(!showRoleMenu)}
             className="navbar-user-btn"
-            title="إدارة الحساب وتبديل الدور"
+            title="حسابي وتبديل الدور"
           >
             <div
               className="navbar-user-avatar"
               style={{
                 background:
                   role === 'student' ? 'linear-gradient(135deg, #f59e0b, #d97706)' :
-                  role === 'teacher' ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' :
-                  role === 'supervisor' ? 'linear-gradient(135deg, #10b981, #059669)' :
+                  role === 'teacher' ? 'linear-gradient(135deg, #4338ca, #0284c7)' :
+                  role === 'supervisor' ? 'linear-gradient(135deg, #059669, #10b981)' :
                   'linear-gradient(135deg, #64748b, #475569)'
               }}
             >
               {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : '👤'}
             </div>
             <div className="navbar-user-details">
-              <div className="navbar-user-name">{user?.name || 'زائر المنصة'}</div>
+              <div className="navbar-user-name">{user?.name || 'حساب تجريبي'}</div>
               <div className="navbar-user-role">{getRoleLabel()}</div>
             </div>
             <span className="dropdown-caret">▼</span>
@@ -243,12 +253,12 @@ export const Navbar = () => {
                   {user?.name || 'زائر المنصة'}
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                  {getRoleLabel()} • منصة أذكياء الرياضيات
+                  {getRoleLabel()}
                 </div>
               </div>
 
               <div className="user-dropdown-section-title">
-                تبديل الدور للتجربة والمعاينة:
+                تبديل الدور السريع (للتجربة والمعاينة):
               </div>
 
               <button
@@ -257,13 +267,14 @@ export const Navbar = () => {
                   loginAs('student');
                   setShowRoleMenu(false);
                   showToast('تم التبديل إلى حساب الطالب (فهد السالم)', 'info');
+                  setCurrentScreen('13');
                 }}
                 className={`user-dropdown-action ${role === 'student' ? 'active' : ''}`}
               >
                 <span>🎒</span>
                 <div style={{ flex: 1, textAlign: 'right' }}>
-                  <div style={{ fontWeight: '700' }}>طالب (فهد السالم)</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>المستوى 3 • 1,250 XP</div>
+                  <div style={{ fontWeight: '700' }}>فضاء الطالب</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>فهد السالم • المستوى 3</div>
                 </div>
               </button>
 
@@ -273,13 +284,14 @@ export const Navbar = () => {
                   loginAs('teacher');
                   setShowRoleMenu(false);
                   showToast('تم التبديل إلى حساب المعلم (أ. طارق العمري)', 'info');
+                  setCurrentScreen('02');
                 }}
                 className={`user-dropdown-action ${role === 'teacher' ? 'active' : ''}`}
               >
                 <span>👨‍🏫</span>
                 <div style={{ flex: 1, textAlign: 'right' }}>
-                  <div style={{ fontWeight: '700' }}>معلم (أ. طارق العمري)</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>معلم رياضيات • 3 فصول</div>
+                  <div style={{ fontWeight: '700' }}>فضاء المعلم</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>أ. طارق العمري • معلم رياضيات</div>
                 </div>
               </button>
 
@@ -294,7 +306,19 @@ export const Navbar = () => {
                 className="user-dropdown-action"
               >
                 <span>⚙️</span>
-                <span style={{ flex: 1, textAlign: 'right' }}>الملف الشخصي وتفضيلات النظام</span>
+                <span style={{ flex: 1, textAlign: 'right' }}>الملف الشخصي والإعدادات</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrentScreen('04');
+                  setShowRoleMenu(false);
+                }}
+                className="user-dropdown-action"
+              >
+                <span>🔐</span>
+                <span style={{ flex: 1, textAlign: 'right' }}>بوابات الدخول والتسجيل</span>
               </button>
 
               <button
@@ -303,7 +327,7 @@ export const Navbar = () => {
                   await logout();
                   setShowRoleMenu(false);
                   showToast('تم تسجيل الخروج بنجاح', 'info');
-                  setCurrentScreen('04');
+                  setCurrentScreen('hub');
                 }}
                 className="user-dropdown-action logout-action"
               >

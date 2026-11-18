@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { mathSymbolCategories } from '../data/mathSymbols';
 import { copyToClipboard } from '../utils/platformHelpers';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const KeyboardSymbolsManagement = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -33,16 +34,15 @@ export const KeyboardSymbolsManagement = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          type="button"
-          onClick={() => setCurrentScreen('hub')}
-          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '700' }}
-        >
-          ← العودة لمعرض الواجهات
-        </button>
-        <span className="badge badge-cyan">12 لوحة المفاتيح والرموز الرياضية</span>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: 'لوحة الرموز والمعادلات الرياضية', icon: '⌨️' }
+        ]}
+        backTo="13"
+        backLabel="بوابة الطالب"
+        tag="محرر الرموز"
+      />
 
       <div className="page-hero">
         <h1 className="hero-title">إدارة لوحة المفاتيح والرموز الرياضية المتقدمة</h1>

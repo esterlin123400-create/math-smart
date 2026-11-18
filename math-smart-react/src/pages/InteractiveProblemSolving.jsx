@@ -7,6 +7,7 @@ import { analyzeMathStep, askMathTutor, isGeminiConfigured, checkGeminiAvailabil
 import { saveQuizResult } from '../services/dbService';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime, playErrorTone, playLevelUpFanfare } from '../utils/soundEffects';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const InteractiveProblemSolving = () => {
   const { setCurrentScreen, showToast } = useApp();
@@ -273,6 +274,15 @@ export const InteractiveProblemSolving = () => {
 
   return (
     <div>
+      <Breadcrumb
+        items={[
+          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: 'مختبر المسائل والسبورة الذكية', icon: '✍️' }
+        ]}
+        backTo="13"
+        backLabel="العودة لبوابة الطالب"
+        tag="تدريب ذكي"
+      />
       {/* Workspace Header */}
       <div style={{
         display: 'flex',

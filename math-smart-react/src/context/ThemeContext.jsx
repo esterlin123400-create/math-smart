@@ -16,9 +16,9 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     try {
       const saved = typeof window !== 'undefined' ? window.localStorage.getItem(THEME_STORAGE_KEY) : null;
-      return saved === 'light' || saved === 'dark' ? saved : 'dark';
+      return saved === 'light' || saved === 'dark' ? saved : 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 
