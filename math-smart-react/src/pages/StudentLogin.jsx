@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -102,7 +102,7 @@ export const StudentLogin = () => {
                     width: '52px',
                     height: '52px',
                     borderRadius: '50%',
-                    background: selectedAvatar === av.src ? '#4f46e5' : 'var(--bg-subtle)',
+                    background: selectedAvatar === av.src ? '#0d9488' : 'var(--bg-subtle)',
                     border: selectedAvatar === av.src ? '3px solid #38bdf8' : '1px solid var(--border-card)',
                     padding: '6px',
                     cursor: 'pointer',
@@ -169,7 +169,7 @@ export const StudentLogin = () => {
             <button
               type="button"
               onClick={() => setCurrentScreen('15')}
-              style={{ background: 'none', border: 'none', color: '#ec4899', fontWeight: '800', cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: '#f97316', fontWeight: '800', cursor: 'pointer' }}
             >
               سجل حساباً جديداً مجاناً
             </button>

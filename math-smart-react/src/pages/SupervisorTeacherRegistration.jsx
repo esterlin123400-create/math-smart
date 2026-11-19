@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -77,9 +77,9 @@ export const SupervisorTeacherRegistration = () => {
             borderRadius: '20px',
             overflow: 'hidden',
             margin: '0 auto 16px',
-            boxShadow: '0 8px 25px rgba(79, 70, 229, 0.4)',
+            boxShadow: '0 8px 25px rgba(13, 148, 136, 0.4)',
             border: '2px solid rgba(56, 189, 248, 0.4)',
-            background: '#090d1a'
+            background: '#e6faf5'
           }}>
             <img
               src="/assets/math_smart_logo.jpg"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -85,8 +85,8 @@ export const GradeLevelSelection = () => {
             key={st.id}
             onClick={() => setSelectedStage(st.id)}
             style={{
-              background: selectedStage === st.id ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.22), rgba(6, 182, 212, 0.14))' : 'var(--bg-card)',
-              border: selectedStage === st.id ? '2px solid #6366f1' : '1px solid var(--border-card)',
+              background: selectedStage === st.id ? 'linear-gradient(135deg, rgba(13, 148, 136, 0.22), rgba(6, 182, 212, 0.14))' : 'var(--bg-card)',
+              border: selectedStage === st.id ? '2px solid #14b8a6' : '1px solid var(--border-card)',
               borderRadius: '20px',
               padding: '24px',
               cursor: 'pointer',

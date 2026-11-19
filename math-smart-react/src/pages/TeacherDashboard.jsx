@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
@@ -29,7 +29,7 @@ export const TeacherDashboard = () => {
   const stats = [
     { label: 'إجمالي الطلاب المسجلين', value: '96 طالباً', icon: '👨‍🎓', color: '#38bdf8', change: '+12 هذا الشهر' },
     { label: 'متوسط نسبة الإتقان', value: '88.4%', icon: '📈', color: '#10b981', change: '+4.2% تحسن عام' },
-    { label: 'الاختبارات والتقييمات النشطة', value: `${activeAssignmentsCount} اختبارات`, icon: '📝', color: '#a855f7', change: `${assignments.length} إجمالي المرسلة` },
+    { label: 'الاختبارات والتقييمات النشطة', value: `${activeAssignmentsCount} اختبارات`, icon: '📝', color: '#fb923c', change: `${assignments.length} إجمالي المرسلة` },
     { label: 'التحديات المباشرة اليوم', value: '14 جولة', icon: '⚡', color: '#f59e0b', change: 'معدل تنافسي عالي' }
   ];
 
@@ -153,7 +153,7 @@ export const TeacherDashboard = () => {
                   padding: '6px 14px',
                   borderRadius: '20px',
                   border: '1px solid var(--border-card)',
-                  background: selectedClass === cls ? '#4f46e5' : 'var(--bg-subtle)',
+                  background: selectedClass === cls ? '#0d9488' : 'var(--bg-subtle)',
                   color: selectedClass === cls ? '#fff' : 'var(--text-body)',
                   cursor: 'pointer',
                   fontSize: '12px',
@@ -188,7 +188,7 @@ export const TeacherDashboard = () => {
                   <td style={{ width: '180px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ flex: 1, height: '6px', background: 'var(--bg-subtle-strong)', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{ width: `${student.progress}%`, height: '100%', background: 'linear-gradient(90deg, #4f46e5, #06b6d4)' }} />
+                        <div style={{ width: `${student.progress}%`, height: '100%', background: 'linear-gradient(90deg, #0d9488, #06b6d4)' }} />
                       </div>
                       <span style={{ fontSize: '12px', fontFamily: 'var(--font-en)' }}>{student.progress}%</span>
                     </div>

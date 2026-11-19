@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -116,7 +116,7 @@ export const ProfileAndSettings = () => {
               padding: '10px 20px',
               borderRadius: '12px',
               border: '1px solid var(--border-card)',
-              background: activeTab === tab.id ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
+              background: activeTab === tab.id ? 'linear-gradient(135deg, #0d9488, #06b6d4)' : 'var(--bg-subtle)',
               color: activeTab === tab.id ? '#fff' : 'var(--text-body)',
               cursor: 'pointer',
               fontSize: '13px',
@@ -139,9 +139,9 @@ export const ProfileAndSettings = () => {
                 width: '90px',
                 height: '90px',
                 borderRadius: '50%',
-                background: '#4f46e5',
+                background: '#0d9488',
                 padding: '8px',
-                boxShadow: '0 8px 25px rgba(79, 70, 229, 0.4)',
+                boxShadow: '0 8px 25px rgba(13, 148, 136, 0.4)',
                 flexShrink: 0
               }}>
                 <img src={user?.avatar || '/assets/avatar_fahad_hero.svg'} alt="Avatar" style={{ width: '100%', height: '100%' }} />
@@ -164,7 +164,7 @@ export const ProfileAndSettings = () => {
                         width: '44px',
                         height: '44px',
                         borderRadius: '50%',
-                        background: user?.avatar === av ? '#4f46e5' : 'var(--bg-subtle)',
+                        background: user?.avatar === av ? '#0d9488' : 'var(--bg-subtle)',
                         border: user?.avatar === av ? '2px solid #38bdf8' : '1px solid var(--border-card)',
                         padding: '4px',
                         cursor: 'pointer'

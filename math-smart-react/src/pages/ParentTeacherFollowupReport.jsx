@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
@@ -106,15 +106,15 @@ export const ParentTeacherFollowupReport = () => {
 
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>المنافسة والروح الرياضية</div>
-          <div style={{ fontSize: '32px', fontWeight: '900', color: '#ec4899', fontFamily: 'var(--font-en)' }}>ممتاز</div>
-          <span style={{ fontSize: '11px', color: '#ec4899' }}>تعاوني مع زملائه في الفريق</span>
+          <div style={{ fontSize: '32px', fontWeight: '900', color: '#f97316', fontFamily: 'var(--font-en)' }}>ممتاز</div>
+          <span style={{ fontSize: '11px', color: '#f97316' }}>تعاوني مع زملائه في الفريق</span>
         </div>
       </div>
 
       {/* TEACHER NOTE CARD */}
-      <div className="glass-card" style={{ marginBottom: '32px', padding: '30px', borderColor: 'rgba(79, 70, 229, 0.4)' }}>
+      <div className="glass-card" style={{ marginBottom: '32px', padding: '30px', borderColor: 'rgba(13, 148, 136, 0.4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#4f46e5', padding: '6px', flexShrink: 0 }}>
+          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#0d9488', padding: '6px', flexShrink: 0 }}>
             <img src="/assets/avatar_math_wizard.svg" alt="Teacher" style={{ width: '100%', height: '100%' }} />
           </div>
           <div>
@@ -129,7 +129,7 @@ export const ParentTeacherFollowupReport = () => {
 
         <div style={{
           background: 'var(--bg-inset)',
-          borderRight: '4px solid #4f46e5',
+          borderRight: '4px solid #0d9488',
           padding: '20px 24px',
           borderRadius: '12px',
           fontSize: '14px',

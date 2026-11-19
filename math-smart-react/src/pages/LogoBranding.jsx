@@ -17,13 +17,13 @@ export const LogoBranding = () => {
   ];
 
   const colors = [
-    { name: 'الأزرق النيلي الرئيسي (Indigo Primary)', hex: '#4f46e5', cssVar: '--primary', role: 'الهوية البصرية والأزرار والمكونات الأساسية' },
-    { name: 'السماوي السيبراني (Cyan Accent)', hex: '#06b6d4', cssVar: '--accent-cyan', role: 'المؤشرات والبيانات التفاعلية ونبضات التوهج' },
-    { name: 'البنفسجي الإشعاعي (Neon Purple)', hex: '#8b5cf6', cssVar: '--accent-purple', role: 'شارات العبقرية وشرارات الإلهام الرياضي' },
-    { name: 'الوردي النيوني (Neon Pink)', hex: '#ec4899', cssVar: '--accent-pink', role: 'حلبة التحديات المباشرة والمبارزات الحماسية' },
-    { name: 'الزمردي (Emerald Success)', hex: '#10b981', cssVar: '--accent-emerald', role: 'الإجابات الصحيحة ونسب الإتقان والتفوق' },
-    { name: 'الكهرماني (Amber Energy)', hex: '#f59e0b', cssVar: '--accent-amber', role: 'النسبة الذهبية ونقاط الخبرة XP والمهام اليومية' },
-    { name: 'الكحلي الفضائي الداكن (Deep Obsidian)', hex: '#060913', cssVar: '--bg-base', role: 'الخلفيات وأسطح الشاشات الزجاجية السيبرانية' }
+    { name: 'الفيروزي الرئيسي (Turquoise Primary)', hex: '#0d9488', cssVar: '--primary', role: 'الهوية البصرية والأزرار والمكونات الأساسية' },
+    { name: 'الفيروزي المشرق (Bright Turquoise)', hex: '#14b8a6', cssVar: '--primary-light', role: 'المؤشرات والبيانات التفاعلية والتأثيرات الهادئة' },
+    { name: 'الأخضر النعناعي (Mint Green)', hex: '#10b981', cssVar: '--accent-emerald', role: 'الإجابات الصحيحة ونسب الإتقان والتفوق الدراسي' },
+    { name: 'النعناعي الفاتح (Soft Mint)', hex: '#34d399', cssVar: '--accent-mint', role: 'التدرجات اللطيفة وإبراز المهارات المكتسبة' },
+    { name: 'البرتقالي الفاتح (Light Orange)', hex: '#fb923c', cssVar: '--accent-amber', role: 'نقاط الخبرة XP والشارات والمهام اليومية' },
+    { name: 'البرتقالي الدافئ (Warm Orange)', hex: '#f97316', cssVar: '--accent-pink', role: 'حلبة التحديات المباشرة والمبارزات الحماسية' },
+    { name: 'الأبيض النعناعي الفاتح (Mint Ivory)', hex: '#f4fbf9', cssVar: '--bg-base', role: 'الخلفيات الفاتحة والمريحة للعين في جميع الصفحات' }
   ];
 
   const handleCopyHex = async (color) => {
@@ -55,7 +55,7 @@ export const LogoBranding = () => {
         padding: '50px 30px',
         textAlign: 'center',
         marginBottom: '28px',
-        borderColor: 'rgba(99, 102, 241, 0.45)',
+        borderColor: 'rgba(20, 184, 166, 0.45)',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -67,7 +67,7 @@ export const LogoBranding = () => {
           transform: 'translateX(-50%)',
           width: '380px',
           height: '260px',
-          background: 'radial-gradient(ellipse at center, rgba(79, 70, 229, 0.35) 0%, rgba(6, 182, 212, 0.15) 50%, transparent 75%)',
+          background: 'radial-gradient(ellipse at center, rgba(13, 148, 136, 0.35) 0%, rgba(6, 182, 212, 0.15) 50%, transparent 75%)',
           pointerEvents: 'none'
         }} />
 
@@ -78,9 +78,9 @@ export const LogoBranding = () => {
           margin: '0 auto 24px',
           borderRadius: '38px',
           overflow: 'hidden',
-          boxShadow: '0 20px 50px rgba(79, 70, 229, 0.5), 0 0 30px rgba(6, 182, 212, 0.35)',
+          boxShadow: '0 20px 50px rgba(13, 148, 136, 0.5), 0 0 30px rgba(6, 182, 212, 0.35)',
           border: '2px solid rgba(56, 189, 248, 0.5)',
-          background: '#090d1a',
+          background: '#e6faf5',
           position: 'relative'
         }}>
           <img
@@ -159,15 +159,15 @@ export const LogoBranding = () => {
                 gap: '8px',
                 padding: '10px 18px',
                 borderRadius: '16px',
-                border: isActive ? '1px solid #6366f1' : '1px solid var(--border-card)',
-                background: isActive ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
+                border: isActive ? '1px solid #14b8a6' : '1px solid var(--border-card)',
+                background: isActive ? 'linear-gradient(135deg, #0d9488, #06b6d4)' : 'var(--bg-subtle)',
                 color: isActive ? '#fff' : 'var(--text-muted)',
                 cursor: 'pointer',
                 fontFamily: 'var(--font-ar)',
                 fontSize: '13px',
                 fontWeight: '700',
                 transition: 'all 0.2s',
-                boxShadow: isActive ? '0 4px 15px rgba(79, 70, 229, 0.35)' : 'none'
+                boxShadow: isActive ? '0 4px 15px rgba(13, 148, 136, 0.35)' : 'none'
               }}
             >
               <span>{tab.icon}</span>
@@ -202,7 +202,7 @@ export const LogoBranding = () => {
             </div>
 
             <div className="glass-card" style={{ padding: '24px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(20, 184, 166, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
                 🧊
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '8px' }}>
@@ -214,7 +214,7 @@ export const LogoBranding = () => {
             </div>
 
             <div className="glass-card" style={{ padding: '24px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(236, 72, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(249, 115, 22, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
                 ✨
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '8px' }}>
@@ -241,7 +241,7 @@ export const LogoBranding = () => {
             gap: '20px'
           }}>
             {/* Dark Mode */}
-            <div className="glass-card" style={{ textAlign: 'center', background: '#0b1120', padding: '30px 20px' }}>
+            <div className="glass-card" style={{ textAlign: 'center', background: '#143b40', padding: '30px 20px' }}>
               <div style={{ width: '80px', height: '80px', margin: '0 auto 16px', borderRadius: '18px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <img src="/assets/math_smart_logo.jpg" alt="Dark Mode" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -250,7 +250,7 @@ export const LogoBranding = () => {
             </div>
 
             {/* Vector SVG Icon */}
-            <div className="glass-card" style={{ textAlign: 'center', background: '#0f172a', padding: '30px 20px' }}>
+            <div className="glass-card" style={{ textAlign: 'center', background: '#19474c', padding: '30px 20px' }}>
               <div style={{ width: '80px', height: '80px', margin: '0 auto 16px' }}>
                 <img src="/assets/math_smart_logo.svg" alt="Vector SVG" style={{ width: '100%', height: '100%' }} />
               </div>
@@ -259,16 +259,16 @@ export const LogoBranding = () => {
             </div>
 
             {/* Light Mode / Printing */}
-            <div className="glass-card" style={{ textAlign: 'center', background: '#f8fafc', color: '#0f172a', padding: '30px 20px', borderColor: '#cbd5e1' }}>
+            <div className="glass-card" style={{ textAlign: 'center', background: '#f8fafc', color: '#134e4a', padding: '30px 20px', borderColor: '#cbd5e1' }}>
               <div style={{ width: '80px', height: '80px', margin: '0 auto 16px', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.15)' }}>
                 <img src="/assets/math_smart_logo.jpg" alt="Light Mode" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', marginBottom: '4px' }}>تطبيق المطبوعات والشهادات</div>
+              <div style={{ fontSize: '15px', fontWeight: '800', color: '#134e4a', marginBottom: '4px' }}>تطبيق المطبوعات والشهادات</div>
               <div style={{ fontSize: '12px', color: '#64748b' }}>لشهادات الشرف، خطابات التقدير، والتقارير المدرسية الرسمية</div>
             </div>
 
             {/* Horizontal Lockup */}
-            <div className="glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '30px 20px', background: '#0f172a' }}>
+            <div className="glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '30px 20px', background: '#19474c' }}>
               <div style={{ width: '56px', height: '56px', borderRadius: '14px', overflow: 'hidden' }}>
                 <img src="/assets/math_smart_logo.jpg" alt="Horizontal Lockup" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -311,7 +311,7 @@ export const LogoBranding = () => {
                   <div style={{ fontSize: '14px', fontWeight: '900', color: '#0284c7', fontFamily: 'var(--font-en)', marginBottom: '4px' }}>
                     {c.hex}
                   </div>
-                  <div style={{ fontSize: '10px', color: '#6366f1', fontFamily: 'var(--font-en)', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '10px', color: '#14b8a6', fontFamily: 'var(--font-en)', marginBottom: '6px' }}>
                     {c.cssVar}
                   </div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{c.role}</div>

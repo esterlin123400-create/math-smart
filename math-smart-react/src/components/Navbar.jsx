@@ -231,9 +231,9 @@ export const Navbar = () => {
               className="navbar-user-avatar"
               style={{
                 background:
-                  role === 'student' ? 'linear-gradient(135deg, #f59e0b, #d97706)' :
-                  role === 'teacher' ? 'linear-gradient(135deg, #4338ca, #0284c7)' :
-                  role === 'supervisor' ? 'linear-gradient(135deg, #059669, #10b981)' :
+                  role === 'student' ? 'linear-gradient(135deg, #fb923c, #f97316)' :
+                  role === 'teacher' ? 'linear-gradient(135deg, #10b981, #14b8a6)' :
+                  role === 'supervisor' ? 'linear-gradient(135deg, #0d9488, #06b6d4)' :
                   'linear-gradient(135deg, #64748b, #475569)'
               }}
             >

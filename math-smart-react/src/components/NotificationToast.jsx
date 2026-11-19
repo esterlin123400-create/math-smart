@@ -8,7 +8,7 @@ export const NotificationToast = () => {
 
   const bgColors = {
     success: 'linear-gradient(135deg, #10b981, #059669)',
-    info: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
+    info: 'linear-gradient(135deg, #10b981, #14b8a6)',
     warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
     danger: 'linear-gradient(135deg, #ef4444, #b91c1c)'
   };

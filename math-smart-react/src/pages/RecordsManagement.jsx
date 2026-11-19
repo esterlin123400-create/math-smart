@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { mockRecordsList } from '../data/mockData';
 import { getAllQuizResults } from '../services/dbService';
@@ -210,7 +210,7 @@ export const RecordsManagement = () => {
                   padding: '6px 14px',
                   borderRadius: '20px',
                   border: '1px solid var(--border-card)',
-                  background: filterActivity === f.id ? '#4f46e5' : 'var(--bg-subtle)',
+                  background: filterActivity === f.id ? '#0d9488' : 'var(--bg-subtle)',
                   color: filterActivity === f.id ? '#fff' : 'var(--text-body)',
                   cursor: 'pointer',
                   fontSize: '12px',

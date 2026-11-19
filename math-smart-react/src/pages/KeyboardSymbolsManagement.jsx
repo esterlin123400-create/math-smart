@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { mathSymbolCategories } from '../data/mathSymbols';
 import { copyToClipboard } from '../utils/platformHelpers';
@@ -52,7 +52,7 @@ export const KeyboardSymbolsManagement = () => {
       </div>
 
       {/* FORMULA TEST LAB */}
-      <div className="glass-card" style={{ marginBottom: '32px', padding: '28px', borderColor: 'rgba(99, 102, 241, 0.4)' }}>
+      <div className="glass-card" style={{ marginBottom: '32px', padding: '28px', borderColor: 'rgba(20, 184, 166, 0.4)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <h2 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-heading)' }}>مختبر تجربة كتابة المعادلات والصيغ</h2>
@@ -96,7 +96,7 @@ export const KeyboardSymbolsManagement = () => {
             fontSize: '22px',
             fontWeight: '800',
             background: 'var(--bg-input)',
-            border: '2px solid rgba(99, 102, 241, 0.5)',
+            border: '2px solid rgba(20, 184, 166, 0.5)',
             borderRadius: '14px',
             color: '#0ea5e9',
             fontFamily: 'var(--font-en), var(--font-ar)',
@@ -134,7 +134,7 @@ export const KeyboardSymbolsManagement = () => {
               padding: '8px 16px',
               borderRadius: '20px',
               border: '1px solid var(--border-card)',
-              background: selectedCategory === 'all' ? '#4f46e5' : 'var(--bg-subtle)',
+              background: selectedCategory === 'all' ? '#0d9488' : 'var(--bg-subtle)',
               color: selectedCategory === 'all' ? '#fff' : 'var(--text-body)',
               cursor: 'pointer',
               fontSize: '13px',
@@ -152,7 +152,7 @@ export const KeyboardSymbolsManagement = () => {
                 padding: '8px 16px',
                 borderRadius: '20px',
                 border: '1px solid var(--border-card)',
-                background: selectedCategory === cat.id ? '#4f46e5' : 'var(--bg-subtle)',
+                background: selectedCategory === cat.id ? '#0d9488' : 'var(--bg-subtle)',
                 color: selectedCategory === cat.id ? '#fff' : 'var(--text-body)',
                 cursor: 'pointer',
                 fontSize: '13px',
@@ -203,8 +203,8 @@ export const KeyboardSymbolsManagement = () => {
                     transition: 'all 0.2s'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(79, 70, 229, 0.18)';
-                    e.currentTarget.style.borderColor = '#818cf8';
+                    e.currentTarget.style.background = 'rgba(13, 148, 136, 0.18)';
+                    e.currentTarget.style.borderColor = '#14b8a6';
                     e.currentTarget.style.transform = 'translateY(-3px)';
                   }}
                   onMouseLeave={(e) => {
@@ -235,10 +235,10 @@ export const KeyboardSymbolsManagement = () => {
                       onClick={() => handleInsertSymbol(sym.char)}
                       style={{
                         padding: '3px 8px',
-                        background: 'rgba(79, 70, 229, 0.2)',
+                        background: 'rgba(13, 148, 136, 0.2)',
                         border: 'none',
                         borderRadius: '6px',
-                        color: '#6366f1',
+                        color: '#14b8a6',
                         fontSize: '10px',
                         fontWeight: '700',
                         cursor: 'pointer'

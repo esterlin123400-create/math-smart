@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
-const THEME_STORAGE_KEY = 'math_smart_theme_v1';
+const THEME_STORAGE_KEY = 'math_smart_theme_v2';
 
 /**
  * @typedef {{ theme: 'dark' | 'light', toggleTheme: () => void }} ThemeContextValue

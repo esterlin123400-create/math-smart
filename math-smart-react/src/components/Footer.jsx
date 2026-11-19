@@ -72,9 +72,9 @@ export const Footer = () => {
                 height: '44px',
                 borderRadius: '14px',
                 overflow: 'hidden',
-                border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                boxShadow: '0 6px 20px rgba(79, 70, 229, 0.4)',
-                background: '#090d1a',
+                border: '1.5px solid rgba(45, 212, 191, 0.5)',
+                boxShadow: '0 6px 20px rgba(20, 184, 166, 0.3)',
+                background: '#e6faf5',
                 flexShrink: 0
               }}>
                 <img
@@ -153,7 +153,7 @@ export const Footer = () => {
                 marginBottom: '16px',
                 position: 'relative',
                 paddingBottom: '8px',
-                borderBottom: '2px solid rgba(99, 102, 241, 0.3)',
+                borderBottom: '2px solid rgba(20, 184, 166, 0.35)',
                 display: 'inline-block'
               }}>
                 {col.title}
@@ -178,18 +178,18 @@ export const Footer = () => {
                         textAlign: 'right',
                         transition: 'color 0.2s'
                       }}
-                      onMouseEnter={(e) => { e.currentTarget.style.color = '#38bdf8'; }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#0d9488'; }}
                       onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
                     >
                       <span>• {link.label}</span>
                       {link.badge && (
                         <span style={{
                           fontSize: '10px',
-                          background: 'rgba(99, 102, 241, 0.16)',
-                          color: '#818cf8',
+                          background: 'rgba(20, 184, 166, 0.14)',
+                          color: '#0d9488',
                           padding: '1px 6px',
                           borderRadius: '8px',
-                          border: '1px solid rgba(99, 102, 241, 0.3)'
+                          border: '1px solid rgba(20, 184, 166, 0.3)'
                         }}>
                           {link.badge}
                         </span>

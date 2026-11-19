@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockQuestionsResult } from '../data/mockData';
@@ -45,19 +45,19 @@ export const SmartAssessmentResult = () => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>شهادة إتقان - ${studentName}</title>
   <style>
-    body { font-family: Tahoma, Arial, sans-serif; background: #f1f5f9; color: #0f172a; margin: 0; padding: 32px; }
-    .cert { max-width: 820px; margin: 0 auto; background: #ffffff; border: 8px double #4f46e5; border-radius: 20px; padding: 40px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); }
+    body { font-family: Tahoma, Arial, sans-serif; background: #f1f5f9; color: #134e4a; margin: 0; padding: 32px; }
+    .cert { max-width: 820px; margin: 0 auto; background: #ffffff; border: 8px double #0d9488; border-radius: 20px; padding: 40px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px; }
-    .brand { font-size: 22px; font-weight: 900; color: #4f46e5; }
+    .brand { font-size: 22px; font-weight: 900; color: #0d9488; }
     .badge { background: #ecfdf5; color: #059669; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; border: 1px solid #10b981; }
-    h1 { text-align: center; color: #1e293b; font-size: 30px; margin: 10px 0 8px; }
+    h1 { text-align: center; color: #134e4a; font-size: 30px; margin: 10px 0 8px; }
     .subtitle { text-align: center; color: #64748b; font-size: 15px; margin-bottom: 26px; }
-    .student { text-align: center; font-size: 28px; font-weight: 900; color: #4f46e5; margin: 12px 0; }
+    .student { text-align: center; font-size: 28px; font-weight: 900; color: #0d9488; margin: 12px 0; }
     .metrics { display: flex; justify-content: center; gap: 28px; margin: 26px 0; flex-wrap: wrap; }
     .metric-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 14px 26px; text-align: center; }
     .metric-val { font-size: 28px; font-weight: 900; color: #059669; }
-    .box { background: #f8fafc; border-right: 4px solid #4f46e5; padding: 16px 20px; border-radius: 10px; margin-top: 20px; line-height: 1.8; }
-    .print-btn { display: block; margin: 26px auto 0; background: #4f46e5; color: #fff; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; cursor: pointer; }
+    .box { background: #f8fafc; border-right: 4px solid #0d9488; padding: 16px 20px; border-radius: 10px; margin-top: 20px; line-height: 1.8; }
+    .print-btn { display: block; margin: 26px auto 0; background: #0d9488; color: #fff; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; cursor: pointer; }
     @media print { body { background: #fff; padding: 0; } .cert { box-shadow: none; } .print-btn { display: none; } }
   </style>
 </head>
@@ -183,7 +183,7 @@ export const SmartAssessmentResult = () => {
           right: 0,
           left: 0,
           height: '4px',
-          background: 'linear-gradient(90deg, #10b981, #3b82f6, #a855f7)'
+          background: 'linear-gradient(90deg, #10b981, #3b82f6, #fb923c)'
         }} />
 
         {/* Trophy Mascot */}
@@ -257,14 +257,14 @@ export const SmartAssessmentResult = () => {
       </div>
 
       {/* AI FEEDBACK ANALYSIS CARD */}
-      <div className="glass-card" style={{ marginBottom: '32px', borderColor: 'rgba(99, 102, 241, 0.4)' }}>
+      <div className="glass-card" style={{ marginBottom: '32px', borderColor: 'rgba(20, 184, 166, 0.4)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
               width: '40px',
               height: '40px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+              background: 'linear-gradient(135deg, #14b8a6, #fb923c)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -287,7 +287,7 @@ export const SmartAssessmentResult = () => {
             onClick={handleRefreshAiReport}
             disabled={aiLoading}
             className="btn btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '12px', borderColor: '#818cf8', color: '#818cf8' }}
+            style={{ padding: '8px 14px', fontSize: '12px', borderColor: '#14b8a6', color: '#14b8a6' }}
           >
             {aiLoading ? 'جاري التوليد...' : '🔄 تحديث التحليل الذكي'}
           </button>

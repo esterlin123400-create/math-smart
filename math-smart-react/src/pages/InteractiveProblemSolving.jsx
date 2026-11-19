@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { MathKeypad } from '../components/MathKeypad';
@@ -327,7 +327,7 @@ export const InteractiveProblemSolving = () => {
             type="button"
             onClick={() => setShowTutorModal(true)}
             className="btn btn-secondary"
-            style={{ padding: '6px 14px', fontSize: '12px', borderColor: '#818cf8', color: '#818cf8' }}
+            style={{ padding: '6px 14px', fontSize: '12px', borderColor: '#14b8a6', color: '#14b8a6' }}
           >
             💬 اسأل المعلم الذكي
           </button>
@@ -370,8 +370,8 @@ export const InteractiveProblemSolving = () => {
                 fontSize: '12px',
                 fontWeight: '700',
                 cursor: 'pointer',
-                border: isSelected ? '1px solid #4f46e5' : '1px solid var(--border-card)',
-                background: isSelected ? 'rgba(79, 70, 229, 0.18)' : 'var(--bg-subtle)',
+                border: isSelected ? '1px solid #0d9488' : '1px solid var(--border-card)',
+                background: isSelected ? 'rgba(13, 148, 136, 0.18)' : 'var(--bg-subtle)',
                 color: isSelected ? 'var(--text-heading)' : 'var(--text-muted)',
                 transition: 'all 0.2s'
               }}
@@ -430,8 +430,8 @@ export const InteractiveProblemSolving = () => {
 
             {/* Mathematical Equation Display */}
             <div style={{
-              background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(6, 182, 212, 0.1))',
-              border: '1px solid rgba(79, 70, 229, 0.3)',
+              background: 'linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(6, 182, 212, 0.1))',
+              border: '1px solid rgba(13, 148, 136, 0.3)',
               borderRadius: '14px',
               padding: '12px 18px',
               display: 'flex',
@@ -518,8 +518,8 @@ export const InteractiveProblemSolving = () => {
                   minWidth: '140px',
                   padding: '12px',
                   fontSize: '14px',
-                  background: 'linear-gradient(135deg, #6366f1, #a855f7)',
-                  borderColor: '#a855f7'
+                  background: 'linear-gradient(135deg, #14b8a6, #fb923c)',
+                  borderColor: '#fb923c'
                 }}
               >
                 {aiAnalyzing ? 'جاري الفحص بالذكاء الاصطناعي...' : 'تحليل الخطوة بالـ AI 🤖'}
@@ -733,8 +733,8 @@ export const InteractiveProblemSolving = () => {
               <div style={{
                 marginTop: '16px',
                 padding: '16px',
-                background: 'rgba(79, 70, 229, 0.15)',
-                border: '1px solid rgba(79, 70, 229, 0.3)',
+                background: 'rgba(13, 148, 136, 0.15)',
+                border: '1px solid rgba(13, 148, 136, 0.3)',
                 borderRadius: '12px',
                 fontSize: '13px',
                 lineHeight: 1.8,

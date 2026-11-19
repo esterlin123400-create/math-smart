@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockUserData } from '../data/mockData';
@@ -47,7 +47,7 @@ export const StudentDashboard = () => {
           right: 0,
           left: 0,
           height: '4px',
-          background: 'linear-gradient(90deg, #f59e0b, #ec4899, #4f46e5)'
+          background: 'linear-gradient(90deg, #f59e0b, #f97316, #0d9488)'
         }} />
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
@@ -90,7 +90,7 @@ export const StudentDashboard = () => {
                   <div style={{
                     width: `${progressPct}%`,
                     height: '100%',
-                    background: 'linear-gradient(90deg, #f59e0b, #ec4899)'
+                    background: 'linear-gradient(90deg, #f59e0b, #f97316)'
                   }} />
                 </div>
               </div>
@@ -119,8 +119,8 @@ export const StudentDashboard = () => {
 
       {/* DAILY QUEST BANNER */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.15))',
-        border: '1px solid rgba(99, 102, 241, 0.4)',
+        background: 'linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(6, 182, 212, 0.15))',
+        border: '1px solid rgba(20, 184, 166, 0.4)',
         borderRadius: '20px',
         padding: '24px 30px',
         display: 'flex',
@@ -176,8 +176,8 @@ export const StudentDashboard = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '14px 18px',
-                background: 'rgba(236, 72, 153, 0.1)',
-                border: '1px solid rgba(236, 72, 153, 0.3)',
+                background: 'rgba(249, 115, 22, 0.1)',
+                border: '1px solid rgba(249, 115, 22, 0.3)',
                 borderRadius: '14px',
                 cursor: 'pointer'
               }}
@@ -199,8 +199,8 @@ export const StudentDashboard = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '14px 18px',
-                background: 'rgba(99, 102, 241, 0.1)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
+                background: 'rgba(20, 184, 166, 0.1)',
+                border: '1px solid rgba(20, 184, 166, 0.3)',
                 borderRadius: '14px',
                 cursor: 'pointer'
               }}

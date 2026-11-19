@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -97,7 +97,7 @@ export const PasswordRecovery = () => {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                background: step >= s ? '#4f46e5' : 'var(--bg-subtle-strong)',
+                background: step >= s ? '#0d9488' : 'var(--bg-subtle-strong)',
                 color: step >= s ? '#fff' : 'var(--text-muted)',
                 display: 'flex',
                 alignItems: 'center',

@@ -4,16 +4,16 @@ import { useApp } from '../context/AppContext';
 export const ScratchpadCanvas = ({ height = 300 }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [color, setColor] = useState('#38bdf8');
+  const [color, setColor] = useState('#0d9488');
   const [lineWidth, setLineWidth] = useState(3);
   const [tool, setTool] = useState('pen'); // 'pen' | 'eraser'
   const { showToast } = useApp();
 
   const drawMathGrid = useCallback((ctx, w, h) => {
-    ctx.fillStyle = '#040711';
+    ctx.fillStyle = '#fafefd';
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.045)';
+    ctx.strokeStyle = 'rgba(13, 148, 136, 0.1)';
     ctx.lineWidth = 1;
     const step = 25;
     for (let x = 0; x < w; x += step) {
@@ -95,7 +95,7 @@ export const ScratchpadCanvas = ({ height = 300 }) => {
     const ctx = canvas.getContext('2d');
     const { x, y } = getCoordinates(e);
 
-    ctx.strokeStyle = tool === 'eraser' ? '#040711' : color;
+    ctx.strokeStyle = tool === 'eraser' ? '#fafefd' : color;
     ctx.lineWidth = tool === 'eraser' ? lineWidth * 3.5 : lineWidth;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -153,7 +153,7 @@ export const ScratchpadCanvas = ({ height = 300 }) => {
               padding: '4px 10px',
               borderRadius: '8px',
               border: 'none',
-              background: tool === 'pen' ? '#4f46e5' : 'var(--bg-subtle)',
+              background: tool === 'pen' ? '#0d9488' : 'var(--bg-subtle)',
               color: tool === 'pen' ? '#fff' : 'var(--text-body)',
               cursor: 'pointer',
               fontSize: '12px',
@@ -207,7 +207,7 @@ export const ScratchpadCanvas = ({ height = 300 }) => {
           {/* Color Palettes */}
           {tool === 'pen' && (
             <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              {['#38bdf8', '#10b981', '#fbbf24', '#f43f5e', '#ffffff'].map(c => (
+              {['#0d9488', '#10b981', '#f97316', '#f43f5e', '#134e4a'].map(c => (
                 <button
                   type="button"
                   key={c}
@@ -219,7 +219,7 @@ export const ScratchpadCanvas = ({ height = 300 }) => {
                     borderRadius: '50%',
                     background: c,
                     cursor: 'pointer',
-                    border: color === c ? '2px solid #818cf8' : '1px solid rgba(0,0,0,0.5)',
+                    border: color === c ? '2px solid #14b8a6' : '1px solid rgba(13, 148, 136, 0.35)',
                     transform: color === c ? 'scale(1.2)' : 'scale(1)'
                   }}
                 />

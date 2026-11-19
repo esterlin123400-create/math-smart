@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { createChallengeRoom, subscribeToRoom, joinChallengeRoom, updateChallengeRoomScore } from '../services/dbService';
@@ -299,7 +299,7 @@ export const LiveChallengeArena = () => {
             ← مغادرة الحلبة
           </button>
           <div style={{
-            background: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+            background: 'linear-gradient(135deg, #f97316, #8b5cf6)',
             padding: '6px 14px',
             borderRadius: '20px',
             fontWeight: '900',
@@ -405,14 +405,14 @@ export const LiveChallengeArena = () => {
             width: '60px',
             height: '60px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ec4899, #f59e0b)',
+            background: 'linear-gradient(135deg, #f97316, #f59e0b)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: '900',
             fontSize: '18px',
             color: '#fff',
-            boxShadow: '0 0 25px rgba(236, 72, 153, 0.5)'
+            boxShadow: '0 0 25px rgba(249, 115, 22, 0.5)'
           }}>
             VS
           </div>
@@ -431,13 +431,13 @@ export const LiveChallengeArena = () => {
 
         {/* Player 2 Card */}
         <div className="glass-card" style={{
-          borderColor: 'rgba(236, 72, 153, 0.4)',
-          background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.12), var(--bg-card))'
+          borderColor: 'rgba(249, 115, 22, 0.4)',
+          background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.12), var(--bg-card))'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ flex: 1, textAlign: 'left' }}>
               <div style={{ fontSize: '16px', fontWeight: '900', color: 'var(--text-heading)' }}>{player2.name}</div>
-              <div style={{ fontSize: '12px', color: '#ec4899' }}>الحالة: {player2.status}</div>
+              <div style={{ fontSize: '12px', color: '#f97316' }}>الحالة: {player2.status}</div>
               <div style={{ fontSize: '26px', fontWeight: '900', color: '#db2777', fontFamily: 'var(--font-en)' }}>
                 {player2.score} <span style={{ fontSize: '13px' }}>نقطة</span>
               </div>

@@ -125,8 +125,8 @@ export const QuickSwitcherModal = () => {
                   fontFamily: 'var(--font-ar)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(67, 56, 202, 0.08)';
-                  e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.45)';
+                  e.currentTarget.style.background = 'rgba(20, 184, 166, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(20, 184, 166, 0.45)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'var(--bg-subtle)';

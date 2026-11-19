@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockCurriculumUnits } from '../data/mockData';
@@ -110,9 +110,9 @@ export const CurriculumAndUnits = () => {
   const getDifficultyBadge = (difficulty) => {
     switch (difficulty) {
       case 'أسطوري':
-        return { bg: 'rgba(236, 72, 153, 0.15)', color: '#f472b6', border: 'rgba(236, 72, 153, 0.3)' };
+        return { bg: 'rgba(249, 115, 22, 0.15)', color: '#f472b6', border: 'rgba(249, 115, 22, 0.3)' };
       case 'خبير':
-        return { bg: 'rgba(168, 85, 247, 0.15)', color: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' };
+        return { bg: 'rgba(251, 146, 60, 0.15)', color: '#c084fc', border: 'rgba(251, 146, 60, 0.3)' };
       case 'متقدم':
         return { bg: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: 'rgba(56, 189, 248, 0.3)' };
       case 'متوسط':
@@ -138,8 +138,8 @@ export const CurriculumAndUnits = () => {
           style={{
             padding: '8px 16px',
             borderRadius: '14px',
-            border: '1px solid rgba(67, 56, 202, 0.25)',
-            background: 'rgba(67, 56, 202, 0.08)',
+            border: '1px solid rgba(13, 148, 136, 0.25)',
+            background: 'rgba(13, 148, 136, 0.08)',
             color: 'var(--primary)',
             fontSize: '12px',
             fontWeight: '700',
@@ -167,7 +167,7 @@ export const CurriculumAndUnits = () => {
         marginBottom: '28px'
       }}>
         <div className="glass-card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{ fontSize: '28px', background: 'rgba(79, 70, 229, 0.15)', padding: '10px', borderRadius: '12px' }}>📚</div>
+          <div style={{ fontSize: '28px', background: 'rgba(13, 148, 136, 0.15)', padding: '10px', borderRadius: '12px' }}>📚</div>
           <div>
             <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}>إجمالي الوحدات المعتمدة</div>
             <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-heading)' }}>12 وحدة كاملة</div>
@@ -221,9 +221,9 @@ export const CurriculumAndUnits = () => {
                 gap: '10px',
                 padding: '12px 20px',
                 borderRadius: '16px',
-                border: isActive ? '2px solid #6366f1' : '1px solid var(--border-card)',
+                border: isActive ? '2px solid #14b8a6' : '1px solid var(--border-card)',
                 background: isActive
-                  ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.22), rgba(6, 182, 212, 0.16))'
+                  ? 'linear-gradient(135deg, rgba(13, 148, 136, 0.22), rgba(6, 182, 212, 0.16))'
                   : 'var(--bg-card)',
                 color: isActive ? 'var(--text-heading)' : 'var(--text-muted)',
                 cursor: 'pointer',
@@ -231,13 +231,13 @@ export const CurriculumAndUnits = () => {
                 fontSize: '14px',
                 fontWeight: '700',
                 transition: 'all 0.2s',
-                boxShadow: isActive ? '0 4px 20px rgba(99, 102, 241, 0.25)' : 'none'
+                boxShadow: isActive ? '0 4px 20px rgba(20, 184, 166, 0.25)' : 'none'
               }}
             >
               <span style={{ fontSize: '18px' }}>{st.icon}</span>
               <span>{st.name}</span>
               <span style={{
-                background: isActive ? '#4f46e5' : 'var(--bg-subtle-strong)',
+                background: isActive ? '#0d9488' : 'var(--bg-subtle-strong)',
                 color: isActive ? '#fff' : 'var(--text-body)',
                 fontSize: '11px',
                 padding: '2px 8px',
@@ -335,7 +335,7 @@ export const CurriculumAndUnits = () => {
                   borderColor: unit.completed
                     ? 'rgba(16, 185, 129, 0.4)'
                     : isExpanded
-                    ? 'rgba(99, 102, 241, 0.5)'
+                    ? 'rgba(20, 184, 166, 0.5)'
                     : 'var(--border-card)',
                   transition: 'all 0.25s'
                 }}
@@ -349,7 +349,7 @@ export const CurriculumAndUnits = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     cursor: 'pointer',
-                    background: isExpanded ? 'rgba(79, 70, 229, 0.08)' : 'transparent',
+                    background: isExpanded ? 'rgba(13, 148, 136, 0.08)' : 'transparent',
                     flexWrap: 'wrap',
                     gap: '16px'
                   }}
@@ -362,7 +362,7 @@ export const CurriculumAndUnits = () => {
                       background: unit.completed
                         ? 'linear-gradient(135deg, #059669, #10b981)'
                         : isExpanded
-                        ? 'linear-gradient(135deg, #4f46e5, #06b6d4)'
+                        ? 'linear-gradient(135deg, #0d9488, #06b6d4)'
                         : 'var(--bg-subtle-strong)',
                       color: (unit.completed || isExpanded) ? '#fff' : 'var(--text-heading)',
                       display: 'flex',
@@ -370,7 +370,7 @@ export const CurriculumAndUnits = () => {
                       justifyContent: 'center',
                       fontSize: '24px',
                       flexShrink: 0,
-                      boxShadow: isExpanded ? '0 4px 15px rgba(79, 70, 229, 0.3)' : 'none'
+                      boxShadow: isExpanded ? '0 4px 15px rgba(13, 148, 136, 0.3)' : 'none'
                     }}>
                       {unit.icon}
                     </div>
@@ -382,14 +382,14 @@ export const CurriculumAndUnits = () => {
                           padding: '3px 10px',
                           borderRadius: '12px',
                           background: unit.stageId === 'calculus'
-                            ? 'rgba(236, 72, 153, 0.16)'
+                            ? 'rgba(249, 115, 22, 0.16)'
                             : unit.stageId === 'high'
-                            ? 'rgba(168, 85, 247, 0.16)'
+                            ? 'rgba(251, 146, 60, 0.16)'
                             : unit.stageId === 'middle'
                             ? 'rgba(56, 189, 248, 0.16)'
                             : 'rgba(16, 185, 129, 0.16)',
                           color: unit.stageId === 'calculus'
-                            ? '#ec4899'
+                            ? '#f97316'
                             : unit.stageId === 'high'
                             ? '#9333ea'
                             : unit.stageId === 'middle'
@@ -410,7 +410,7 @@ export const CurriculumAndUnits = () => {
                             border: '1px solid var(--border-card)',
                             padding: '2px 8px',
                             borderRadius: '6px',
-                            color: '#6366f1'
+                            color: '#14b8a6'
                           }}>
                             {unit.formulaPreview}
                           </span>
@@ -436,7 +436,7 @@ export const CurriculumAndUnits = () => {
                         <div style={{
                           width: `${unit.progress}%`,
                           height: '100%',
-                          background: unit.progress === 100 ? '#10b981' : 'linear-gradient(90deg, #4f46e5, #06b6d4)'
+                          background: unit.progress === 100 ? '#10b981' : 'linear-gradient(90deg, #0d9488, #06b6d4)'
                         }} />
                       </div>
                     </div>
@@ -614,7 +614,7 @@ export const CurriculumAndUnits = () => {
         }}>
           <div style={{
             background: 'var(--bg-modal)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            border: '1px solid rgba(20, 184, 166, 0.3)',
             borderRadius: '24px',
             width: '100%',
             maxWidth: '680px',
@@ -653,7 +653,7 @@ export const CurriculumAndUnits = () => {
             <div style={{
               width: '100%',
               height: '300px',
-              background: 'radial-gradient(circle at center, #0f172a, #040711)',
+              background: 'radial-gradient(circle at center, #19474c, #113236)',
               borderRadius: '16px',
               display: 'flex',
               flexDirection: 'column',
@@ -686,14 +686,14 @@ export const CurriculumAndUnits = () => {
                       width: '76px',
                       height: '76px',
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
+                      background: 'linear-gradient(135deg, #0d9488, #06b6d4)',
                       border: 'none',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '30px',
                       cursor: 'pointer',
-                      boxShadow: '0 0 35px rgba(79, 70, 229, 0.7)',
+                      boxShadow: '0 0 35px rgba(13, 148, 136, 0.7)',
                       color: '#fff',
                       transition: 'transform 0.2s'
                     }}
@@ -715,8 +715,8 @@ export const CurriculumAndUnits = () => {
                   </div>
                   {activeVideoModal.formulaPreview && (
                     <div style={{
-                      background: 'rgba(79, 70, 229, 0.25)',
-                      border: '1px solid rgba(99, 102, 241, 0.45)',
+                      background: 'rgba(13, 148, 136, 0.25)',
+                      border: '1px solid rgba(20, 184, 166, 0.45)',
                       borderRadius: '10px',
                       padding: '10px 14px',
                       fontFamily: 'monospace',

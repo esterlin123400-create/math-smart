@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { copyToClipboard } from '../utils/platformHelpers';
@@ -17,7 +17,7 @@ export const AcademicReports = () => {
   const skills = [
     { name: 'الجبر والمعادلات الخطية', level: 96, status: 'متقن بامتياز', color: '#10b981' },
     { name: 'الهندسة والزوايا والمساحات', level: 92, status: 'متقن', color: '#38bdf8' },
-    { name: 'الكسور والعمليات التناسبية', level: 86, status: 'جيد جداً', color: '#818cf8' },
+    { name: 'الكسور والعمليات التناسبية', level: 86, status: 'جيد جداً', color: '#14b8a6' },
     { name: 'الإحصاء وقراءة الرسوم البيانية', level: 76, status: 'يحتاج تدريباً إضافياً', color: '#fbbf24' },
     { name: 'الحساب الذهني وحل المشكلات اللفظية', level: 90, status: 'متقن', color: '#34d399' }
   ];
@@ -114,7 +114,7 @@ export const AcademicReports = () => {
 
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>الالتزام وسلسلة النشاط</div>
-          <div style={{ fontSize: '38px', fontWeight: '900', color: '#ec4899', fontFamily: 'var(--font-en)' }}>{studentStreak} يوم</div>
+          <div style={{ fontSize: '38px', fontWeight: '900', color: '#f97316', fontFamily: 'var(--font-en)' }}>{studentStreak} يوم</div>
           <span className="badge badge-primary" style={{ marginTop: '6px' }}>سلسلة متواصلة 🔥</span>
         </div>
       </div>

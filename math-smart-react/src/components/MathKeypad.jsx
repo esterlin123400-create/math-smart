@@ -47,7 +47,7 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
                 padding: '6px 12px',
                 borderRadius: '10px',
                 border: 'none',
-                background: isActive ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'var(--bg-subtle)',
+                background: isActive ? 'linear-gradient(135deg, #10b981, #14b8a6)' : 'var(--bg-subtle)',
                 color: isActive ? '#fff' : 'var(--text-muted)',
                 fontSize: '12px',
                 fontWeight: '700',
@@ -95,8 +95,8 @@ export const MathKeypad = ({ onInsert, compact = false }) => {
               gap: '2px'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(79, 70, 229, 0.22)';
-              e.currentTarget.style.borderColor = '#818cf8';
+              e.currentTarget.style.background = 'rgba(20, 184, 166, 0.16)';
+              e.currentTarget.style.borderColor = '#14b8a6';
               e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
