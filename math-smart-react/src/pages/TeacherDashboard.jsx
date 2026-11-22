@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
@@ -99,10 +99,24 @@ export const TeacherDashboard = () => {
             </button>
             <button
               type="button"
+              onClick={() => setCurrentScreen('07')}
+              className="btn btn-secondary"
+            >
+              📋 سجلات الطلاب (CSV)
+            </button>
+            <button
+              type="button"
               onClick={() => setCurrentScreen('08')}
               className="btn btn-secondary"
             >
               📊 التقارير الأكاديمية
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentScreen('16')}
+              className="btn btn-secondary"
+            >
+              👨‍👩‍👧 متابعة أولياء الأمور
             </button>
           </div>
         </div>

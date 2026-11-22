@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockCurriculumUnits } from '../data/mockData';
@@ -25,7 +25,7 @@ const applySavedStatuses = (baseUnits, savedStatuses) => {
 
 export const CurriculumAndUnits = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user, updateProfile } = useAuth();
+  const { role, user, updateProfile } = useAuth();
   const [selectedStage, setSelectedStage] = useState('all'); // 'all' | 'elementary' | 'middle' | 'high' | 'calculus'
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedUnit, setExpandedUnit] = useState(9); // Default expanded to Calculus Unit 9 or first
@@ -126,8 +126,8 @@ export const CurriculumAndUnits = () => {
     <div>
       <Breadcrumb
         items={[{ label: 'خارطة المناهج والوحدات الدراسية', icon: '📖' }]}
-        backTo="13"
-        backLabel="بوابة الطالب"
+        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
         tag="12 وحدة منهجية"
       />
 
@@ -147,9 +147,62 @@ export const CurriculumAndUnits = () => {
             fontFamily: 'var(--font-ar)'
           }}
         >
-          تغيير المرحلة الدراسية ⚙️
+          تغيير المرحلة والصف الدراسي ⚙️
         </button>
       </div>
+
+      {/* Grade Contextual Banner for Students & Parents */}
+      {(role === 'student' || role === 'parent') && (
+        <div style={{
+          background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.12), rgba(13, 148, 136, 0.12))',
+          border: '1px solid rgba(16, 185, 129, 0.3)',
+          borderRadius: '16px',
+          padding: '16px 20px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '24px' }}>🎯</span>
+            <div>
+              <div style={{ fontWeight: '800', color: 'var(--text-heading)', fontSize: '14px' }}>
+                {role === 'parent' ? `مقررات صف الابن فهد: ${user?.studentGrade || 'الصف السادس الابتدائي'}` : `منهج صفك الدراسي الحالي: ${user?.grade || 'الصف السادس الابتدائي'}`}
+              </div>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                الوحدات مرتبة وفق الخطة الدراسية مع إمكانية التنقل المباشر للمسائل والاختبارات
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedStage('elementary');
+                setSearchQuery('السادس');
+                showToast('تمت تصفية المنهج لعرض دروس الصف السادس', 'info');
+              }}
+              className="btn btn-primary"
+              style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '10px' }}
+            >
+              عرض منهج الصف السادس فقط 📌
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedStage('all');
+                setSearchQuery('');
+              }}
+              className="btn btn-secondary"
+              style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '10px' }}
+            >
+              عرض جميع المراحل
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <div className="page-hero">
@@ -460,6 +513,63 @@ export const CurriculumAndUnits = () => {
                 {/* Collapsible Lessons */}
                 {isExpanded && (
                   <div style={{ padding: '24px 28px', borderTop: '1px solid var(--border-card)', background: 'var(--bg-inset)' }}>
+                    {/* Quick unit action bar */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '10px',
+                      flexWrap: 'wrap',
+                      marginBottom: '16px',
+                      padding: '10px 14px',
+                      background: 'var(--bg-card)',
+                      borderRadius: '12px',
+                      border: '1px solid var(--border-card)',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: '800', color: 'var(--text-heading)' }}>
+                        <span>⚡ أدوات الوحدة التفاعلية:</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {role !== 'parent' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCurrentScreen('09');
+                              showToast(`الانتقال لمختبر المسائل للتدرب على مسائل: ${unit.title}`, 'info');
+                            }}
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px' }}
+                          >
+                            ✍️ مختبر المسائل (09)
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCurrentScreen('01');
+                            showToast(`الانتقال لنموذج التقييم الذكي لوحدة: ${unit.title}`, 'info');
+                          }}
+                          className="btn btn-secondary"
+                          style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px' }}
+                        >
+                          📋 التقييم الذكي والشهادة (01)
+                        </button>
+                        {role !== 'parent' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCurrentScreen('03');
+                              showToast(`دخول حلبة التحدي والمبارزة لوحدة: ${unit.title}`, 'info');
+                            }}
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px' }}
+                          >
+                            ⚡ حلبة التحديات (03)
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                       <span style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-heading)' }}>
                         محتويات المقرر ({unit.lessons.length} دروس تفاعلية مجهزة):

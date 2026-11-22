@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -156,6 +156,56 @@ export const SupervisorTeacherLogin = () => {
             style={{ background: 'none', border: 'none', color: '#10b981', fontWeight: '800', cursor: 'pointer' }}
           >
             طلب إنشاء حساب واعتماد مدرسة
+          </button>
+        </div>
+
+        {/* Quick Cross-Role Links */}
+        <div style={{
+          marginTop: '20px',
+          paddingTop: '16px',
+          borderTop: '1px solid var(--border-card)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          fontSize: '12px',
+          gap: '10px',
+          flexWrap: 'wrap'
+        }}>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('04')}
+            style={{
+              background: 'rgba(249, 115, 22, 0.1)',
+              border: '1px solid rgba(249, 115, 22, 0.3)',
+              color: '#f97316',
+              padding: '6px 12px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontFamily: 'var(--font-ar)'
+            }}
+          >
+            🎒 بوابة دخول الطالب
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              loginAs('parent');
+              setCurrentScreen('16');
+              showToast('تم تسجيل دخول ولي الأمر (عبدالعزيز السالم)', 'success');
+            }}
+            style={{
+              background: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              color: '#10b981',
+              padding: '6px 12px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontFamily: 'var(--font-ar)'
+            }}
+          >
+            👨‍👩‍👧 بوابة دخول ولي الأمر
           </button>
         </div>
       </div>

@@ -10,6 +10,7 @@ const ROLE_LABELS = {
   student: 'طالب',
   teacher: 'معلم رياضيات',
   supervisor: 'مشرف تربوي',
+  parent: 'ولي أمر',
   guest: 'زائر المنصة'
 };
 
@@ -88,6 +89,8 @@ export const ProfileAndSettings = () => {
     <div>
       <Breadcrumb
         items={[{ label: 'الملف الشخصي وتفضيلات النظام', icon: '⚙️' }]}
+        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
         tag="إعدادات الحساب"
       />
 

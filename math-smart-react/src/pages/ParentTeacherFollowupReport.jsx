@@ -1,11 +1,13 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
 import { playSuccessChime } from '../utils/soundEffects';
 import { Breadcrumb } from '../components/Breadcrumb';
 
 export const ParentTeacherFollowupReport = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { role, user } = useAuth();
   const [showMeetingModal, setShowMeetingModal] = useState(false);
   const [parentNote, setParentNote] = useState('');
   const [selectedMeetingTime, setSelectedMeetingTime] = useState('الثلاثاء 04:30 مساءً (عن بُعد)');
@@ -57,11 +59,11 @@ export const ParentTeacherFollowupReport = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
-          { label: 'تقرير متابعة ولي الأمر والمعلم', icon: '👨‍👩‍👧' }
+          { label: role === 'parent' ? 'بوابة ولي الأمر' : 'بوابة المعلم والإشراف', screen: role === 'parent' ? '16' : '02', icon: role === 'parent' ? '👨‍👩‍👧' : '👨‍🏫' },
+          { label: 'متابعة نواتج تعلّم الطالب', icon: '📋' }
         ]}
-        backTo="02"
-        backLabel="لوحة المعلم"
+        backTo={role === 'parent' ? 'hub' : '02'}
+        backLabel={role === 'parent' ? 'الرئيسية' : 'لوحة المعلم'}
         tag="متابعة الأسرة"
       />
 
@@ -147,16 +149,27 @@ export const ParentTeacherFollowupReport = () => {
             className="btn btn-primary"
             style={{ fontSize: '13px' }}
           >
-            استعراض آخر تقييم ذكي للطالب (01) 📊
+            {role === 'parent' ? 'استعراض التقييم الذكي وشهادة التفوق للابن (01) 🏆' : 'استعراض آخر تقييم ذكي للطالب (01) 📊'}
           </button>
-          <button
-            type="button"
-            onClick={() => setCurrentScreen('08')}
-            className="btn btn-secondary"
-            style={{ fontSize: '13px' }}
-          >
-            عرض مصفوفة المهارات الكاملة (08) 📈
-          </button>
+          {role === 'parent' ? (
+            <button
+              type="button"
+              onClick={() => setCurrentScreen('17')}
+              className="btn btn-secondary"
+              style={{ fontSize: '13px' }}
+            >
+              استعراض مقررات ومنهج صف الابن (17) 📖
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setCurrentScreen('08')}
+              className="btn btn-secondary"
+              style={{ fontSize: '13px' }}
+            >
+              عرض مصفوفة المهارات والتحليلات الأكاديمية (08) 📈
+            </button>
+          )}
         </div>
       </div>
 

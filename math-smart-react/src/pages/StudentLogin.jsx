@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -172,6 +172,56 @@ export const StudentLogin = () => {
               style={{ background: 'none', border: 'none', color: '#f97316', fontWeight: '800', cursor: 'pointer' }}
             >
               سجل حساباً جديداً مجاناً
+            </button>
+          </div>
+
+          {/* Quick links to Parent & Teacher Login Portals */}
+          <div style={{
+            marginTop: '20px',
+            paddingTop: '16px',
+            borderTop: '1px solid var(--border-card)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontSize: '12px',
+            gap: '10px',
+            flexWrap: 'wrap'
+          }}>
+            <button
+              type="button"
+              onClick={() => {
+                loginAs('parent');
+                setCurrentScreen('16');
+                showToast('تم تسجيل دخول ولي الأمر (عبدالعزيز السالم) لمتابعة الابن', 'success');
+              }}
+              style={{
+                background: 'rgba(16, 185, 129, 0.1)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                color: '#10b981',
+                padding: '6px 12px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontFamily: 'var(--font-ar)'
+              }}
+            >
+              👨‍👩‍👧 دخول ولي أمر الطالب
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentScreen('10')}
+              style={{
+                background: 'rgba(13, 148, 136, 0.1)',
+                border: '1px solid rgba(13, 148, 136, 0.3)',
+                color: '#0d9488',
+                padding: '6px 12px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontFamily: 'var(--font-ar)'
+              }}
+            >
+              👨‍🏫 بوابة المعلم والمشرف
             </button>
           </div>
         </div>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { screensCatalog } from '../data/screensCatalog';
 
 export const QuickSwitcherModal = () => {
   const { isQuickSwitcherOpen, setIsQuickSwitcherOpen, setCurrentScreen } = useApp();
+  const { role, canAccessScreen } = useAuth();
   const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
@@ -22,12 +24,14 @@ export const QuickSwitcherModal = () => {
 
   if (!isQuickSwitcherOpen) return null;
 
-  const filtered = screensCatalog.filter(s =>
-    s.title.includes(filterText) ||
-    s.category.includes(filterText) ||
-    s.subtitle.includes(filterText) ||
-    s.id.includes(filterText)
-  );
+  const filtered = screensCatalog
+    .filter(s => canAccessScreen ? canAccessScreen(s.id, role) : true)
+    .filter(s =>
+      s.title.includes(filterText) ||
+      s.category.includes(filterText) ||
+      s.subtitle.includes(filterText) ||
+      s.id.includes(filterText)
+    );
 
   return (
     <div

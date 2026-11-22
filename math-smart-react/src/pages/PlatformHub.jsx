@@ -155,27 +155,44 @@ export const PlatformHub = () => {
             <button
               type="button"
               onClick={() => {
-                if (role === 'guest') loginAs('student');
+                loginAs('student');
                 setCurrentScreen('13');
-                showToast('مرحباً بك في فضاء الطالب!', 'info');
+                showToast('مرحباً بك في فضاء الطالب ولوحة المهام!', 'info');
               }}
               className="btn btn-primary hub-cta-btn-lg"
             >
               <span>🎒</span>
-              <span>ابدأ التعلّم كطالب</span>
+              <span>بوابة الطالب</span>
             </button>
 
             <button
               type="button"
               onClick={() => {
-                if (role === 'guest') loginAs('teacher');
+                loginAs('teacher');
                 setCurrentScreen('02');
                 showToast('مرحباً بك في فضاء المعلم والإشراف!', 'info');
               }}
               className="btn btn-secondary hub-cta-btn-lg"
             >
               <span>👨‍🏫</span>
-              <span>دخول بوابة المعلم</span>
+              <span>بوابة المعلم</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                loginAs('parent');
+                setCurrentScreen('16');
+                showToast('مرحباً بك في بوابة متابعة ولي الأمر!', 'info');
+              }}
+              className="btn btn-secondary hub-cta-btn-lg"
+              style={{
+                borderColor: 'rgba(16, 185, 129, 0.4)',
+                color: '#10b981'
+              }}
+            >
+              <span>👨‍👩‍👧</span>
+              <span>بوابة ولي الأمر</span>
             </button>
 
             <button
@@ -184,7 +201,7 @@ export const PlatformHub = () => {
               className="btn btn-secondary hub-cta-btn-lg hub-cta-battle"
             >
               <span>⚡</span>
-              <span>حلبة التحديات الحية</span>
+              <span>حلبة التحديات</span>
             </button>
           </div>
 
@@ -243,7 +260,9 @@ export const PlatformHub = () => {
               onClick={() => {
                 if (portal.id === 'student') loginAs('student');
                 if (portal.id === 'teacher') loginAs('teacher');
+                if (portal.id === 'parent') loginAs('parent');
                 setCurrentScreen(portal.targetScreen);
+                showToast(`الانتقال إلى ${portal.title}`, 'info');
               }}
             >
               <div className="hub-pillar-top">

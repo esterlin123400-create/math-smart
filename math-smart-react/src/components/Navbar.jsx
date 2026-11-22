@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -38,30 +38,86 @@ export const Navbar = () => {
   }, []);
 
   const getRoleLabel = () => {
-    if (role === 'student') return `طالب • المستوى ${user?.level || 1}`;
+    if (role === 'student') return `طالب • المستوى ${user?.level || 8}`;
     if (role === 'teacher') return 'معلم رياضيات';
     if (role === 'supervisor') return 'مشرف تربوي';
+    if (role === 'parent') return 'ولي أمر الطالب فهد';
     return 'زائر المنصة';
   };
 
-  const primaryNavItems = [
-    { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
-    { id: '13', label: 'بوابة الطالب', icon: '🎒' },
-    { id: '09', label: 'مختبر المسائل', icon: '✍️' },
-    { id: '03', label: 'حلبة التحديات', icon: '⚡' },
-    { id: '17', label: 'المناهج', icon: '📖' },
-    { id: '02', label: 'بوابة المعلم', icon: '👨‍🏫' }
-  ];
+  const primaryNavItems = useMemo(() => {
+    if (role === 'student') {
+      return [
+        { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
+        { id: '13', label: 'لوحة الطالب', icon: '🎒' },
+        { id: '17', label: 'المناهج والدروس', icon: '📖' },
+        { id: '09', label: 'مختبر المسائل', icon: '✍️' },
+        { id: '03', label: 'حلبة التحديات', icon: '⚡' },
+        { id: '01', label: 'التقييم والشهادة', icon: '📋' }
+      ];
+    }
+    if (role === 'teacher' || role === 'supervisor') {
+      return [
+        { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
+        { id: '02', label: 'لوحة المعلم', icon: '👨‍🏫' },
+        { id: '07', label: 'إدارة السجلات', icon: '📊' },
+        { id: '08', label: 'التقارير الأكاديمية', icon: '📈' },
+        { id: '17', label: 'المناهج والوحدات', icon: '📖' },
+        { id: '16', label: 'متابعة أولياء الأمور', icon: '👨‍👩‍👧' }
+      ];
+    }
+    if (role === 'parent') {
+      return [
+        { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
+        { id: '16', label: 'بوابة متابعة الابن', icon: '👨‍👩‍👧' },
+        { id: '01', label: 'تقرير تفوق الابن', icon: '📋' },
+        { id: '17', label: 'مناهج صف الابن', icon: '📖' }
+      ];
+    }
+    return [
+      { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
+      { id: '17', label: 'تصفح المناهج', icon: '📖' },
+      { id: '06', label: 'المراحل الدراسية', icon: '🎯' },
+      { id: '18', label: 'الهوية والشعار', icon: '🎨' },
+      { id: '04', label: 'بوابة الدخول', icon: '🔐' }
+    ];
+  }, [role]);
 
-  const moreNavItems = [
-    { id: '01', label: 'التقييم الذكي والشهادة', icon: '📋', desc: 'تقييم فوري وطباعة شهادة التفوق' },
-    { id: '06', label: 'تحديد المرحلة والصف', icon: '🎯', desc: 'ابتدائي، متوسط، ثانوي' },
-    { id: '07', label: 'إدارة السجلات المركزية', icon: '📊', desc: 'سجلات الدرجات وتصدير CSV' },
-    { id: '08', label: 'التقارير الأكاديمية', icon: '📈', desc: 'تحليلات الأداء والمهارات' },
-    { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'محرر معادلات رياضية متخصص' },
-    { id: '16', label: 'متابعة ولي الأمر', icon: '👨‍👩‍👧', desc: 'حجز المقابلات وتقارير التقدم' },
-    { id: '18', label: 'الهوية البصرية والشعار', icon: '🎨', desc: 'دليل الألوان والرموز الرسمية' }
-  ];
+  const moreNavItems = useMemo(() => {
+    if (role === 'student') {
+      return [
+        { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'محرر معادلات رياضية متخصص' },
+        { id: '06', label: 'المرحلة والصف الدراسي', icon: '🎯', desc: 'الصف السادس الابتدائي' },
+        { id: '11', label: 'الملف الشخصي', icon: '⚙️', desc: 'تخصيص الحساب والشخصية الرمزية' },
+        { id: '18', label: 'الهوية البصرية والشعار', icon: '🎨', desc: 'دليل الألوان والرموز الرسمية' }
+      ];
+    }
+    if (role === 'teacher' || role === 'supervisor') {
+      return [
+        { id: '09', label: 'معاينة مختبر المسائل', icon: '✍️', desc: 'تحضير واختبار المسائل للطلاب' },
+        { id: '01', label: 'معاينة التقييم الذكي', icon: '📋', desc: 'مراجعة نموذج التقييم والشهادة' },
+        { id: '03', label: 'معاينة حلبة التحدي', icon: '⚡', desc: 'مراقبة مبارزات الطلاب المباشرة' },
+        { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'محرر معادلات رياضية متخصص' },
+        { id: '06', label: 'تحديد المرحلة والصف', icon: '🎯', desc: 'الفصول والمراحل المسندة' },
+        { id: '11', label: 'الملف الشخصي والإعدادات', icon: '⚙️', desc: 'إعدادات حساب المعلم' },
+        { id: '18', label: 'الهوية والشعار', icon: '🎨', desc: 'دليل الألوان والرموز الرسمية' }
+      ];
+    }
+    if (role === 'parent') {
+      return [
+        { id: '06', label: 'المرحلة والصف للابن', icon: '🎯', desc: 'الصف السادس الابتدائي' },
+        { id: '11', label: 'إعدادات حساب ولي الأمر', icon: '⚙️', desc: 'الهاتف والتنبيهات المباشرة' },
+        { id: '18', label: 'الهوية البصرية والشعار', icon: '🎨', desc: 'دليل المنصة والألوان' }
+      ];
+    }
+    return [
+      { id: '04', label: 'دخول الطالب', icon: '🎒', desc: 'بوابة دخول الطلاب' },
+      { id: '10', label: 'دخول المعلم والمشرف', icon: '👨‍🏫', desc: 'بوابة المعلمين والمشرفين' },
+      { id: '15', label: 'تسجيل طالب جديد', icon: '📝', desc: 'انضمام طالب جديد' },
+      { id: '14', label: 'تسجيل معلم جديد', icon: '🛡️', desc: 'توثيق حساب معلم' },
+      { id: '05', label: 'استعادة كلمة المرور', icon: '🔑', desc: 'التحقق بخطوتين' }
+    ];
+  }, [role]);
 
   const isMoreActive = moreNavItems.some(item => item.id === currentScreen);
 
@@ -234,10 +290,11 @@ export const Navbar = () => {
                   role === 'student' ? 'linear-gradient(135deg, #fb923c, #f97316)' :
                   role === 'teacher' ? 'linear-gradient(135deg, #10b981, #14b8a6)' :
                   role === 'supervisor' ? 'linear-gradient(135deg, #0d9488, #06b6d4)' :
+                  role === 'parent' ? 'linear-gradient(135deg, #10b981, #059669)' :
                   'linear-gradient(135deg, #64748b, #475569)'
               }}
             >
-              {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : '👤'}
+              {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : role === 'parent' ? '👨‍👩‍👧' : '👤'}
             </div>
             <div className="navbar-user-details">
               <div className="navbar-user-name">{user?.name || 'حساب تجريبي'}</div>
@@ -258,7 +315,7 @@ export const Navbar = () => {
               </div>
 
               <div className="user-dropdown-section-title">
-                تبديل الدور السريع (للتجربة والمعاينة):
+                تبديل الدور السريع (الصلاحيات المعتمدة):
               </div>
 
               <button
@@ -274,7 +331,7 @@ export const Navbar = () => {
                 <span>🎒</span>
                 <div style={{ flex: 1, textAlign: 'right' }}>
                   <div style={{ fontWeight: '700' }}>فضاء الطالب</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>فهد السالم • المستوى 3</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>فهد السالم • المستوى {user?.level || 8}</div>
                 </div>
               </button>
 
@@ -291,7 +348,24 @@ export const Navbar = () => {
                 <span>👨‍🏫</span>
                 <div style={{ flex: 1, textAlign: 'right' }}>
                   <div style={{ fontWeight: '700' }}>فضاء المعلم</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>أ. طارق العمري • معلم رياضيات</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>أ. طارق العمري • معلم أول رياضيات</div>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  loginAs('parent');
+                  setShowRoleMenu(false);
+                  showToast('تم التبديل إلى حساب ولي الأمر (عبدالعزيز السالم)', 'info');
+                  setCurrentScreen('16');
+                }}
+                className={`user-dropdown-action ${role === 'parent' ? 'active' : ''}`}
+              >
+                <span>👨‍👩‍👧</span>
+                <div style={{ flex: 1, textAlign: 'right' }}>
+                  <div style={{ fontWeight: '700' }}>بوابة ولي الأمر</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>عبدالعزيز السالم • متابعة الابن فهد</div>
                 </div>
               </button>
 

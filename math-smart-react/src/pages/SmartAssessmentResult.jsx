@@ -17,7 +17,7 @@ const escapeHtml = (value) => String(value ?? '')
 
 export const SmartAssessmentResult = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user } = useAuth();
+  const { role, user } = useAuth();
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const savedLatestResult = readStorageJson('math_smart_latest_result_v1', null);
   const data = savedLatestResult && savedLatestResult.examTitle ? savedLatestResult : mockQuestionsResult;
@@ -152,11 +152,11 @@ export const SmartAssessmentResult = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: role === 'teacher' ? 'بوابة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : role === 'parent' ? '16' : '13', icon: role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👩‍👧' : '🎒' },
           { label: 'التقييم الذكي والشهادة المعتمدة', icon: '📋' }
         ]}
-        backTo="13"
-        backLabel="العودة لبوابة الطالب"
+        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'teacher' ? 'العودة لبوابة المعلم' : role === 'parent' ? 'العودة لبوابة ولي الأمر' : 'العودة لبوابة الطالب'}
         tag="التقييم التشخيصي"
       />
 
@@ -413,6 +413,105 @@ export const SmartAssessmentResult = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Role-Specific Navigation Action Bar */}
+      <div style={{
+        marginTop: '32px',
+        padding: '20px 24px',
+        background: 'var(--bg-card)',
+        borderRadius: '18px',
+        border: '1px solid var(--border-card)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '14px'
+      }}>
+        <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--text-heading)' }}>
+          <span>الخطوة التالية بعد استعراض التقييم:</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          {role === 'student' && (
+            <>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('09')}
+                className="btn btn-primary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                ✍️ تدرب أكثر في مختبر المسائل (09)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('03')}
+                className="btn btn-secondary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                ⚡ حلبة التحديات 1v1 (03)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('13')}
+                className="btn btn-secondary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                🎒 العودة للوحة الطالب (13)
+              </button>
+            </>
+          )}
+
+          {(role === 'teacher' || role === 'supervisor') && (
+            <>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('07')}
+                className="btn btn-primary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                📋 سجلات درجات الطلاب (07)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('08')}
+                className="btn btn-secondary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                📊 التقارير والتحليلات (08)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('02')}
+                className="btn btn-secondary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                👨‍🏫 العودة للوحة المعلم (02)
+              </button>
+            </>
+          )}
+
+          {role === 'parent' && (
+            <>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('16')}
+                className="btn btn-primary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                👨‍👩‍👧 العودة لبوابة متابعة الابن (16)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('17')}
+                className="btn btn-secondary"
+                style={{ fontSize: '13px', padding: '10px 18px' }}
+              >
+                📖 استعراض منهج صف الابن (17)
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

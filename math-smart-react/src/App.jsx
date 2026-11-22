@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { QuickSwitcherModal } from './components/QuickSwitcherModal';
 import { NotificationToast } from './components/NotificationToast';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { AccessDeniedGuard } from './components/AccessDeniedGuard';
 
 // Lazy-loaded 18 Page Components + Hub (Code Splitting for fast mobile/desktop loading)
 const PlatformHub = lazy(() => import('./pages/PlatformHub').then(m => ({ default: m.PlatformHub })));
@@ -55,8 +56,15 @@ const PageLoader = () => (
 
 const MainRouter = () => {
   const { currentScreen } = useApp();
+  const { role, canAccessScreen } = useAuth();
+
+  const isAccessAllowed = canAccessScreen ? canAccessScreen(currentScreen, role) : true;
 
   const renderScreen = () => {
+    if (!isAccessAllowed) {
+      return <AccessDeniedGuard attemptedScreen={currentScreen} />;
+    }
+
     switch (currentScreen) {
       case '01':
         return <SmartAssessmentResult />;

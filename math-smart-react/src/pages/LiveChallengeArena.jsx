@@ -8,7 +8,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 
 export const LiveChallengeArena = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user, updateProfile } = useAuth();
+  const { role, user, updateProfile } = useAuth();
 
   const battleQuestions = [
     {
@@ -262,11 +262,11 @@ export const LiveChallengeArena = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : '13', icon: role === 'teacher' ? '👨‍🏫' : '🎒' },
           { label: 'حلبة التحديات والمبارزات المباشرة', icon: '⚡' }
         ]}
-        backTo="13"
-        backLabel="بوابة الطالب"
+        backTo={role === 'teacher' ? '02' : '13'}
+        backLabel={role === 'teacher' ? 'بوابة المعلم' : 'بوابة الطالب'}
         tag="تحدٍ مباشر 1v1"
       />
       {/* Header */}

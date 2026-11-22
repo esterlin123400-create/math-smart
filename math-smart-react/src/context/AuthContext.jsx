@@ -7,6 +7,53 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-
 
 export const isValidUuid = (value) => typeof value === 'string' && UUID_REGEX.test(value);
 
+export const ROLE_PERMISSIONS = {
+  student: {
+    name: 'طالب',
+    home: '13',
+    allowedScreens: ['hub', '13', '09', '03', '17', '01', '12', '06', '11', '18', '04', '05', '15'],
+    deniedMessage: 'هذه الصفحة مخصصة للكادر التعليمي أو أولياء الأمور فقط. بصفتك طالباً، يمكنك الاستمتاع بمهامك، دروسك، وحلبة التحديات عبر لوحة تحكم الطالب.'
+  },
+  teacher: {
+    name: 'معلم رياضيات',
+    home: '02',
+    allowedScreens: ['hub', '02', '07', '08', '16', '17', '09', '01', '03', '12', '06', '11', '18', '10', '14', '05'],
+    deniedMessage: 'هذه الصفحة مخصصة لحسابات الطلاب الشخصية. بصفتك معلماً، تتوفر لك لوحة تحكم المعلم الشاملة لإدارة الفصول ومتابعة الطلاب.'
+  },
+  supervisor: {
+    name: 'مشرف تربوي',
+    home: '02',
+    allowedScreens: ['hub', '02', '07', '08', '16', '17', '09', '01', '03', '12', '06', '11', '18', '10', '14', '05'],
+    deniedMessage: 'هذه الصفحة مخصصة لحسابات الطلاب الشخصية. بصفتك مشرفاً تربوياً، تتوفر لك لوحة القيادة وإدارة السجلات المركزية والتقارير الأكاديمية.'
+  },
+  parent: {
+    name: 'ولي أمر',
+    home: '16',
+    allowedScreens: ['hub', '16', '01', '17', '06', '11', '18', '05'],
+    deniedMessage: 'هذه الصفحة مخصصة للطلاب أو المعلمين فقط. بصفتك ولي أمر، يمكنك متابعة أداء وتقارير ابنك والتواصل مع المعلم عبر بوابة ولي الأمر.'
+  },
+  guest: {
+    name: 'زائر',
+    home: 'hub',
+    allowedScreens: ['hub', '04', '05', '10', '14', '15', '18', '17', '06'],
+    deniedMessage: 'يتطلب الوصول إلى هذه الصفحة تسجيل الدخول كطالب أو معلم أو ولي أمر.'
+  }
+};
+
+export const canAccessScreen = (screenId, userRole = 'guest') => {
+  const config = ROLE_PERMISSIONS[userRole];
+  if (!config) return screenId === 'hub';
+  return config.allowedScreens.includes(screenId);
+};
+
+export const getDefaultDashboard = (userRole = 'student') => {
+  return ROLE_PERMISSIONS[userRole]?.home || 'hub';
+};
+
+export const getRoleNameArabic = (userRole = 'student') => {
+  return ROLE_PERMISSIONS[userRole]?.name || userRole;
+};
+
 /**
  * @typedef {Record<string, any>} AuthUser
  * @typedef {{
@@ -159,6 +206,8 @@ export const AuthProvider = ({ children }) => {
       setUser(mockUserData.student);
     } else if (newRole === 'teacher') {
       setUser(mockUserData.teacher);
+    } else if (newRole === 'parent') {
+      setUser(mockUserData.parent);
     } else if (newRole === 'supervisor') {
       setUser({
         ...mockUserData.teacher,
@@ -258,7 +307,13 @@ export const AuthProvider = ({ children }) => {
   // Real Email/Password Login
   const loginWithSupabase = useCallback(async (email, password) => {
     if (!isSupabaseConfigured || !supabase) {
-      loginAs(email.includes('teacher') ? 'teacher' : 'student');
+      if (email.includes('teacher') || email.includes('omari')) {
+        loginAs('teacher');
+      } else if (email.includes('parent') || email.includes('salem')) {
+        loginAs('parent');
+      } else {
+        loginAs('student');
+      }
       return { success: true, mode: 'demo' };
     }
 
@@ -357,7 +412,11 @@ export const AuthProvider = ({ children }) => {
     loginWithSupabase,
     registerWithSupabase,
     resetPassword,
-    updatePassword
+    updatePassword,
+    canAccessScreen,
+    getDefaultDashboard,
+    getRoleNameArabic,
+    ROLE_PERMISSIONS
   }), [
     role,
     user,

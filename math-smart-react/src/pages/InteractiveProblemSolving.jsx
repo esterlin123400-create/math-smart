@@ -11,7 +11,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 
 export const InteractiveProblemSolving = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user, updateProfile } = useAuth();
+  const { role, user, updateProfile } = useAuth();
   const [currentProblemIdx, setCurrentProblemIdx] = useState(0);
   const [equationInput, setEquationInput] = useState('');
   const [showHint, setShowHint] = useState(false);
@@ -276,11 +276,11 @@ export const InteractiveProblemSolving = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          { label: role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : '13', icon: role === 'teacher' ? '👨‍🏫' : '🎒' },
           { label: 'مختبر المسائل والسبورة الذكية', icon: '✍️' }
         ]}
-        backTo="13"
-        backLabel="العودة لبوابة الطالب"
+        backTo={role === 'teacher' ? '02' : '13'}
+        backLabel={role === 'teacher' ? 'لوحة المعلم' : 'لوحة الطالب'}
         tag="تدريب ذكي"
       />
       {/* Workspace Header */}

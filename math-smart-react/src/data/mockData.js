@@ -32,6 +32,33 @@ export const mockUserData = {
     activeQuizzes: 3,
     avgCompletionRate: 88,
     avatar: "/assets/avatar_math_wizard.svg"
+  },
+  parent: {
+    id: "PAR-5012",
+    name: "عبدالعزيز فهد السالم",
+    role: "parent",
+    title: "ولي أمر الطالب: فهد السالم",
+    email: "parent.salem@mathsmart.edu.sa",
+    phone: "0505123456",
+    school: "مدرسة رواد المعرفة الابتدائية",
+    studentId: "STU-9024",
+    studentName: "فهد عبدالعزيز السالم",
+    studentGrade: "الصف السادس الابتدائي",
+    avatar: "/assets/avatar_robot.svg",
+    children: [
+      {
+        id: "STU-9024",
+        name: "فهد عبدالعزيز السالم",
+        grade: "الصف السادس الابتدائي",
+        school: "مدرسة رواد المعرفة الابتدائية",
+        accuracy: 94,
+        xp: 2480,
+        level: 8,
+        completedAssignments: 14,
+        totalAssignments: 14,
+        teacherName: "أ. طارق عبدالملك العمري"
+      }
+    ]
   }
 };
 
