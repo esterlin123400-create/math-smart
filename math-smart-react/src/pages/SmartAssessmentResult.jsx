@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { mockQuestionsResult } from '../data/mockData';
@@ -152,11 +152,15 @@ export const SmartAssessmentResult = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: role === 'teacher' ? 'بوابة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : role === 'parent' ? '16' : '13', icon: role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👩‍👧' : '🎒' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'بوابة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'فضاء الطالب',
+            screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13',
+            icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👩‍👧' : '🎒'
+          },
           { label: 'التقييم الذكي والشهادة المعتمدة', icon: '📋' }
         ]}
-        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
-        backLabel={role === 'teacher' ? 'العودة لبوابة المعلم' : role === 'parent' ? 'العودة لبوابة ولي الأمر' : 'العودة لبوابة الطالب'}
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'admin' ? 'العودة لإدارة السجلات' : role === 'teacher' ? 'العودة لبوابة المعلم' : role === 'parent' ? 'العودة لبوابة ولي الأمر' : 'العودة لبوابة الطالب'}
         tag="التقييم التشخيصي"
       />
 

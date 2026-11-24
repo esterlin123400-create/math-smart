@@ -5,7 +5,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 
 export const GradeLevelSelection = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user, updateProfile } = useAuth();
+  const { role, user, updateProfile } = useAuth();
   const [selectedStage, setSelectedStage] = useState('elementary'); // 'elementary' | 'middle' | 'high' | 'calculus'
   const [activeGrade, setActiveGrade] = useState(user?.grade || 'الصف السادس الابتدائي');
 
@@ -58,11 +58,11 @@ export const GradeLevelSelection = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'خارطة المناهج', screen: '17', icon: '📖' },
-          { label: 'اختيار وتخصيص المرحلة الدراسية', icon: '🎯' }
+          { label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب', screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13', icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👩‍👧' : '🎒' },
+          { label: 'اختيار وتخصيص المرحلة والصف', icon: '🎯' }
         ]}
-        backTo="17"
-        backLabel="خارطة المناهج"
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'admin' ? 'العودة لإدارة النظام' : role === 'teacher' ? 'العودة للوحة المعلم' : role === 'parent' ? 'العودة لبوابة ولي الأمر' : 'العودة لبوابة الطالب'}
         tag="المراحل والصفوف"
       />
 

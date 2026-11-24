@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { MathKeypad } from '../components/MathKeypad';
@@ -276,11 +276,15 @@ export const InteractiveProblemSolving = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : '13', icon: role === 'teacher' ? '👨‍🏫' : '🎒' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب',
+            screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : '13',
+            icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : '🎒'
+          },
           { label: 'مختبر المسائل والسبورة الذكية', icon: '✍️' }
         ]}
-        backTo={role === 'teacher' ? '02' : '13'}
-        backLabel={role === 'teacher' ? 'لوحة المعلم' : 'لوحة الطالب'}
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : '13'}
+        backLabel={role === 'admin' ? 'إدارة السجلات' : role === 'teacher' ? 'لوحة المعلم' : 'لوحة الطالب'}
         tag="تدريب ذكي"
       />
       {/* Workspace Header */}

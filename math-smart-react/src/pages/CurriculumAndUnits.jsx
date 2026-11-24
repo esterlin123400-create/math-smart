@@ -125,9 +125,16 @@ export const CurriculumAndUnits = () => {
   return (
     <div>
       <Breadcrumb
-        items={[{ label: 'خارطة المناهج والوحدات الدراسية', icon: '📖' }]}
-        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
-        backLabel={role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
+        items={[
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'فضاء الطالب',
+            screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13',
+            icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👧' : '🎒'
+          },
+          { label: 'خارطة المناهج والوحدات الدراسية', icon: '📖' }
+        ]}
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'admin' ? 'إدارة السجلات' : role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
         tag="12 وحدة منهجية"
       />
 

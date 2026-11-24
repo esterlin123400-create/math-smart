@@ -7,7 +7,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 
 export const AcademicReports = () => {
   const { setCurrentScreen, showToast } = useApp();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const [showShareModal, setShowShareModal] = useState(false);
 
   const studentName = user?.name || 'فهد عبدالعزيز السالم';
@@ -61,11 +61,15 @@ export const AcademicReports = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : 'بوابة المعلم',
+            screen: role === 'admin' ? '07' : '02',
+            icon: role === 'admin' ? '🛠️' : '👨‍🏫'
+          },
           { label: 'التقارير والتحليلات الأكاديمية', icon: '📈' }
         ]}
-        backTo="02"
-        backLabel="لوحة المعلم"
+        backTo={role === 'admin' ? '07' : '02'}
+        backLabel={role === 'admin' ? 'العودة لإدارة السجلات (07)' : 'لوحة المعلم (02)'}
         tag="تحليلات الأداء"
       />
 
@@ -253,6 +257,39 @@ export const AcademicReports = () => {
           </div>
         </div>
       )}
+      {/* Bottom Navigation */}
+      <div className="glass-card" style={{ marginTop: '28px', padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <button
+          type="button"
+          onClick={() => setCurrentScreen(role === 'admin' ? '07' : '02')}
+          className="btn btn-secondary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+        >
+          <span>←</span>
+          <span>{role === 'admin' ? 'العودة لإدارة السجلات (07)' : 'العودة للوحة المعلم (02)'}</span>
+        </button>
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('07')}
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>📊</span>
+            <span>إدارة السجلات المركزية (07)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('16')}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>👨‍👧</span>
+            <span>متابعة أولياء الأمور (16)</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

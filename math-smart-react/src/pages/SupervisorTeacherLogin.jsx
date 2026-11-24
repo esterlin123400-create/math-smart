@@ -146,6 +146,29 @@ export const SupervisorTeacherLogin = () => {
           >
             ⚡ تجربة الدخول المباشر كمعلم معتمد
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              loginAs('admin');
+              setCurrentScreen('07');
+              showToast('أهلاً بك م. عبدالعزيز المحمود في لوحة إدارة النظام العام!', 'success');
+            }}
+            style={{
+              width: '100%',
+              marginTop: '8px',
+              padding: '10px',
+              background: 'rgba(6, 182, 212, 0.12)',
+              border: '1px solid rgba(6, 182, 212, 0.4)',
+              borderRadius: '10px',
+              color: '#0891b2',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: '700'
+            }}
+          >
+            🛠️ تجربة الدخول كمدير نظام (Super Admin)
+          </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'var(--text-muted)' }}>

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -7,7 +7,8 @@ import { playSuccessChime } from '../utils/soundEffects';
 import { Breadcrumb } from '../components/Breadcrumb';
 
 const ROLE_LABELS = {
-  student: 'طالب',
+  admin: 'مدير النظام (Super Admin)',
+  student: 'طالب (المستخدم العادي)',
   teacher: 'معلم رياضيات',
   supervisor: 'مشرف تربوي',
   parent: 'ولي أمر',
@@ -89,8 +90,8 @@ export const ProfileAndSettings = () => {
     <div>
       <Breadcrumb
         items={[{ label: 'الملف الشخصي وتفضيلات النظام', icon: '⚙️' }]}
-        backTo={role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
-        backLabel={role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'admin' ? 'إدارة السجلات (07)' : role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'لوحة الطالب'}
         tag="إعدادات الحساب"
       />
 

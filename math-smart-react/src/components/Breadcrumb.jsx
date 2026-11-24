@@ -9,8 +9,12 @@ export const Breadcrumb = ({ items = [], backTo = null, backLabel = null, tag = 
   const handleBack = () => {
     if (backTo) {
       setCurrentScreen(backTo);
-    } else if (role === 'teacher') {
+    } else if (role === 'admin') {
+      setCurrentScreen('07');
+    } else if (role === 'teacher' || role === 'supervisor') {
       setCurrentScreen('02');
+    } else if (role === 'parent') {
+      setCurrentScreen('16');
     } else if (role === 'student') {
       setCurrentScreen('13');
     } else {
@@ -21,8 +25,13 @@ export const Breadcrumb = ({ items = [], backTo = null, backLabel = null, tag = 
   const defaultBackLabel = backLabel || (
     backTo === '13' ? 'العودة لبوابة الطالب' :
     backTo === '02' ? 'العودة للوحة المعلم' :
+    backTo === '07' ? 'العودة لإدارة السجلات' :
+    backTo === '16' ? 'العودة لبوابة ولي الأمر' :
+    backTo === '17' ? 'العودة للمناهج' :
     backTo === 'hub' ? 'العودة للرئيسية' :
-    role === 'teacher' ? 'العودة للوحة المعلم' :
+    role === 'admin' ? 'العودة لإدارة السجلات' :
+    (role === 'teacher' || role === 'supervisor') ? 'العودة للوحة المعلم' :
+    role === 'parent' ? 'العودة لبوابة ولي الأمر' :
     role === 'student' ? 'العودة لبوابة الطالب' :
     'العودة للرئيسية'
   );

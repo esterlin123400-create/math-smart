@@ -59,6 +59,21 @@ export const mockUserData = {
         teacherName: "أ. طارق عبدالملك العمري"
       }
     ]
+  },
+  admin: {
+    id: "ADM-001",
+    name: "م. عبدالعزيز المحمود",
+    role: "admin",
+    title: "مدير النظام العام - Super Admin",
+    email: "admin.sys@mathsmart.edu.sa",
+    phone: "0555001122",
+    school: "الإدارة العامة لمنصة أذكياء الرياضيات",
+    department: "إدارة تقنية التعليم والتحكم المركزي",
+    permissionsLevel: "كامل الصلاحيات الإدارية (مدير النظام)",
+    managedSchoolsCount: 18,
+    totalRegisteredStudents: 1420,
+    totalTeachers: 64,
+    avatar: "/assets/avatar_robot.svg"
   }
 };
 

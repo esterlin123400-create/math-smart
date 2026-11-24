@@ -38,14 +38,25 @@ export const Navbar = () => {
   }, []);
 
   const getRoleLabel = () => {
-    if (role === 'student') return `طالب • المستوى ${user?.level || 8}`;
-    if (role === 'teacher') return 'معلم رياضيات';
-    if (role === 'supervisor') return 'مشرف تربوي';
+    if (role === 'admin') return 'مدير النظام (مستخدم النظام)';
+    if (role === 'student') return `طالب (مستخدم عادٍ) • المستوى ${user?.level || 8}`;
+    if (role === 'teacher') return 'معلم أول رياضيات';
+    if (role === 'supervisor') return 'مشرف تربوي (مستخدم النظام)';
     if (role === 'parent') return 'ولي أمر الطالب فهد';
     return 'زائر المنصة';
   };
 
   const primaryNavItems = useMemo(() => {
+    if (role === 'admin') {
+      return [
+        { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
+        { id: '07', label: 'إدارة السجلات', icon: '📊' },
+        { id: '08', label: 'التقارير والتحليلات', icon: '📈' },
+        { id: '02', label: 'لوحة القيادة', icon: '👨‍🏫' },
+        { id: '17', label: 'المناهج والوحدات', icon: '📖' },
+        { id: '16', label: 'سجلات المتابعة', icon: '👨‍👩‍👧' }
+      ];
+    }
     if (role === 'student') {
       return [
         { id: 'hub', label: 'الرئيسية', icon: '🏛️' },
@@ -84,6 +95,17 @@ export const Navbar = () => {
   }, [role]);
 
   const moreNavItems = useMemo(() => {
+    if (role === 'admin') {
+      return [
+        { id: '12', label: 'إدارة لوحة الرموز والمعادلات', icon: '⌨️', desc: 'ضبط وتخصيص مكتبة الرموز الرياضية' },
+        { id: '18', label: 'دليل الهوية والشعار المؤسسي', icon: '🎨', desc: 'إدارة الأصول والهوية' },
+        { id: '06', label: 'إدارة المراحل والصفوف', icon: '🎯', desc: 'تهيئة الخريطة التعليمية' },
+        { id: '11', label: 'إعدادات النظام العامة', icon: '⚙️', desc: 'الأمان والنسخ الاحتياطي والربط' },
+        { id: '09', label: 'معاينة مختبر المسائل', icon: '✍️', desc: 'فحص وتجربة السبورة الذكية' },
+        { id: '03', label: 'مراقبة حلبة التحديات', icon: '⚡', desc: 'متابعة مبارزات الطلاب المباشرة' },
+        { id: '01', label: 'معاينة التقييمات والشهادات', icon: '📋', desc: 'سجل شهادات التفوق الصادرة' }
+      ];
+    }
     if (role === 'student') {
       return [
         { id: '12', label: 'لوحة الرموز والمعادلات', icon: '⌨️', desc: 'محرر معادلات رياضية متخصص' },
@@ -287,6 +309,7 @@ export const Navbar = () => {
               className="navbar-user-avatar"
               style={{
                 background:
+                  role === 'admin' ? 'linear-gradient(135deg, #0284c7, #0d9488)' :
                   role === 'student' ? 'linear-gradient(135deg, #fb923c, #f97316)' :
                   role === 'teacher' ? 'linear-gradient(135deg, #10b981, #14b8a6)' :
                   role === 'supervisor' ? 'linear-gradient(135deg, #0d9488, #06b6d4)' :
@@ -294,7 +317,7 @@ export const Navbar = () => {
                   'linear-gradient(135deg, #64748b, #475569)'
               }}
             >
-              {role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : role === 'parent' ? '👨‍👩‍👧' : '👤'}
+              {role === 'admin' ? '🛠️' : role === 'student' ? '🎒' : role === 'teacher' ? '👨‍🏫' : role === 'supervisor' ? '🛡️' : role === 'parent' ? '👨‍👩‍👧' : '👤'}
             </div>
             <div className="navbar-user-details">
               <div className="navbar-user-name">{user?.name || 'حساب تجريبي'}</div>
@@ -321,6 +344,23 @@ export const Navbar = () => {
               <button
                 type="button"
                 onClick={() => {
+                  loginAs('admin');
+                  setShowRoleMenu(false);
+                  showToast('تم التبديل إلى حساب مدير النظام (م. عبدالعزيز المحمود)', 'info');
+                  setCurrentScreen('07');
+                }}
+                className={`user-dropdown-action ${role === 'admin' ? 'active' : ''}`}
+              >
+                <span>🛠️</span>
+                <div style={{ flex: 1, textAlign: 'right' }}>
+                  <div style={{ fontWeight: '700' }}>مدير النظام (مستخدم النظام)</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>م. عبدالعزيز • كامل الصلاحيات الإدارية</div>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
                   loginAs('student');
                   setShowRoleMenu(false);
                   showToast('تم التبديل إلى حساب الطالب (فهد السالم)', 'info');
@@ -330,7 +370,7 @@ export const Navbar = () => {
               >
                 <span>🎒</span>
                 <div style={{ flex: 1, textAlign: 'right' }}>
-                  <div style={{ fontWeight: '700' }}>فضاء الطالب</div>
+                  <div style={{ fontWeight: '700' }}>فضاء الطالب (مستخدم عادٍ)</div>
                   <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>فهد السالم • المستوى {user?.level || 8}</div>
                 </div>
               </button>

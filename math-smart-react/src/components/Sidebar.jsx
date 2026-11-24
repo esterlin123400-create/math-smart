@@ -7,6 +7,19 @@ export const Sidebar = () => {
   const { currentScreen, setCurrentScreen, isSidebarOpen, setIsSidebarOpen } = useApp();
   const { role } = useAuth();
 
+  const adminGroup = {
+    title: '🛠️ إدارة النظام والتحكم المركزي',
+    items: [
+      { id: '07', label: 'إدارة السجلات المركزية (CSV)', badge: 'إشراف' },
+      { id: '08', label: 'التقارير والتحليلات الأكاديمية', badge: 'تحليلات' },
+      { id: '02', label: 'لوحة القيادة التعليمية', badge: 'فصول' },
+      { id: '16', label: 'سجلات متابعة أولياء الأمور', badge: 'جلسات' },
+      { id: '17', label: 'المناهج والوحدات الدراسية', badge: 'مناهج' },
+      { id: '12', label: 'إدارة لوحة الرموز والمعادلات', badge: 'رموز' },
+      { id: '06', label: 'تهيئة المراحل والصفوف', badge: null }
+    ]
+  };
+
   const studentGroup = {
     title: '🎒 فضاء الطالب والتعلّم',
     items: [
@@ -53,7 +66,9 @@ export const Sidebar = () => {
   };
 
   // Strictly filter groups based on authenticated role (Zero leak between roles)
-  const groups = (role === 'teacher' || role === 'supervisor')
+  const groups = (role === 'admin')
+    ? [adminGroup, settingsGroup]
+    : (role === 'teacher' || role === 'supervisor')
     ? [teacherGroup, settingsGroup]
     : (role === 'parent')
     ? [parentGroup, settingsGroup]
@@ -81,10 +96,11 @@ export const Sidebar = () => {
       <div className="sidebar-header">
         <div className="sidebar-header-title">
           <span>
-            {role === 'teacher' ? 'مساحة عمل المعلم' :
+            {role === 'admin' ? 'مساحة إدارة النظام العام' :
+             role === 'teacher' ? 'مساحة عمل المعلم' :
              role === 'supervisor' ? 'مساحة الإشراف التربوي' :
              role === 'parent' ? 'مساحة متابعة ولي الأمر' :
-             'مساحة التعلّم النشط'}
+             'مساحة التعلّم النشط (طالب)'}
           </span>
         </div>
         <button

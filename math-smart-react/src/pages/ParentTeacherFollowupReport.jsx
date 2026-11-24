@@ -59,11 +59,15 @@ export const ParentTeacherFollowupReport = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: role === 'parent' ? 'بوابة ولي الأمر' : 'بوابة المعلم والإشراف', screen: role === 'parent' ? '16' : '02', icon: role === 'parent' ? '👨‍👩‍👧' : '👨‍🏫' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'parent' ? 'بوابة ولي الأمر' : 'بوابة المعلم والإشراف',
+            screen: role === 'admin' ? '07' : role === 'parent' ? '16' : '02',
+            icon: role === 'admin' ? '🛠️' : role === 'parent' ? '👨‍👩‍👧' : '👨‍🏫'
+          },
           { label: 'متابعة نواتج تعلّم الطالب', icon: '📋' }
         ]}
-        backTo={role === 'parent' ? 'hub' : '02'}
-        backLabel={role === 'parent' ? 'الرئيسية' : 'لوحة المعلم'}
+        backTo={role === 'admin' ? '07' : role === 'parent' ? 'hub' : '02'}
+        backLabel={role === 'admin' ? 'إدارة السجلات (07)' : role === 'parent' ? 'الرئيسية' : 'لوحة المعلم (02)'}
         tag="متابعة الأسرة"
       />
 

@@ -8,35 +8,47 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-
 export const isValidUuid = (value) => typeof value === 'string' && UUID_REGEX.test(value);
 
 export const ROLE_PERMISSIONS = {
-  student: {
-    name: 'طالب',
-    home: '13',
-    allowedScreens: ['hub', '13', '09', '03', '17', '01', '12', '06', '11', '18', '04', '05', '15'],
-    deniedMessage: 'هذه الصفحة مخصصة للكادر التعليمي أو أولياء الأمور فقط. بصفتك طالباً، يمكنك الاستمتاع بمهامك، دروسك، وحلبة التحديات عبر لوحة تحكم الطالب.'
-  },
-  teacher: {
-    name: 'معلم رياضيات',
-    home: '02',
-    allowedScreens: ['hub', '02', '07', '08', '16', '17', '09', '01', '03', '12', '06', '11', '18', '10', '14', '05'],
-    deniedMessage: 'هذه الصفحة مخصصة لحسابات الطلاب الشخصية. بصفتك معلماً، تتوفر لك لوحة تحكم المعلم الشاملة لإدارة الفصول ومتابعة الطلاب.'
+  admin: {
+    name: 'مدير النظام (مستخدم النظام)',
+    category: 'إدارة النظام',
+    home: '07',
+    allowedScreens: ['hub', '07', '08', '02', '12', '16', '17', '18', '11', '06', '01', '09', '03', '13', '10', '14', '04', '05', '15'],
+    deniedMessage: 'لكامل الصلاحيات كمدير نظام، يمكنك إدارة السجلات المركزية ومتابعة أداء المنظومة.'
   },
   supervisor: {
-    name: 'مشرف تربوي',
+    name: 'مشرف تربوي (مستخدم النظام)',
+    category: 'إدارة النظام',
     home: '02',
     allowedScreens: ['hub', '02', '07', '08', '16', '17', '09', '01', '03', '12', '06', '11', '18', '10', '14', '05'],
     deniedMessage: 'هذه الصفحة مخصصة لحسابات الطلاب الشخصية. بصفتك مشرفاً تربوياً، تتوفر لك لوحة القيادة وإدارة السجلات المركزية والتقارير الأكاديمية.'
   },
+  teacher: {
+    name: 'معلم رياضيات',
+    category: 'الكادر التعليمي',
+    home: '02',
+    allowedScreens: ['hub', '02', '07', '08', '16', '17', '09', '01', '03', '12', '06', '11', '18', '10', '14', '05'],
+    deniedMessage: 'هذه الصفحة مخصصة لحسابات الطلاب الشخصية. بصفتك معلماً، تتوفر لك لوحة تحكم المعلم الشاملة لإدارة الفصول ومتابعة الطلاب.'
+  },
+  student: {
+    name: 'طالب (المستخدم العادي)',
+    category: 'المستخدم العادي',
+    home: '13',
+    allowedScreens: ['hub', '13', '09', '03', '17', '01', '12', '06', '11', '18', '04', '05', '15'],
+    deniedMessage: 'منطقة إدارية محمية! هذه الصفحة مخصصة حصرياً لـ مدير النظام (مستخدم النظام) والكادر التعليمي لإدارة السجلات والتقارير. بصفتك مستخدماً عادياً (طالباً)، يمكنك الوصول لمساحات التعلّم والمسائل والتحديات.'
+  },
   parent: {
     name: 'ولي أمر',
+    category: 'الأسرة والمتابعة',
     home: '16',
     allowedScreens: ['hub', '16', '01', '17', '06', '11', '18', '05'],
-    deniedMessage: 'هذه الصفحة مخصصة للطلاب أو المعلمين فقط. بصفتك ولي أمر، يمكنك متابعة أداء وتقارير ابنك والتواصل مع المعلم عبر بوابة ولي الأمر.'
+    deniedMessage: 'هذه الصفحة مخصصة للطلاب أو إدارة النظام فقط. بصفتك ولي أمر، يمكنك متابعة أداء وتقارير ابنك والتواصل مع المعلم عبر بوابة ولي الأمر.'
   },
   guest: {
-    name: 'زائر',
+    name: 'زائر المنصة',
+    category: 'زائر',
     home: 'hub',
     allowedScreens: ['hub', '04', '05', '10', '14', '15', '18', '17', '06'],
-    deniedMessage: 'يتطلب الوصول إلى هذه الصفحة تسجيل الدخول كطالب أو معلم أو ولي أمر.'
+    deniedMessage: 'يتطلب الوصول إلى هذه الصفحة تسجيل الدخول كطالب أو كمدير نظام أو كمعلم أو ولي أمر.'
   }
 };
 
@@ -204,6 +216,8 @@ export const AuthProvider = ({ children }) => {
     setRole(newRole);
     if (newRole === 'student') {
       setUser(mockUserData.student);
+    } else if (newRole === 'admin') {
+      setUser(mockUserData.admin);
     } else if (newRole === 'teacher') {
       setUser(mockUserData.teacher);
     } else if (newRole === 'parent') {
@@ -307,7 +321,9 @@ export const AuthProvider = ({ children }) => {
   // Real Email/Password Login
   const loginWithSupabase = useCallback(async (email, password) => {
     if (!isSupabaseConfigured || !supabase) {
-      if (email.includes('teacher') || email.includes('omari')) {
+      if (email.includes('admin')) {
+        loginAs('admin');
+      } else if (email.includes('teacher') || email.includes('omari')) {
         loginAs('teacher');
       } else if (email.includes('parent') || email.includes('salem')) {
         loginAs('parent');

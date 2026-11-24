@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { createChallengeRoom, subscribeToRoom, joinChallengeRoom, updateChallengeRoomScore } from '../services/dbService';
@@ -262,11 +262,15 @@ export const LiveChallengeArena = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب', screen: role === 'teacher' ? '02' : '13', icon: role === 'teacher' ? '👨‍🏫' : '🎒' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'بوابة المعلم' : 'فضاء الطالب',
+            screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : '13',
+            icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : '🎒'
+          },
           { label: 'حلبة التحديات والمبارزات المباشرة', icon: '⚡' }
         ]}
-        backTo={role === 'teacher' ? '02' : '13'}
-        backLabel={role === 'teacher' ? 'بوابة المعلم' : 'بوابة الطالب'}
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : '13'}
+        backLabel={role === 'admin' ? 'إدارة السجلات (07)' : role === 'teacher' ? 'بوابة المعلم' : 'بوابة الطالب'}
         tag="تحدٍ مباشر 1v1"
       />
       {/* Header */}

@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { mockRecordsList } from '../data/mockData';
 import { getAllQuizResults } from '../services/dbService';
 import { readStorageJson, writeStorageJson } from '../utils/platformHelpers';
@@ -15,6 +16,7 @@ const STATUS_META = {
 
 export const RecordsManagement = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { role } = useAuth();
   const [records, setRecords] = useState(() => readStorageJson('math_smart_records_v1', mockRecordsList));
   const [searchTerm, setSearchTerm] = useState('');
   const [filterActivity, setFilterActivity] = useState('ALL');
@@ -146,12 +148,16 @@ export const RecordsManagement = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'بوابة المعلم', screen: '02', icon: '👨‍🏫' },
+          {
+            label: role === 'admin' ? 'الرئيسية' : 'بوابة المعلم',
+            screen: role === 'admin' ? 'hub' : '02',
+            icon: role === 'admin' ? '🏛️' : '👨‍🏫'
+          },
           { label: 'إدارة السجلات المركزية (CSV)', icon: '📊' }
         ]}
-        backTo="02"
-        backLabel="لوحة المعلم"
-        tag="السجلات المركزية"
+        backTo={role === 'admin' ? 'hub' : '02'}
+        backLabel={role === 'admin' ? 'البوابة الرئيسية' : 'لوحة المعلم (02)'}
+        tag={role === 'admin' ? 'إدارة النظام' : 'السجلات المركزية'}
       />
 
       <div className="page-hero">
@@ -397,6 +403,49 @@ export const RecordsManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Footer Navigation Bar */}
+      <div className="glass-card" style={{ marginTop: '24px', padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <button
+          type="button"
+          onClick={() => setCurrentScreen(role === 'admin' ? 'hub' : '02')}
+          className="btn btn-secondary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+        >
+          <span>←</span>
+          <span>{role === 'admin' ? 'العودة للبوابة الرئيسية' : 'العودة للوحة المعلم (02)'}</span>
+        </button>
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('08')}
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>📈</span>
+            <span>التقارير الأكاديمية (08)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('02')}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>👨‍🏫</span>
+            <span>لوحة المعلم (02)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('16')}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>👨‍👧</span>
+            <span>متابعة أولياء الأمور (16)</span>
+          </button>
+        </div>
+      </div>
 
       {/* Add Record Modal */}
       {showAddModal && (

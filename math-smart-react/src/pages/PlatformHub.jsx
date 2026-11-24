@@ -51,6 +51,21 @@ export const PlatformHub = () => {
         'حجز مواعيد ومقابلات مع معلم المادة',
         'توثيق الملاحظات وخطط الدعم الأكاديمي'
       ]
+    },
+    {
+      id: 'admin',
+      targetScreen: '07',
+      title: 'إدارة النظام والتحكم المركزي (Super Admin)',
+      subtitle: 'إشراف كامل على السجلات والمستخدمين',
+      desc: 'بوابة مدير النظام (مستخدم النظام) لإدارة قواعد البيانات المركزية، تصدير سجلات الطلاب CSV، تحليلات الأداء، والتحكم في الصلاحيات.',
+      icon: '🛠️',
+      accent: '#06b6d4',
+      cta: 'الدخول للوحة مدير النظام',
+      highlights: [
+        'التحكم المركزي بالسجلات وقواعد البيانات',
+        'تقارير تحليلية ومؤشرات الأداء العامة',
+        'حماية أمنية صارمة لصلاحيات النظام'
+      ]
     }
   ];
 
@@ -197,6 +212,23 @@ export const PlatformHub = () => {
 
             <button
               type="button"
+              onClick={() => {
+                loginAs('admin');
+                setCurrentScreen('07');
+                showToast('مرحباً بك م. عبدالعزيز في لوحة إدارة النظام العام!', 'info');
+              }}
+              className="btn btn-secondary hub-cta-btn-lg"
+              style={{
+                borderColor: 'rgba(6, 182, 212, 0.4)',
+                color: '#0891b2'
+              }}
+            >
+              <span>🛠️</span>
+              <span>مدير النظام</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setCurrentScreen('03')}
               className="btn btn-secondary hub-cta-btn-lg hub-cta-battle"
             >
@@ -261,6 +293,7 @@ export const PlatformHub = () => {
                 if (portal.id === 'student') loginAs('student');
                 if (portal.id === 'teacher') loginAs('teacher');
                 if (portal.id === 'parent') loginAs('parent');
+                if (portal.id === 'admin') loginAs('admin');
                 setCurrentScreen(portal.targetScreen);
                 showToast(`الانتقال إلى ${portal.title}`, 'info');
               }}

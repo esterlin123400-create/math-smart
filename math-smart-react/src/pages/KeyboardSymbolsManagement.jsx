@@ -1,11 +1,13 @@
 ﻿import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { mathSymbolCategories } from '../data/mathSymbols';
 import { copyToClipboard } from '../utils/platformHelpers';
 import { Breadcrumb } from '../components/Breadcrumb';
 
 export const KeyboardSymbolsManagement = () => {
   const { setCurrentScreen, showToast } = useApp();
+  const { role } = useAuth();
   const [testFormula, setTestFormula] = useState('3س² + 4ص - √16 = 25');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchSymbol, setSearchSymbol] = useState('');
@@ -36,11 +38,15 @@ export const KeyboardSymbolsManagement = () => {
     <div>
       <Breadcrumb
         items={[
-          { label: 'فضاء الطالب', screen: '13', icon: '🎒' },
+          {
+            label: role === 'admin' ? 'إدارة النظام' : role === 'teacher' ? 'لوحة المعلم' : role === 'parent' ? 'بوابة ولي الأمر' : 'فضاء الطالب',
+            screen: role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13',
+            icon: role === 'admin' ? '🛠️' : role === 'teacher' ? '👨‍🏫' : role === 'parent' ? '👨‍👧' : '🎒'
+          },
           { label: 'لوحة الرموز والمعادلات الرياضية', icon: '⌨️' }
         ]}
-        backTo="13"
-        backLabel="بوابة الطالب"
+        backTo={role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13'}
+        backLabel={role === 'admin' ? 'العودة لإدارة السجلات' : role === 'teacher' ? 'العودة للوحة المعلم' : role === 'parent' ? 'العودة للمتابعة' : 'العودة لبوابة الطالب'}
         tag="محرر الرموز"
       />
 
@@ -267,6 +273,40 @@ export const KeyboardSymbolsManagement = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* FOOTER ACTIONS & NAVIGATION */}
+      <div className="glass-card" style={{ marginTop: '30px', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+        <button
+          type="button"
+          onClick={() => setCurrentScreen(role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13')}
+          className="btn btn-secondary"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+        >
+          <span>←</span>
+          <span>{role === 'admin' ? 'العودة لإدارة السجلات (07)' : role === 'teacher' ? 'العودة للوحة المعلم (02)' : role === 'parent' ? 'العودة للمتابعة (16)' : 'العودة لفضاء الطالب (13)'}</span>
+        </button>
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('09')}
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>✍️</span>
+            <span>الانتقال لمختبر حل المسائل (09)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentScreen('17')}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>📚</span>
+            <span>استعراض المناهج (17)</span>
+          </button>
+        </div>
       </div>
     </div>
   );

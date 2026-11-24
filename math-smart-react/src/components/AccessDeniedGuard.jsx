@@ -25,7 +25,7 @@ export const AccessDeniedGuard = ({ attemptedScreen }) => {
     .filter(([rKey, config]) => rKey !== 'guest' && config.allowedScreens?.includes(attemptedScreen))
     .map(([_, config]) => config.name);
 
-  const homeScreen = getDefaultDashboard ? getDefaultDashboard(role) : (role === 'teacher' ? '02' : role === 'parent' ? '16' : '13');
+  const homeScreen = getDefaultDashboard ? getDefaultDashboard(role) : (role === 'admin' ? '07' : role === 'teacher' ? '02' : role === 'parent' ? '16' : '13');
 
   return (
     <div style={{ maxWidth: '780px', margin: '40px auto', padding: '0 16px' }}>
@@ -187,6 +187,25 @@ export const AccessDeniedGuard = ({ attemptedScreen }) => {
             <button
               type="button"
               onClick={() => {
+                loginAs('admin');
+                setCurrentScreen(attemptedScreen === '07' || attemptedScreen === '08' || attemptedScreen === '02' ? attemptedScreen : '07');
+              }}
+              style={{
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.35)',
+                color: '#0284c7',
+                padding: '4px 12px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontFamily: 'var(--font-ar)'
+              }}
+            >
+              مدير النظام (م. عبدالعزيز) 🛠️
+            </button>
+            <button
+              type="button"
+              onClick={() => {
                 loginAs('student');
                 setCurrentScreen(attemptedScreen === '13' || attemptedScreen === '09' || attemptedScreen === '03' || attemptedScreen === '17' ? attemptedScreen : '13');
               }}
@@ -200,7 +219,7 @@ export const AccessDeniedGuard = ({ attemptedScreen }) => {
                 fontFamily: 'var(--font-ar)'
               }}
             >
-              طالب (فهد)
+              طالب عادٍ (فهد) 🎒
             </button>
             <button
               type="button"
@@ -218,7 +237,7 @@ export const AccessDeniedGuard = ({ attemptedScreen }) => {
                 fontFamily: 'var(--font-ar)'
               }}
             >
-              معلم (أ. طارق)
+              معلم (أ. طارق) 👨‍🏫
             </button>
             <button
               type="button"
@@ -236,7 +255,7 @@ export const AccessDeniedGuard = ({ attemptedScreen }) => {
                 fontFamily: 'var(--font-ar)'
               }}
             >
-              ولي أمر (عبدالعزيز السالم)
+              ولي أمر (عبدالعزيز) 👨‍👩‍👧
             </button>
           </div>
         </div>

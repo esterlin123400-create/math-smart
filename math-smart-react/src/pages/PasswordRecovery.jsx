@@ -138,6 +138,24 @@ export const PasswordRecovery = () => {
             <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px' }}>
               إرسال رمز التحقق (OTP) ✉️
             </button>
+
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '14px', fontSize: '13px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('04')}
+                style={{ background: 'none', border: 'none', color: '#38bdf8', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                ← العودة لدخول الطالب (04)
+              </button>
+              <span style={{ color: 'var(--text-muted)' }}>•</span>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('10')}
+                style={{ background: 'none', border: 'none', color: '#10b981', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                دخول المعلم والمشرف (10)
+              </button>
+            </div>
           </form>
         )}
 
@@ -253,14 +271,24 @@ export const PasswordRecovery = () => {
             <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '24px' }}>
               يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة والعودة لمغامرات الرياضيات.
             </p>
-            <button
-              type="button"
-              onClick={() => setCurrentScreen('04')}
-              className="btn btn-primary"
-              style={{ padding: '12px 30px' }}
-            >
-              الانتقال لتسجيل الدخول 🚀
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('04')}
+                className="btn btn-primary"
+                style={{ padding: '12px 24px' }}
+              >
+                دخول الطلاب (04) 🎒
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentScreen('10')}
+                className="btn btn-secondary"
+                style={{ padding: '12px 24px' }}
+              >
+                دخول المعلم والمشرف (10) 👨‍🏫
+              </button>
+            </div>
           </div>
         )}
       </div>
