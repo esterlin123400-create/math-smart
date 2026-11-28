@@ -70,9 +70,12 @@ export const StudentLogin = () => {
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '8px' }}>
-            بوابة عباقرة الرياضيات 🚀
+          <h2 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '4px' }}>
+            مدارك • أذكياء الرياضيات 🚀
           </h2>
+          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--primary)', marginBottom: '8px' }}>
+            منصة تعليمية رقمية تفاعلية
+          </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
             انضم الآن لخوض التحديات اليومية، جمع نقاط الخبرة XP، والتنافس مع زملائك على صدارة المتصدرين!
           </p>

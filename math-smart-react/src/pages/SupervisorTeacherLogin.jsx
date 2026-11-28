@@ -63,9 +63,12 @@ export const SupervisorTeacherLogin = () => {
               onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
             />
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '6px' }}>
-            بوابة المعلمين والمشرفين التربويين
+          <h1 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '4px' }}>
+            مدارك • أذكياء الرياضيات
           </h1>
+          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--primary)', marginBottom: '6px' }}>
+            منصة تعليمية رقمية تفاعلية — بوابة الكادر التعليمي
+          </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
             الدخول المعتمد لإدارة الفصول ومتابعة مخرجات تعلم الرياضيات
           </p>

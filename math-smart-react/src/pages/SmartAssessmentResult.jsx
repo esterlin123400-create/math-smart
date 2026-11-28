@@ -64,11 +64,11 @@ export const SmartAssessmentResult = () => {
 <body>
   <div class="cert">
     <div class="top-bar">
-      <div class="brand">منصة أذكياء الرياضيات • Math Smart</div>
+      <div class="brand">منصة مدارك • أذكياء الرياضيات — منصة تعليمية رقمية تفاعلية</div>
       <div class="badge">شهادة إتقان معتمدة</div>
     </div>
     <h1>شهادة تفوق وإتقان رياضي</h1>
-    <p class="subtitle">تشهد منصة أذكياء الرياضيات الذكية بإتمام التقييم بنجاح وتفوق:</p>
+    <p class="subtitle">تشهد منصة مدارك (أذكياء الرياضيات) بإتمام التقييم بنجاح وتفوق:</p>
     <div class="student">${studentName}</div>
     <p class="subtitle">${gradeName} • ${examTitle}</p>
     <div class="metrics">
@@ -91,7 +91,7 @@ export const SmartAssessmentResult = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `شهادة_أذكياء_الرياضيات_${(user?.name || 'طالب').replace(/\s+/g, '_')}.html`;
+    link.download = `شهادة_مدارك_أذكياء_الرياضيات_${(user?.name || 'طالب').replace(/\s+/g, '_')}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

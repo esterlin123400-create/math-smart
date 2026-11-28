@@ -149,7 +149,7 @@ export const PlatformHub = () => {
           <div className="hub-hero-badges-row">
             <span className="hub-pill-badge hub-pill-primary">
               <span>✨</span>
-              <span>منصة التعليم التفاعلي الذكي للرياضيات</span>
+              <span>مدارك • أذكياء الرياضيات — منصة تعليمية رقمية تفاعلية</span>
             </span>
             <span className="hub-pill-badge hub-pill-tech">
               <span>🎓</span>
@@ -162,7 +162,7 @@ export const PlatformHub = () => {
           </h1>
 
           <p className="hub-hero-desc">
-            منصة <strong>أذكياء الرياضيات</strong> هي منظومة تعليمية متكاملة تجمع بين التعلّم التفاعلي، الذكاء الاصطناعي التشخيصي، والمبارزات الحية؛ صُممت بعناية لتمكين الطالب، دعم المعلم، وإشراك ولي الأمر في رحلة تفوق مستمرة.
+            منصة <strong>مدارك</strong> (مشروع أذكياء الرياضيات) هي منظومة تعليمية رقمية تفاعلية تجمع بين التعلّم التفاعلي، الذكاء الاصطناعي التشخيصي، والمبارزات الحية؛ صُممت بعناية لتمكين الطالب، دعم المعلم، وإشراك ولي الأمر في رحلة تفوق مستمرة.
           </p>
 
           {/* Primary Role CTAs */}

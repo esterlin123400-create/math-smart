@@ -147,16 +147,15 @@ export const Navbar = () => {
     <header className="app-navbar">
       {/* Brand & Contextual Sidebar Toggle */}
       <div className="app-navbar-brand-section">
-        {!isFullWidthPage && (
-          <button
-            type="button"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="navbar-icon-btn"
-            title={isSidebarOpen ? 'طي القائمة الجانبية' : 'فتح قائمة الأدوات'}
-          >
-            {isSidebarOpen ? '◀' : '☰'}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`navbar-icon-btn navbar-sidebar-toggle ${isFullWidthPage ? 'mobile-only-toggle' : ''}`}
+          title={isSidebarOpen ? 'طي القائمة الجانبية' : 'فتح قائمة الأدوات والتنقل'}
+          aria-label="القائمة الجانبية"
+        >
+          {isSidebarOpen ? '✕' : '☰'}
+        </button>
 
         <button
           type="button"
@@ -167,15 +166,19 @@ export const Navbar = () => {
           <div className="navbar-logo-wrapper">
             <img
               src="/assets/math_smart_logo.jpg"
-              alt="شعار أذكياء الرياضيات"
+              alt="شعار منصة مدارك - أذكياء الرياضيات"
               decoding="async"
               className="navbar-logo-img"
               onError={(e) => { e.currentTarget.src = '/assets/math_smart_logo.svg'; }}
             />
           </div>
-          <div>
-            <div className="app-navbar-brand-title">أذكياء الرياضيات</div>
-            <div className="app-navbar-brand-tagline">منصة التعليم الذكي للرياضيات</div>
+          <div className="app-navbar-brand-text">
+            <div className="app-navbar-brand-title">
+              <span className="brand-main-title">مدارك</span>
+              <span className="brand-title-separator">•</span>
+              <span className="brand-sub-title">أذكياء الرياضيات</span>
+            </div>
+            <div className="app-navbar-brand-tagline">منصة تعليمية رقمية تفاعلية</div>
           </div>
         </button>
       </div>

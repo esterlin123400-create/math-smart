@@ -388,12 +388,15 @@ export const InteractiveProblemSolving = () => {
       </div>
 
       {/* TWO COLUMN WORKSPACE: LEFT PROBLEM/KEYPAD + RIGHT SCRATCHPAD */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
-        gap: '24px',
-        alignItems: 'start'
-      }}>
+      <div
+        className="interactive-problem-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
+          gap: '24px',
+          alignItems: 'start'
+        }}
+      >
         {/* Left Column: Problem Details, Inputs, and Virtual Keypad */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Problem Card */}

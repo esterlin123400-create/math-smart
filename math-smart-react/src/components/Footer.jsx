@@ -87,11 +87,13 @@ export const Footer = () => {
                 />
               </div>
               <div>
-                <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--text-heading)' }}>
-                  أذكياء الرياضيات
+                <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--text-heading)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>مدارك</span>
+                  <span style={{ color: 'var(--primary-light)', fontSize: '13px' }}>•</span>
+                  <span style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: '800' }}>أذكياء الرياضيات</span>
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                  Math Smart Platform
+                  منصة تعليمية رقمية تفاعلية
                 </div>
               </div>
             </div>
@@ -103,7 +105,7 @@ export const Footer = () => {
               marginBottom: '20px',
               maxWidth: '360px'
             }}>
-              المنظومة التعليمية الرقمية المتقدمة لتعليم الرياضيات التفاعلية بالمملكة العربية السعودية، تجمع بين التقييم التشخيصي بالذكاء الاصطناعي، حلبات المبارزة اللحظية، وتغطية المناهج من التأسيس حتى التفاضل والتكامل.
+              منصة <strong>مدارك</strong> (مشروع أذكياء الرياضيات) — منظومة تعليمية رقمية تفاعلية مصممة لتمكين الطالب، دعم المعلم، وإشراك ولي الأمر بأحدث تقنيات التعلّم التكيفي والذكاء الاصطناعي، وتغطية المناهج من التأسيس حتى التفاضل والتكامل.
             </p>
 
             {/* Badges / Tech Status */}
@@ -206,7 +208,7 @@ export const Footer = () => {
         {/* Bottom Sub-footer */}
         <div className="app-footer-bottom">
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span>© 2026 منصة أذكياء الرياضيات | Math Smart. جميع الحقوق محفوظة.</span>
+            <span>© 2026 منصة مدارك • أذكياء الرياضيات — منصة تعليمية رقمية تفاعلية. جميع الحقوق محفوظة.</span>
             <span>•</span>
             <span style={{ color: '#10b981' }}>نظام تعليمي وتقني موحد متوافق مع معايير وزارة التعليم</span>
           </div>

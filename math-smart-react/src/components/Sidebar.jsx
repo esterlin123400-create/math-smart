@@ -74,6 +74,13 @@ export const Sidebar = () => {
     ? [parentGroup, settingsGroup]
     : [studentGroup, settingsGroup];
 
+  const handleNav = (screenId) => {
+    setCurrentScreen(screenId);
+    if (typeof window !== 'undefined' && window.innerWidth <= 900) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   if (!isSidebarOpen) {
     return (
       <aside className="app-sidebar-collapsed">
@@ -91,79 +98,86 @@ export const Sidebar = () => {
   }
 
   return (
-    <aside className="app-sidebar">
-      {/* Sidebar Header */}
-      <div className="sidebar-header">
-        <div className="sidebar-header-title">
-          <span>
-            {role === 'admin' ? 'مساحة إدارة النظام العام' :
-             role === 'teacher' ? 'مساحة عمل المعلم' :
-             role === 'supervisor' ? 'مساحة الإشراف التربوي' :
-             role === 'parent' ? 'مساحة متابعة ولي الأمر' :
-             'مساحة التعلّم النشط (طالب)'}
-          </span>
+    <>
+      <div
+        className="sidebar-mobile-backdrop"
+        onClick={() => setIsSidebarOpen(false)}
+        aria-hidden="true"
+      />
+      <aside className="app-sidebar">
+        {/* Sidebar Header */}
+        <div className="sidebar-header">
+          <div className="sidebar-header-title">
+            <span>
+              {role === 'admin' ? 'مساحة إدارة النظام العام' :
+               role === 'teacher' ? 'مساحة عمل المعلم' :
+               role === 'supervisor' ? 'مساحة الإشراف التربوي' :
+               role === 'parent' ? 'مساحة متابعة ولي الأمر' :
+               'مساحة التعلّم النشط (طالب)'}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsSidebarOpen(false)}
+            className="sidebar-close-btn"
+            title="طي القائمة لتوسيع مساحة العمل"
+          >
+            ✕
+          </button>
         </div>
+
+        {/* Back to Platform Home Card */}
         <button
           type="button"
-          onClick={() => setIsSidebarOpen(false)}
-          className="sidebar-close-btn"
-          title="طي القائمة لتوسيع مساحة العمل"
+          onClick={() => handleNav('hub')}
+          className={`sidebar-hub-card ${currentScreen === 'hub' ? 'active' : ''}`}
         >
-          ✕
-        </button>
-      </div>
-
-      {/* Back to Platform Home Card */}
-      <button
-        type="button"
-        onClick={() => setCurrentScreen('hub')}
-        className={`sidebar-hub-card ${currentScreen === 'hub' ? 'active' : ''}`}
-      >
-        <span className="hub-card-icon">🏛️</span>
-        <div className="hub-card-content">
-          <div className="hub-card-title">الصفحة الرئيسية للمنصة</div>
-          <div className="hub-card-subtitle">نظرة شاملة على المنظومة</div>
-        </div>
-      </button>
-
-      {/* Contextual Role Groups */}
-      <div className="sidebar-groups-container">
-        {groups.map((group, gIdx) => (
-          <div key={gIdx} className="sidebar-group">
-            <div className="sidebar-group-title">
-              {group.title}
-            </div>
-
-            <div className="sidebar-group-items">
-              {group.items.map(itemObj => {
-                const screen = screensCatalog.find(s => s.id === itemObj.id);
-                if (!screen) return null;
-                const isActive = currentScreen === screen.id;
-
-                return (
-                  <button
-                    type="button"
-                    key={screen.id}
-                    onClick={() => setCurrentScreen(screen.id)}
-                    className={`sidebar-nav-btn ${isActive ? 'active' : ''}`}
-                    title={screen.subtitle}
-                  >
-                    <span className="sidebar-item-icon">{screen.icon}</span>
-                    <span className="sidebar-item-title">
-                      {itemObj.label}
-                    </span>
-                    {itemObj.badge && (
-                      <span className={`sidebar-item-badge ${isActive ? 'badge-active' : ''}`}>
-                        {itemObj.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          <span className="hub-card-icon">🏛️</span>
+          <div className="hub-card-content">
+            <div className="hub-card-title">الصفحة الرئيسية للمنصة</div>
+            <div className="hub-card-subtitle">نظرة شاملة على المنظومة</div>
           </div>
-        ))}
-      </div>
-    </aside>
+        </button>
+
+        {/* Contextual Role Groups */}
+        <div className="sidebar-groups-container">
+          {groups.map((group, gIdx) => (
+            <div key={gIdx} className="sidebar-group">
+              <div className="sidebar-group-title">
+                {group.title}
+              </div>
+
+              <div className="sidebar-group-items">
+                {group.items.map(itemObj => {
+                  const screen = screensCatalog.find(s => s.id === itemObj.id);
+                  if (!screen) return null;
+                  const isActive = currentScreen === screen.id;
+
+                  return (
+                    <button
+                      type="button"
+                      key={screen.id}
+                      onClick={() => handleNav(screen.id)}
+                      className={`sidebar-nav-btn ${isActive ? 'active' : ''}`}
+                      title={screen.subtitle}
+                    >
+                      <span className="sidebar-item-icon">{screen.icon}</span>
+                      <span className="sidebar-item-title">
+                        {itemObj.label}
+                      </span>
+                      {itemObj.badge && (
+                        <span className={`sidebar-item-badge ${isActive ? 'badge-active' : ''}`}>
+                          {itemObj.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 };

@@ -105,7 +105,7 @@ export const LogoBranding = () => {
           fontWeight: '800',
           marginBottom: '14px'
         }}>
-          <span>✨</span> الشعار الرسمي المعتمد لمنصة أذكياء الرياضيات
+          <span>✨</span> الهوية الرسمية المعتمدة: مدارك • أذكياء الرياضيات
         </div>
 
         <h1 style={{
@@ -115,12 +115,21 @@ export const LogoBranding = () => {
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          marginBottom: '10px'
+          marginBottom: '6px'
         }}>
-          أذكياء الرياضيات | Math Smart
+          مدارك | أذكياء الرياضيات
         </h1>
+        <div style={{
+          fontSize: '15px',
+          fontWeight: '800',
+          color: 'var(--primary)',
+          marginBottom: '14px',
+          letterSpacing: '0.3px'
+        }}>
+          منصة تعليمية رقمية تفاعلية
+        </div>
         <p style={{ color: 'var(--text-muted)', fontSize: '15px', maxWidth: '680px', margin: '0 auto 26px', lineHeight: 1.8 }}>
-          المنظومة التعليمية الرقمية المتقدمة لتعليم الرياضيات التفاعلية بالمملكة العربية السعودية، تجمع بين الذكاء الاصطناعي، التقييم التكيفي، وحلبات التحدي الرياضي
+          المنظومة التعليمية الرقمية المتقدمة بالمملكة العربية السعودية؛ يمثل اسم <strong>«مدارك»</strong> المظلة الشاملة لآفاق الفكر والإدراك والوعي الرياضي، بينما يمثل <strong>«أذكياء الرياضيات»</strong> المسار التفاعلي الرائد لبناء جيل من العباقرة والمتميزين.
         </p>
 
         {/* Action Downloads */}
@@ -189,6 +198,18 @@ export const LogoBranding = () => {
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
             gap: '20px'
           }}>
+            <div className="glass-card" style={{ padding: '24px', borderColor: 'rgba(20, 184, 166, 0.4)' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(20, 184, 166, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
+                💡
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '8px' }}>
+                اسم "مدارك" والآفاق المعرفية
+              </h3>
+              <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                الاسم الرئيسي الشامل المعبر عن اتساع مدارك العقل البشري، استيعاب المفاهيم الرياضية المعقدة، وبناء التفكير التحليلي الواعي.
+              </p>
+            </div>
+
             <div className="glass-card" style={{ padding: '24px' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
                 🌀

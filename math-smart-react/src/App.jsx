@@ -112,7 +112,7 @@ const MainRouter = () => {
 
   return (
     <div className="app-container">
-      {!isFullWidthPage && <Sidebar />}
+      {(!isFullWidthPage || isSidebarOpen) && <Sidebar />}
       <main className="main-content">
         <div className="page-wrapper">
           <ErrorBoundary>
