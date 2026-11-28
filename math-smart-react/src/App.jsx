@@ -55,7 +55,7 @@ const PageLoader = () => (
 );
 
 const MainRouter = () => {
-  const { currentScreen } = useApp();
+  const { currentScreen, isSidebarOpen } = useApp();
   const { role, canAccessScreen } = useAuth();
 
   const isAccessAllowed = canAccessScreen ? canAccessScreen(currentScreen, role) : true;
